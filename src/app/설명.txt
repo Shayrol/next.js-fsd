@@ -1,0 +1,30 @@
+📌 app/ 디렉토리 구조 (App Router)
+Next.js App Router에서 app/ 디렉토리는 라우팅, 
+페이지 구조, 레이아웃을 담당한다.
+이 안에서 메인 layout.tsx, page.tsx 같은 핵심 구조가 잡힘
+
+✅ 기본적인 역할
+app/layout.tsx → 전역 레이아웃 (Provider 설정, 공통 UI 포함)
+app/page.tsx → 메인 페이지 (홈 화면)
+app/경로/page.tsx → 특정 경로의 페이지
+app/경로/layout.tsx → 특정 경로의 레이아웃
+app/provider.tsx → 전역 Provider 설정 (Apollo, Theme 등)
+
+
+📌 src/app/의 역할
+Next.js에서는 app/을 src/ 내부에 위치시킬 수도 있음.
+이 경우, src/app/은 기존 app/과 같은 역할이지만, src/ 내부에서 관리되는 차이점이 있다.
+
+✅ 이렇게 구분할 수 있다.
+src/app/ → 레이아웃 및 Provider 설정을 담당
+src/widgets/, src/components/ → 재사용 가능한 UI 컴포넌트 관리
+src/lib/ → 유틸 함수, API 호출 로직 관리
+src/hooks/ → 커스텀 훅 관리
+src/providers/ → 전역 Provider 관리 (ex. Apollo, Theme, Zustand)
+즉, src/app/ 안에서는 layout.tsx, provider.tsx 등 전체적인 구조를 잡는 역할을 하고,
+나머지는 src/에서 모듈화해서 관리하는 방식이 깔끔하다.
+
+📌 정리
+✔️ app/ = 라우팅과 페이지 구조를 담당
+✔️ src/app/ = 레이아웃과 Provider 설정을 담당 (전체적인 셋팅)
+✔️ src/ = 재사용 가능한 컴포넌트, 유틸, 훅 등을 모듈화해서 관리
