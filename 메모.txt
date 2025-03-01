@@ -1,0 +1,50 @@
+전에는 yaml 파일로 했었음
+
+
+graphql API 타입 다운받기
+  1. graphql codegen 접속
+  2. yarn add --dev @graphql-codegen/cli 설치(graphql, typescript도 설치 해야함)
+  3. codegen.ts 파일 생성 후 아래 코드 넣기
+    import type { CodegenConfig } from '@graphql-codegen/cli'
+ 
+    const config: CodegenConfig = {
+      schema: 'http://main-practice.codebootcamp.co.kr/graphql',  //🎈 api 엔드포인트 주소 입력하면 타입 다운
+      documents: ['src/**/*.tsx'],                    //🎈 ts로 저장할 것이기에 src/**/*.ts 추가
+      generates: {
+          './src/entities/api': {                            //🎈 저장할 위치
+            preset: 'client',
+          }
+      }
+    }
+    export default config
+
+  4. 해당 codegen.ts는 최상위 루트에 생성한다. (package.json 위치)
+  5. package.json에 들어가 scripts에 실행 명령어 추가(2번에 설치로 가능)
+     "codegen": "graphql-codegen --config codegen.ts"
+    추가 했으면 yarn codegen 으로 실행해 타입 파일을 받아온다.
+    에러 있으면 node_modules, yarn.lock 삭제 후 다시 yarn install 후 yarn codegen
+    추가 에러가 있으면 documents 주적 처리하고 다시 yarn codegen하면 됨
+  6. 그럼 해당 /entities/api에 파일 여러개 생성이 되는데 여기서 graphql.ts가 메인이다.
+     이전 documents를 통해 설치를 했으면 graphql.ts의 맨 아래에 export const CreateBoardDocument 등 여러개가 있을 것이다.
+     이건 gql, 타입 등 안해도 알아서 해줘 편의성은 좋음
+
+
+graphql SSR 요청
+  useQuery, useMutation은 CSR에서만 동작을 한다.
+  ssr 요청을 하기 위해서는 client를 통해 요청을 한다.
+
+  const { data } = await client.query<
+    Pick<Query, "fetchBoardsOfTheBest">
+  >({
+    query: BOARDS_OF_THE_BEST,
+    fetchPolicy: "cache-first",
+  });
+
+ 이렇게 해서 ssr 요청을 할 수 있으며 client는 다음과 같이 추가한다.
+
+  export const client = new ApolloClient({
+    ssrMode: typeof window === "undefined",
+    uri: process.env.NEXT_PUBLIC_GRAPHQL_URL, // 환경변수로 GraphQL 서버 URI 설정
+    cache: new InMemoryCache(),
+  });
+  여기서 ssrMode를 추가해주면 된다.

@@ -1,4 +1,3 @@
-// src/app/provider/apolloClient.ts
 import { client } from "@/shared/api/apollo-client";
 import { ApolloProvider } from "@apollo/client";
 

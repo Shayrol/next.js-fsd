@@ -1,3 +1,10 @@
+import BoardsOfTheBest from "@/features/BoardsOfTheBest/ui/BoardsOfTheBest";
+
 export default function Home() {
-  return <div>Home page</div>;
+  return (
+    <div>
+      <BoardsOfTheBest />
+      Home page
+    </div>
+  );
 }

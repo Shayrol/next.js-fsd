@@ -5,9 +5,30 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const HeaderTag = [
-  { path: "/", element: <Link href={"/"}>트립토크</Link> },
-  { path: "/B", element: <Link href={"/B"}>숙박권 구매</Link> },
-  { path: "/C", element: <Link href={"/C"}>마이 페이지</Link> },
+  {
+    path: "/",
+    element: (
+      <Link href={"/"} className="block w-full h-[40px] p-2">
+        트립토크
+      </Link>
+    ),
+  },
+  {
+    path: "/B",
+    element: (
+      <Link href={"/B"} className="block w-full h-[40px] p-2">
+        숙박권 구매
+      </Link>
+    ),
+  },
+  {
+    path: "/C",
+    element: (
+      <Link href={"/C"} className="block w-full h-[40px] p-2">
+        마이 페이지
+      </Link>
+    ),
+  },
 ];
 
 export default function TabNavigation() {
@@ -15,8 +36,8 @@ export default function TabNavigation() {
 
   return (
     <ul className="flex justify-between items-center gap-4">
-      <li className="mr-[28px] w-auto">
-        <Link href={"/"}>
+      <li className="mr-[28px]">
+        <Link href={"/"} className="block p-2">
           <Image
             src="/layout/header/logo-header.svg"
             alt="logo-image"
@@ -30,7 +51,7 @@ export default function TabNavigation() {
       {HeaderTag.map((el) => (
         <li
           key={el.path}
-          className={`h-[40px] p-2 font-bold text-base whitespace-nowrap 
+          className={`flex justify-center items-center font-bold text-base whitespace-nowrap
             ${
               pathName === el.path
                 ? "border-b-2 border-black"
