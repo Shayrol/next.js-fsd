@@ -1,10 +1,9 @@
-import BoardsOfTheBest from "@/features/BoardsOfTheBest/ui/BoardsOfTheBest";
+import BoardsOfTheBest from "@/features/Boards/BoardsOfTheBest/ui/BoardsOfTheBest";
 
 export default function Home() {
   return (
-    <div>
+    <main className="flex flex-col justify-center items-center w-full">
       <BoardsOfTheBest />
-      Home page
-    </div>
+    </main>
   );
 }

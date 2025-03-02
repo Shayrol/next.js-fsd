@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Logo from "./logo";
 
 const HeaderTag = [
   {
@@ -37,16 +37,7 @@ export default function TabNavigation() {
   return (
     <ul className="flex justify-between items-center gap-4">
       <li className="mr-[28px]">
-        <Link href={"/"} className="block p-2">
-          <Image
-            src="/layout/header/logo-header.svg"
-            alt="logo-image"
-            width={0}
-            height={0}
-            sizes="100vw"
-            className="min-w-[56px] min-h-[32px]"
-          />
-        </Link>
+        <Logo />
       </li>
       {HeaderTag.map((el) => (
         <li

@@ -12,7 +12,7 @@ export default function Banner() {
       slidesPerView={1} // 한 슬라이드에 보여주는 화면 개수
       loop={true}
       pagination={{ clickable: true, type: "bullets" }}
-      className="w-full h-[516px]" // Swiper 크기 명확히 지정
+      className="w-full max-w-[1280px] h-[516px] max-sm:max-h-[200px]" // Swiper 크기 명확히 지정
       autoplay={{ delay: 3000, disableOnInteraction: false }} // 3초마다 자동으로 넘김
     >
       {["1", "2", "3"].map((num) => (

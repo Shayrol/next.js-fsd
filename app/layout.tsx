@@ -8,21 +8,20 @@ import { ApolloClientProvider } from "@/app/provider/ApolloProvider";
 import { ThemeProvider } from "@/app/provider/ThemeProvider";
 import { usePathname } from "next/navigation";
 
-const BANNER_HIDDEN = ["/B"];
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   const pathname = usePathname();
-  const banner = BANNER_HIDDEN.includes(String(pathname));
+  const BANNER = ["/"];
+  const banner = BANNER.includes(String(pathname));
 
   return (
     <ApolloClientProvider>
       <html lang="en" suppressHydrationWarning>
         <head />
-        <body className="flex flex-col items-center justify-center w-full">
+        <body className="flex flex-col items-center justify-center w-full overflow-x-hidden border border-red-600">
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
@@ -30,8 +29,8 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <Header />
-            {!banner && <Banner />}
-            <main className="flex items-start justify-center p-8 w-[1280px] h-screen bg-pink-400">
+            {banner && <Banner />}
+            <main className="flex items-start justify-center w-full max-w-[1280px] h-screen mt-8 px-5 border border-red-400 ">
               {children}
             </main>
             <Footer />

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <!-- 배경 원 -->
+  <circle cx="150" cy="150" r="150" fill="#E5E5E5"/>
+  
+  <!-- 사람 실루엣 -->
+  <circle cx="150" cy="120" r="40" fill="#AAAAAA"/>
+  <path d="M150,170 C117,170 90,200 90,240 L210,240 C210,200 183,170 150,170 Z" fill="#AAAAAA"/>
+</svg>
