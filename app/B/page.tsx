@@ -1,3 +1,9 @@
+import { Boards } from "@/features/Boards/Boards";
+
 export default function B() {
-  return <div>B Page</div>;
+  return (
+    <div>
+      <Boards />
+    </div>
+  );
 }

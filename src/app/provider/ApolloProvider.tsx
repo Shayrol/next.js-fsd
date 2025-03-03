@@ -1,3 +1,5 @@
+"use client";
+
 import { client } from "@/shared/api/apollo-client";
 import { ApolloProvider } from "@apollo/client";
 

@@ -13,7 +13,7 @@ export default function BoardsOfTheBestItem(props: IProps) {
   const data = props.data;
 
   return (
-    <section className="flex gap-4 w-full h-[152px] border border-green-400 hover:bg-gray-100 rounded-sm">
+    <section className="flex gap-2 w-full h-[152px] max-md:w-[280px">
       {/* 게시물 이미지 */}
       <Image
         src={data.images?.[0] ?? "/not-images/not-image.svg"}
@@ -26,46 +26,46 @@ export default function BoardsOfTheBestItem(props: IProps) {
       {/* 게시물 정보 */}
       <article className="flex flex-col justify-between w-full">
         {/* 제목, 작성자 */}
-        <header className="flex flex-col gap-3 w-full h-[80px]">
+        <header className="flex flex-col gap-2 w-fit h-fit">
           {/* 제목 */}
-          <h2 className="font-bold w-full line-clamp-1 overflow-hidden">
+          <h2 className="font-bold  leading-6 tracking-normal h-[48px] line-clamp-2 overflow-hidden">
             {data.title ?? "null"}
           </h2>
 
           {/* 작성자 */}
-          <section className="flex items-center gap-1">
+          <section className="flex items-center gap-1 w-fit">
             <Image
               src={data.user?.picture ?? "/not-images/not-profile.svg"}
               alt="profile"
-              width={0}
-              height={0}
+              width={24}
+              height={24}
               sizes="100vw"
-              className="rounded-sm w-[24px] h-[24px] object-cover"
+              className=" "
             />
 
-            <div className="text-[14px] text-gray-500">
+            <div className="  leading-5 tracking-normal font-light w-fit h-[20px] text-gray-500">
               {data.writer ?? "null"}
             </div>
           </section>
         </header>
 
         {/* 좋아요, 등록일 */}
-        <section className="flex justify-between items-center h-[24px]">
+        <section className="flex justify-between w-full h-fit">
           {/* 좋아요 */}
-          <section className="flex items-center justify-center gap-1">
+          <section className="flex gap-1 w-fit h-fit">
             <Image
               src={"/vote/main-like.svg"}
               alt="like-count"
-              width={19}
-              height={0}
+              width={24}
+              height={24}
             />
-            <div className="text-[14px] text-red-500">
+            <div className="w-[17px] h-[20px]  leading-5 tracking-normal text-red-500">
               {data.likeCount ?? "000"}
             </div>
           </section>
 
           {/* 등록일 */}
-          <time className="text-[14px] font-normal text-gray-600">
+          <time className="w-fit h-[20px] font-normal leading-5 tracking-normal text-gray-600">
             {formatDate(data.createdAt) ?? "0000.00.00"}
           </time>
         </section>

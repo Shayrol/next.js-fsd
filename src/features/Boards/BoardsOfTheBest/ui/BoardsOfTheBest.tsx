@@ -14,14 +14,24 @@ export default async function BoardsOfTheBest() {
     // fetchPolicy: "cache-first", // 캐시 없으면 서버 요청(ssr요청 후 캐싱해서 딱히 필요 없음)
   });
 
-  console.log(data);
   return (
-    <main className="flex flex-col gap-6 w-full border border-amber-500">
+    <main className="flex flex-col gap-6 w-full h-fit  max-xl:max-w-full overflow-hidden">
       <h1 className="font-bold text-[28px]">오늘 핫한 트립토크</h1>
-      {/* <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-9"> */}
-      <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-9">
+      {/* <section
+        className="grid grid-cols-4 max-xl:grid-cols-2 w-full gap-9 
+                    max-md:inline-flex max-md:overflow-x-scroll border border-red-600"
+      > */}
+      <section
+        className="grid grid-cols-4 max-xl:grid-cols-2 w-full gap-9 
+                    max-md:flex max-md:overflow-x-scroll max-md:pr-[10vw] max-md:mr-auto"
+        style={{ scrollbarWidth: "none" }}
+      >
         {data.fetchBoardsOfTheBest.map((el, index) => (
-          <Link href={`/${el._id}`} key={el._id + index}>
+          <Link
+            href={`/${el._id}`}
+            key={el._id + index}
+            className="shrink-0 bg-[#f6f6f6] p-1 rounded-md"
+          >
             <BoardsOfTheBestItem data={el} />
           </Link>
         ))}
