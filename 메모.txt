@@ -48,3 +48,22 @@ graphql SSR 요청
     cache: new InMemoryCache(),
   });
   여기서 ssrMode를 추가해주면 된다.
+
+
+
+이미지 불러오기 - next.js 의 Image 태그
+next.config.ts에서
+images: {
+  domains: ["storage.googleapis.com"], // 외부 이미지 도메인 추가
+},
+외부 도메인을 추가해줘야 가져올 수 있다.
+
+<Image
+  key={el}
+  src={`https://storage.googleapis.com/${el}`}
+  alt="dd"
+  width={30}
+  height={30}
+  unoptimized // 최적화 비활성화
+/>
+이미지를 wedp로 최적화로 가져오는데 원본 이미지로 가져오기 위해서는 unoptimized 사용하면 된다.

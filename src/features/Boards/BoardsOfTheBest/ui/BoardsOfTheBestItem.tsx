@@ -3,7 +3,6 @@
 import { Board } from "@/entities/api/graphql";
 import { formatDate } from "@/lib/dateUtils";
 import Image from "next/image";
-// import Link from "next/link";
 
 interface IProps {
   data: Board;
@@ -13,7 +12,7 @@ export default function BoardsOfTheBestItem(props: IProps) {
   const data = props.data;
 
   return (
-    <section className="flex gap-2 w-full h-[152px] max-md:w-[280px">
+    <section className="flex gap-2 w-full h-[152px] max-md:w-[280px]">
       {/* 게시물 이미지 */}
       <Image
         src={data.images?.[0] ?? "/not-images/not-image.svg"}

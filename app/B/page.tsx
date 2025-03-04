@@ -1,9 +1,5 @@
-import { Boards } from "@/features/Boards/Boards";
+// import { Boards } from "@/features/Boards/Boards";
 
 export default function B() {
-  return (
-    <div>
-      <Boards />
-    </div>
-  );
+  return <div>{/* <Boards /> */}B page</div>;
 }

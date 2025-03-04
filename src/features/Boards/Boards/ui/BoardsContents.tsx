@@ -1,14 +1,19 @@
+"use client";
+
 import { Query } from "@/entities/api/graphql";
-import { client } from "@/shared/api/apollo-client";
-import { BOARDS } from "../api/useFetchBoards";
 import { formatDate } from "@/lib/dateUtils";
 import Link from "next/link";
 
-export default async function BoardsContents() {
-  const { data } = await client.query<Pick<Query, "fetchBoards">>({
-    query: BOARDS,
-    variables: { page: 1 },
-  });
+interface IProps {
+  data: Pick<Query, "fetchBoards">;
+}
+
+export default function BoardsContents(props: IProps) {
+  // 상태관리를 통해 data 저장하기(초기값으로..)
+  // 검색 버튼으로 상태관리 업데이트
+  const data = props.data;
+
+  console.log("Boards: ", data);
 
   return (
     <article className="flex flex-col justify-center items-center gap-6 px-12 py-6 w-full border shadow-lg shadow-[#1c1c1c1c] rounded-2xl">
@@ -21,7 +26,7 @@ export default async function BoardsContents() {
           <span className="flex justify-start items-center w-full max-w-[848px] gap-[10px] font-medium text-[#1c1c1c]">
             제목
           </span>
-          <span className="flex justify-center items-center w-[100px] gap-[10px] font-medium text-[#1c1c1c]">
+          <span className="flex justify-center items-center w-[140px] gap-[10px] font-medium text-[#1c1c1c]">
             작성자
           </span>
           <span className="flex justify-center items-center w-[100px] gap-[10px] font-medium text-[#1c1c1c]">
@@ -41,11 +46,11 @@ export default async function BoardsContents() {
                 href={`/${el._id}`}
                 className="w-full max-w-[848px] hover:underline"
               >
-                <span className="flex justify-start items-center w-full max-w-[848px] gap-[10px] font-medium text-[#1c1c1c]">
+                <span className="flex justify-start items-center w-full max-w-[820px] gap-[10px] font-medium text-[#1c1c1c] line-clamp-1 overflow-hidden">
                   {el.title}
                 </span>
               </Link>
-              <h3 className="flex justify-center items-center w-[100px] gap-[10px] font-medium text-[#1c1c1c] opacity-80">
+              <h3 className="flex justify-center items-center w-[140px] gap-[10px] font-medium text-[#1c1c1c] opacity-80 line-clamp-1 overflow-hidden">
                 {el.writer}
               </h3>
               <time className="flex justify-center items-center w-[100px] gap-[10px] font-medium text-[#1c1c1c]">

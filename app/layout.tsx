@@ -12,7 +12,7 @@ export default function RootLayout({
     <ApolloClientProvider>
       <html lang="en" suppressHydrationWarning>
         <head />
-        <body className="flex flex-col items-center justify-center w-full gap-10">
+        <body className="flex flex-col items-center justify-center w-full gap-10 px-5">
           {/* <ThemeProvider
             attribute="class"
             defaultTheme="system"

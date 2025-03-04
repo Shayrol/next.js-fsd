@@ -1,22 +1,30 @@
-import BoardsSearch from "./Boards-Search";
-import BoardsDate from "./Boards-Date";
-import BoardsSearchButton from "./Boards-Search-Button";
-import WriterBoardsButton from "./Writer-Boards-Button";
-import BoardsContents from "./Boards";
+import BoardsContents from "./BoardsContents";
+import { client } from "@/shared/api/apollo-client";
+import { BOARDS } from "../api/useFetchBoards";
+import { Query } from "@/entities/api/graphql";
+import { DatePickerWithRange } from "@/shared/ui/input/datePicker";
+import { BoardsSearchButton } from "@/shared/ui/button/search-button";
+import { BoardsSearch } from "@/shared/ui/input/search";
+import { WriterBoardsButton } from "@/shared/ui/button/write-button";
 
 export default async function Boards() {
+  const { data } = await client.query<Pick<Query, "fetchBoards">>({
+    query: BOARDS,
+    variables: { page: 1 },
+  });
+
   return (
-    <main className="flex flex-col justify-center items-start gap-6 w-full h-fit">
+    <section className="flex flex-col justify-center items-start gap-6 w-full min-w-[640px] h-fit">
       <h1 className="font-bold text-[28px]">트립토크 게시판</h1>
-      <article className="flex w-full">
-        <section className="flex gap-4 w-full">
+      <article className="flex w-full h-fit min-w-[640px] gap-2">
+        <section className="flex gap-4 w-full min-w-[640px]">
+          <DatePickerWithRange />
           <BoardsSearch />
-          <BoardsDate />
           <BoardsSearchButton />
         </section>
         <WriterBoardsButton />
       </article>
-      <BoardsContents />
-    </main>
+      <BoardsContents data={data} />
+    </section>
   );
 }

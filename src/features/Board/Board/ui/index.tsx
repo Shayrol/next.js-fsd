@@ -1,39 +1,18 @@
+import { BOARD } from "@/features/Board/Board/api/useFetchBoard";
 import { client } from "@/shared/api/apollo-client";
-import { gql } from "@apollo/client";
+import { Query } from "@/entities/api/graphql";
+import BoardContents from "./BoardContents";
 
-const FETCH_BOARD = gql`
-  query fetchBoard($boardId: ID!) {
-    fetchBoard(boardId: $boardId) {
-      _id
-      writer
-      title
-      contents
-    }
-  }
-`;
-
-export default async function Board({
-  params,
-}: {
-  params: Promise<{ boardId: string }>;
-}) {
-  const boardId = (await params).boardId;
-
-  const { data } = await client.query({
-    query: FETCH_BOARD,
+export default async function Board({ boardId }: { boardId: string }) {
+  const { data } = await client.query<Pick<Query, "fetchBoard">>({
+    query: BOARD,
     variables: { boardId },
   });
 
-  console.log("fetchBoard: ", boardId);
-
   return (
-    <div>
-      <div>dynamic routing</div>
-      <div>{data?.fetchBoard._id}</div>
-      <div>{data?.fetchBoard.writer}</div>
-      <div>{data?.fetchBoard.title}</div>
-      <div>{data?.fetchBoard.contents}</div>
-    </div>
+    <section className="flex flex-col justify-center items-center w-full gap-6">
+      <BoardContents data={data} />
+    </section>
   );
 }
 
