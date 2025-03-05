@@ -1,16 +1,22 @@
 import { Board } from "@/features/Board/Board";
+import { Reply } from "@/features/Reply/Reply";
+
+type Params = { boardId: string };
+// type SearchParams = { [key: string]: string | string[] | undefined };
 
 export default async function BoardPage({
   params,
-}: {
-  params: Promise<{ boardId: string }>;
+}: // searchParams,
+{
+  params: Params;
+  // searchParams: SearchParams;
 }) {
-  const boardId = (await params).boardId;
+  const boardId = String(params.boardId);
 
   return (
-    <main className="flex flex-col justify-center items-center gap-4 w-full border border-red-500">
+    <main className="flex flex-col justify-center items-center gap-4 w-full">
       <Board boardId={boardId} />
-      <div>reply</div>
+      <Reply boardId={boardId} />
     </main>
   );
 }

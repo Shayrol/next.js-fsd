@@ -7,10 +7,10 @@ import { BoardsSearchButton } from "@/shared/ui/button/search-button";
 import { BoardsSearch } from "@/shared/ui/input/search";
 import { WriterBoardsButton } from "@/shared/ui/button/write-button";
 
-export default async function Boards() {
+export default async function Boards({ page }: { page: number }) {
   const { data } = await client.query<Pick<Query, "fetchBoards">>({
     query: BOARDS,
-    variables: { page: 1 },
+    variables: { page: page ?? 1 },
   });
 
   return (

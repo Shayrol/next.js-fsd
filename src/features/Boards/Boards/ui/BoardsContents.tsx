@@ -2,6 +2,7 @@
 
 import { Query } from "@/entities/api/graphql";
 import { formatDate } from "@/lib/dateUtils";
+import Pagination from "@/shared/ui/pagination/pagination";
 import Link from "next/link";
 
 interface IProps {
@@ -9,27 +10,22 @@ interface IProps {
 }
 
 export default function BoardsContents(props: IProps) {
-  // 상태관리를 통해 data 저장하기(초기값으로..)
-  // 검색 버튼으로 상태관리 업데이트
   const data = props.data;
-
-  console.log("Boards: ", data);
 
   return (
     <article className="flex flex-col justify-center items-center gap-6 px-12 py-6 w-full border shadow-lg shadow-[#1c1c1c1c] rounded-2xl">
-      {/* <section className="gap-2"> */}
       <ul className="flex flex-col gap-2 w-full">
-        <div className="flex w-full max-w-[1184px] px-6 py-4">
+        <div className="flex w-full max-w-[1184px] gap-3 px-6 py-4">
           <span className="flex justify-center items-center w-[64px] gap-[10px] font-medium text-[#1c1c1c]">
             번호
           </span>
-          <span className="flex justify-start items-center w-full max-w-[848px] gap-[10px] font-medium text-[#1c1c1c]">
+          <span className="flex justify-start items-center w-full max-w-[820px] gap-[10px] font-medium text-[#1c1c1c]">
             제목
           </span>
-          <span className="flex justify-center items-center w-[140px] gap-[10px] font-medium text-[#1c1c1c]">
+          <span className="flex justify-center items-center w-[220px] gap-[10px] font-medium text-[#1c1c1c]">
             작성자
           </span>
-          <span className="flex justify-center items-center w-[100px] gap-[10px] font-medium text-[#1c1c1c]">
+          <span className="flex justify-center items-center  w-full max-w-[100px] gap-[10px] font-medium text-[#1c1c1c]">
             날짜
           </span>
         </div>
@@ -50,18 +46,19 @@ export default function BoardsContents(props: IProps) {
                   {el.title}
                 </span>
               </Link>
-              <h3 className="flex justify-center items-center w-[140px] gap-[10px] font-medium text-[#1c1c1c] opacity-80 line-clamp-1 overflow-hidden">
+              <h3 className="flex justify-center items-center w-[220px] gap-[10px] font-medium text-[#1c1c1c] opacity-80">
                 {el.writer}
               </h3>
-              <time className="flex justify-center items-center w-[100px] gap-[10px] font-medium text-[#1c1c1c]">
+
+              <time className="flex justify-center items-center w-full max-w-[100px] gap-[10px] font-medium text-[#1c1c1c]">
                 {formatDate(el.createdAt)}
               </time>
             </li>
           ))}
         </section>
       </ul>
-      {/* </section> */}
-      <div>pagination</div>
+      {/* <Link href={"/?page=2"}>2page</Link> */}
+      <Pagination />
     </article>
   );
 }

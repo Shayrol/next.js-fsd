@@ -39,8 +39,10 @@ export default function DatePickerWithRange({
             <Image
               src={"/vote/main-date.svg"}
               alt="date-image"
-              width={17}
+              width={0}
               height={0}
+              sizes="100vw"
+              className="w-[17px] h-fit"
             />
             <span className="w-full h-full">
               {date?.from ? (

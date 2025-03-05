@@ -1,4 +1,4 @@
-import LoginButton from "@/shared/login/login-button";
+import LoginButton from "@/shared/ui/login/login-button/Login-Button";
 import TabNavigation from "./ui/tab-navigation";
 import Link from "next/link";
 

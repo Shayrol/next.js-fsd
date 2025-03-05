@@ -36,10 +36,10 @@ export default function BoardsOfTheBestItem(props: IProps) {
             <Image
               src={data.user?.picture ?? "/not-images/not-profile.svg"}
               alt="profile"
-              width={24}
-              height={24}
+              width={0}
+              height={0}
               sizes="100vw"
-              className=" "
+              className="w-6 h-6"
             />
 
             <div className="  leading-5 tracking-normal font-light w-fit h-[20px] text-gray-500">
@@ -55,8 +55,10 @@ export default function BoardsOfTheBestItem(props: IProps) {
             <Image
               src={"/vote/main-like.svg"}
               alt="like-count"
-              width={24}
-              height={24}
+              width={0}
+              height={0}
+              sizes="100vw"
+              className="w-6 h-6"
             />
             <div className="w-[17px] h-[20px]  leading-5 tracking-normal text-red-500">
               {data.likeCount ?? "000"}
