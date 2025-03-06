@@ -30,16 +30,24 @@ export default async function Home({
   searchParams: SearchParams;
 }) {
   // const slug = params.slug;
-  const page = Number(searchParams.page) ?? 1; // page를 searchParams에서 추출
+  // const page = Number(searchParams.page) ?? 1; // page를 searchParams에서 추출
+
+  const { page } = await searchParams;
+  const pageNumber = Number(page) || 1;
 
   console.log("params: ", params);
   console.log("searchParams: ", searchParams);
   console.log("page: ", page);
+  console.log("page: ", pageNumber);
 
   return (
     <main className="flex flex-col justify-center items-center gap-10 w-full">
       <BoardsOfTheBest />
-      <Boards page={page} />
+      <Boards page={pageNumber} />
     </main>
   );
 }
+
+// 뭐 ssr router 뭐시기 뜨는거 const page = Number(searchParams.page) ?? 1;
+// 여기서 문제가 있었음 사용에는 문제없고 경고문이 뜨는데
+// const { page } = await searchParams; 비동기 처리문제였음

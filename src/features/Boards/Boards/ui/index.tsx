@@ -6,12 +6,21 @@ import { DatePickerWithRange } from "@/shared/ui/input/datePicker";
 import { BoardsSearchButton } from "@/shared/ui/button/search-button";
 import { BoardsSearch } from "@/shared/ui/input/search";
 import { WriterBoardsButton } from "@/shared/ui/button/write-button";
+import { BOARDS_COUNT } from "../api/useFetchBoardsCount";
 
 export default async function Boards({ page }: { page: number }) {
   const { data } = await client.query<Pick<Query, "fetchBoards">>({
     query: BOARDS,
-    variables: { page: page ?? 1 },
+    variables: { page },
   });
+
+  const { data: dataCount } = await client.query<
+    Pick<Query, "fetchBoardsCount">
+  >({
+    query: BOARDS_COUNT,
+  });
+
+  const totalPages = dataCount.fetchBoardsCount;
 
   return (
     <section className="flex flex-col justify-center items-start gap-6 w-full min-w-[640px] h-fit">
@@ -24,7 +33,7 @@ export default async function Boards({ page }: { page: number }) {
         </section>
         <WriterBoardsButton />
       </article>
-      <BoardsContents data={data} />
+      <BoardsContents query={{ data, page, totalPages }} />
     </section>
   );
 }

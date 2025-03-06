@@ -6,11 +6,17 @@ import Pagination from "@/shared/ui/pagination/pagination";
 import Link from "next/link";
 
 interface IProps {
-  data: Pick<Query, "fetchBoards">;
+  query: {
+    data: Pick<Query, "fetchBoards"> | undefined;
+    page: number;
+    totalPages: number;
+  };
 }
 
 export default function BoardsContents(props: IProps) {
-  const data = props.data;
+  const data = props.query.data;
+  const page = props.query.page;
+  const dataCount = props.query.totalPages;
 
   return (
     <article className="flex flex-col justify-center items-center gap-6 px-12 py-6 w-full border shadow-lg shadow-[#1c1c1c1c] rounded-2xl">
@@ -30,7 +36,7 @@ export default function BoardsContents(props: IProps) {
           </span>
         </div>
         <section className="flex flex-col gap-3 w-full max-w-[1184px] h-fit">
-          {data.fetchBoards.map((el) => (
+          {(data?.fetchBoards || []).map((el) => (
             <li
               key={el._id}
               className="flex justify-start items-center gap-2 w-full max-w-[1184px] h-[44px] px-6 py-3 border border-[#f2f2f2] rounded-xl"
@@ -58,7 +64,7 @@ export default function BoardsContents(props: IProps) {
         </section>
       </ul>
       {/* <Link href={"/?page=2"}>2page</Link> */}
-      <Pagination />
+      <Pagination page={page} totalPages={dataCount} />
     </article>
   );
 }

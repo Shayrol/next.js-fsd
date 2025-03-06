@@ -11,7 +11,8 @@ export default async function BoardPage({
   params: Params;
   // searchParams: SearchParams;
 }) {
-  const boardId = String(params.boardId);
+  // const boardId = String(params.boardId);
+  const { boardId } = await params;
 
   return (
     <main className="flex flex-col justify-center items-center gap-4 w-full">

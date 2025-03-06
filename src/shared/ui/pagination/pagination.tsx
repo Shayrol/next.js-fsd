@@ -1,65 +1,135 @@
 "use client";
 
-import Link from "next/link";
+import Image from "next/image";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRef, useState } from "react";
 
-export default function Pagination() {
-  const pageGroupSize = 5;
+export default function Pagination({
+  page,
+  totalPages,
+}: {
+  page: number;
+  totalPages: number;
+}) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const isClicked = useRef(false);
 
-  // 현재 그룹의 위치 계산 === 1~5 = 1 / 6~10 = 2 / 이전, 다음 페이지 위치 계산
-  const currentGroup = Math.ceil(1 / pageGroupSize);
-  console.log(currentGroup);
+  // queryString page / 현재페이지 불러오기 없으면 1page
+  const pageNumber = Number(page) || 1;
+  // 첫 번째 page 1, 11, 21...
+  const startPageNum = Math.floor((pageNumber - 1) / 10) * 10 + 1;
+  // 첫 번째 page 저장(이전, 다음 페이지 이동 및 계산을 위함)
+  const [startPage, setStartPage] = useState(startPageNum);
+  // 마지막 page 번호 불러오기 (총860개 일때 86 반환)
+  const lastPage = Math.ceil((totalPages ?? 10) / 10);
 
-  // 그룹의 시작점 계산 === 다음 페이지 클릭 이동시 시작하는 페이지 번호 계산
-  const start = (currentGroup - 1) * pageGroupSize + 1;
-  // console.log("start: ", start);
-  // 그룹의 마지막 번호 계산
-  const end = Math.min(currentGroup * pageGroupSize, 102);
-  // console.log("end: ", end);
+  const searchParams = useSearchParams();
 
-  // 페이지 번호 배열 생성
-  const pageNumbers = Array.from(
-    { length: end - start + 1 },
-    (_, i) => start + i
-  );
+  const PrevPageChange = () => {
+    if (startPage === 1 || isClicked.current) return;
 
-  // 페이지 변경 핸들러
-  const handlePageChange = (page: number) => {
-    router.push(
-      {
-        pathname: router.pathname,
-        query: { ...router.query, page },
-      },
-      undefined,
-      { shallow: true }
-    );
+    isClicked.current = true; // 클릭 방지
+    const PrevPage = startPage - 10;
+
+    setStartPage(PrevPage);
+    handlePageChange(PrevPage);
+
+    setTimeout(() => {
+      isClicked.current = false; // 0.5초 후 클릭 가능
+    }, 500);
   };
 
-  // 이전/다음 그룹으로 이동
-  const handlePrevGroup = () => {
-    const prevPage = Math.max(start - pageGroupSize, 1);
-    handlePageChange(prevPage);
-  };
+  const NextPageChange = () => {
+    if (startPage + 10 > lastPage || isClicked.current) return;
 
-  const handleNextGroup = () => {
-    const nextPage = Math.min(end + 1, 102);
+    isClicked.current = true;
+    const nextPage = startPage + 10;
+
+    setStartPage(nextPage);
     handlePageChange(nextPage);
+
+    setTimeout(() => {
+      isClicked.current = false;
+    }, 300);
+  };
+
+  const handlePageChange = (page: number) => {
+    if (pageNumber === page) return;
+    const params = new URLSearchParams(searchParams?.toString());
+    params.set("page", page.toString());
+
+    // 리렌더링 없이 query string 수정 - 이전 router.push의 shallow 옵션
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+
+    console.log("tlfgod");
   };
 
   return (
-    <article>
-      {/* 이전 그룹 버튼 */}
-      {start > 1 && <button onClick={handlePrevGroup}>이전</button>}
-      {/* 페이지 번호 버튼들 */}
-      {pageNumbers.map((pageNum) => (
-        <Link href={`/?page=${pageNum}`} key={pageNum}>
-          {pageNum}
-        </Link>
-      ))}
-
-      {/* 다음 그룹 버튼 */}
-      {end < 102 && <button onClick={handleNextGroup}>다음</button>}
+    <article className="flex w-full h-full max-h-[32px]">
+      <ul className="flex flex-row justify-center items-center gap-2 w-full h-full">
+        <li
+          onClick={PrevPageChange}
+          className="flex justify-center items-center cursor-pointer size-6"
+        >
+          <Image
+            src="/pagination/prev.svg"
+            alt="next-pagination"
+            width={0}
+            height={0}
+            sizes="100vw"
+            className={`
+              w-[6.55px] h-[11.15px]
+              filter ${
+                startPage !== 1
+                  ? "brightness-50"
+                  : "brightness-200 invert contrast-150"
+              }`}
+          />
+        </li>
+        <span className="flex flex-row justify-center items-center gap-4 w-[224px] h-[32px]">
+          {new Array(5).fill(1).map((el, index) => {
+            if (index + startPage <= lastPage) {
+              return (
+                <li
+                  key={index + startPage}
+                  onClick={() => handlePageChange(index + startPage)}
+                  className={`
+                    flex justify-center items-center size-8 rounded-[8px] p-[10px] cursor-pointer 
+                    gap-[10px] hover:bg-[#f2f2f2] hover:text-black
+                    ${
+                      pageNumber === index + startPage
+                        ? "bg-[#f2f2f2] text-black font-medium"
+                        : "bg-none text-[#777777] font-normal"
+                    }
+                    `}
+                >
+                  {index + startPage}
+                </li>
+              );
+            }
+          })}
+        </span>
+        <li
+          onClick={NextPageChange}
+          className="flex justify-center items-center cursor-pointer size-6"
+        >
+          <Image
+            src="/pagination/next.svg"
+            alt="next-pagination"
+            width={0}
+            height={0}
+            sizes="100vw"
+            className={`
+              w-[6.55px] h-[11.15px]
+              filter ${
+                startPage + 10 <= lastPage
+                  ? "brightness-50"
+                  : "brightness-200 invert contrast-150"
+              }`}
+          />
+        </li>
+      </ul>
     </article>
   );
 }
-
-// totalPages === 102로 임시

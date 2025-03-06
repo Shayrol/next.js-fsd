@@ -152,6 +152,7 @@ export default function BoardContents(props: IProps) {
             height={0}
             sizes="100vw"
             className="w-auto h-auto"
+            priority={false}
           />
         </button>
         <Link href={`/${data.fetchBoard._id}/edit`}>
@@ -162,9 +163,12 @@ export default function BoardContents(props: IProps) {
             height={0}
             sizes="100vw"
             className="w-auto h-auto"
+            priority={false}
           />
         </Link>
       </section>
     </article>
   );
 }
+
+// 버튼 이미지 로드 문제 해결하기

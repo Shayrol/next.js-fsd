@@ -29,9 +29,11 @@ export default function Banner() {
               <Image
                 src={`/layout/banner/banner-image(${num}).png`}
                 alt={`Slide ${num}`}
-                fill // 부모 요소에 맞게 이미지 크기 조정
+                // fill // 부모 요소에 맞게 이미지 크기 조정
+                width={0}
+                height={0}
                 sizes="100vw"
-                className="mx-auto" // 이미지 꽉 채우기
+                className="w-full h-full mx-auto" // 이미지 꽉 채우기
               />
             </SwiperSlide>
           ))}
