@@ -2,8 +2,18 @@ import { Query } from "@/entities/api/graphql";
 import { gql, useQuery } from "@apollo/client";
 
 export const BOARDS = gql`
-  query fetchBoards($page: Int) {
-    fetchBoards(page: $page) {
+  query fetchBoards(
+    $page: Int
+    $search: String
+    $startDate: DateTime
+    $endDate: DateTime
+  ) {
+    fetchBoards(
+      page: $page
+      search: $search
+      startDate: $startDate
+      endDate: $endDate
+    ) {
       _id
       writer
       title
@@ -20,7 +30,10 @@ export const BOARDS = gql`
 `;
 
 export const useFetchBoards = () => {
-  const result = useQuery<Pick<Query, "fetchBoards">>(BOARDS);
+  const result = useQuery<Pick<Query, "fetchBoards">>(BOARDS, {
+    ssr: false,
+    fetchPolicy: "cache-first",
+  });
 
   return result;
 };

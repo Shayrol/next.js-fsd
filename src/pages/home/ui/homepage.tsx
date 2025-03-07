@@ -1,5 +1,9 @@
+import { Query } from "@/entities/api/graphql";
 import { Boards } from "@/features/Boards/Boards";
+import { BOARDS } from "@/features/Boards/Boards/api/useFetchBoards";
+import { BOARDS_COUNT } from "@/features/Boards/Boards/api/useFetchBoardsCount";
 import BoardsOfTheBest from "@/features/Boards/BoardsOfTheBest/ui/BoardsOfTheBest";
+import { client } from "@/shared/api/apollo-client";
 
 // 타입 정의 (Promise 없이 일반 객체로)
 type Params = { slug: string };
@@ -23,31 +27,59 @@ export async function generateMetadata({
 }
 
 export default async function Home({
-  params,
+  // params,
   searchParams,
 }: {
-  params: Params;
+  // params: Params;
   searchParams: SearchParams;
 }) {
   // const slug = params.slug;
-  // const page = Number(searchParams.page) ?? 1; // page를 searchParams에서 추출
 
-  const { page } = await searchParams;
-  const pageNumber = Number(page) || 1;
+  // 서버 컴포넌트에서 query string 값 가져오기
+  const {
+    page: pageNumber,
+    search: searchString,
+    from: fromDate,
+    to: toDate,
+  } = await searchParams;
 
-  console.log("params: ", params);
-  console.log("searchParams: ", searchParams);
-  console.log("page: ", page);
-  console.log("page: ", pageNumber);
+  // API 요청 값 가공
+  const page = pageNumber ? Number(pageNumber) : 1;
+  const search = searchString ? String(searchString) : "";
+  const startDate = fromDate ? new Date(String(fromDate)) : undefined;
+  const endDate = toDate ? new Date(String(toDate)) : undefined;
+
+  // SSR API 요청 - Boards
+  const { data } = await client.query<Pick<Query, "fetchBoards">>({
+    query: BOARDS,
+    variables: {
+      page,
+      search,
+      startDate,
+      endDate,
+    },
+  });
+
+  // SSR API 요청 - Boards Count
+  const { data: dataCount } = await client.query<
+    Pick<Query, "fetchBoardsCount">
+  >({
+    query: BOARDS_COUNT,
+    variables: {
+      search,
+      startDate,
+      endDate,
+    },
+  });
+
+  console.log("Home - data: ", data);
+  console.log("Home - count: ", dataCount);
+  console.log("Home - startDate: ", startDate);
 
   return (
     <main className="flex flex-col justify-center items-center gap-10 w-full">
       <BoardsOfTheBest />
-      <Boards page={pageNumber} />
+      <Boards query={{ data, dataCount }} />
     </main>
   );
 }
-
-// 뭐 ssr router 뭐시기 뜨는거 const page = Number(searchParams.page) ?? 1;
-// 여기서 문제가 있었음 사용에는 문제없고 경고문이 뜨는데
-// const { page } = await searchParams; 비동기 처리문제였음

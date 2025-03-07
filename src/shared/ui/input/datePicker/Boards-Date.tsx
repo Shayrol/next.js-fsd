@@ -14,18 +14,15 @@ import {
 } from "@/components/ui/popover";
 import Image from "next/image";
 
-export default function DatePickerWithRange({
-  className,
-}: React.HTMLAttributes<HTMLDivElement>) {
-  const [date, setDate] = React.useState<DateRange | undefined>({
-    from: undefined,
-    to: undefined,
-  });
+interface IProps {
+  date: DateRange | undefined;
+  setDate: React.Dispatch<React.SetStateAction<DateRange | undefined>>;
+  className?: React.HTMLAttributes<HTMLDivElement>;
+}
 
-  console.log("date: ", date);
-
+export default function DatePickerWithRange({ query }: { query: IProps }) {
   return (
-    <div className={cn("grid gap-2", className)}>
+    <div className={cn("grid gap-2", query.className)}>
       <Popover>
         <PopoverTrigger asChild>
           <Button
@@ -33,7 +30,7 @@ export default function DatePickerWithRange({
             variant={"outline"}
             className={cn(
               "w-[289px] h-[48px] p-3 gap-2 justify-start text-left font-normal border-none outline-none bg-gray-50",
-              !date?.from && !date?.to && "text-muted-foreground"
+              !query.date?.from && !query.date?.to && "text-muted-foreground"
             )}
           >
             <Image
@@ -45,14 +42,14 @@ export default function DatePickerWithRange({
               className="w-[17px] h-fit"
             />
             <span className="w-full h-full">
-              {date?.from ? (
-                date.to ? (
+              {query.date?.from ? (
+                query.date.to ? (
                   <>
-                    {format(date.from, "yyyy.MM.dd")} -{" "}
-                    {format(date.to, "yyyy.MM.dd")}
+                    {format(query.date.from, "yyyy.MM.dd")} -{" "}
+                    {format(query.date.to, "yyyy.MM.dd")}
                   </>
                 ) : (
-                  format(date.from, "yyyy.MM.dd")
+                  format(query.date.from, "yyyy.MM.dd")
                 )
               ) : (
                 <span className="font-normal text-gray-600">
@@ -66,9 +63,9 @@ export default function DatePickerWithRange({
           <Calendar
             initialFocus
             mode="range"
-            defaultMonth={date?.from || new Date()}
-            selected={date}
-            onSelect={setDate}
+            defaultMonth={query.date?.from || new Date()}
+            selected={query.date}
+            onSelect={query.setDate}
             numberOfMonths={2}
           />
         </PopoverContent>
