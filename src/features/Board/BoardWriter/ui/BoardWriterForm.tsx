@@ -2,9 +2,9 @@ import ImageUploader from "./ImageSlot";
 
 export default function BoardWriterForm() {
   return (
-    <article className="flex flex-col gap-10 justify-center items-center w-full h-fit">
+    <article className="flex flex-col gap-10 justify-center items-center w-full h-fit max-sm:gap-4">
       {/* 작성자 */}
-      <section className="flex justify-center items-center gap-10 w-full">
+      <section className="flex justify-center items-center gap-10 w-full max-sm:flex-col max-sm:gap-4">
         <div className="flex flex-col gap-2 w-full">
           <p className="flex gap-1">
             작성자<span className="text-red-500">*</span>
@@ -49,7 +49,7 @@ export default function BoardWriterForm() {
         </p>
         <textarea
           placeholder="내용을 입력해 주세요."
-          className="w-full px-4 py-3 min-h-[336px] outline-none border border-gray-200 rounded-[8px] bg-white resize-none"
+          className="w-full px-4 py-3 min-h-[336px] outline-none border border-gray-200 rounded-[8px] bg-white resize-none max-sm:min-h-[120px]"
         />
       </section>
       <hr className="w-full border border-b-gray-100" />
@@ -85,9 +85,19 @@ export default function BoardWriterForm() {
       <hr className="w-full border border-b-gray-100" />
 
       {/* 사진 */}
-      <section>
-        <p>사진 첨부</p>
+      <section className="flex flex-col gap-2 w-full max-sm:justify-center max-sm:items-center">
+        <p className="flex justify-start w-full">사진 첨부</p>
         <ImageUploader />
+      </section>
+
+      {/* 등록, 취소 */}
+      <section className="flex justify-end items-center gap-4 w-full h-fit">
+        <button className="flex justify-center items-center gap-2 w-fit min-h-[48px] px-4 py-3 bg-white text-black font-semibold rounded-[8px] border border-black hover:bg-gray-100/90 max-sm:w-full">
+          취소
+        </button>
+        <button className="flex justify-center items-center gap-2 w-fit min-h-[48px] px-4 py-3 bg-[#2974E5] text-white font-semibold rounded-[8px] border border-[#2974E5] hover:bg-[#2974E5]/90 max-sm:w-full">
+          등록하기
+        </button>
       </section>
     </article>
   );

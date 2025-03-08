@@ -16,7 +16,7 @@ export default function BoardsContents(props: IProps) {
   const count = props.query.count?.fetchBoardsCount;
 
   return (
-    <article className="flex flex-col justify-center items-center gap-6 py-6 w-full shadow-lg shadow-[#1c1c1c1c] rounded-2xl">
+    <article className="flex flex-col justify-center items-center gap-6 px-2 py-6 w-full shadow-lg shadow-[#1c1c1c1c] rounded-2xl">
       <ul className="flex flex-col justify-center items-center gap-2 w-full">
         <div className="flex w-full justify-center items-center max-w-[1280px] gap-3 px-6 py-4">
           <span className="flex justify-center items-center w-[64px] gap-[10px] font-medium text-nowrap text-[#1c1c1c]">
@@ -38,7 +38,7 @@ export default function BoardsContents(props: IProps) {
             props.query.data.fetchBoards.map((el) => (
               <li
                 key={el._id}
-                className="flex justify-center items-center gap-2 w-full  h-[44px] px-6 py-3 border border-[#f2f2f2] rounded-xl"
+                className="flex justify-center items-center gap-2 w-full  h-[44px] px-6 py-3 border border-gray-300 rounded-xl"
               >
                 <p className="flex justify-center items-center w-[64px] gap-[10px] font-medium text-[#1c1c1c] opacity-60">
                   {el._id.slice(-4)}
