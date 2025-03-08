@@ -21,7 +21,7 @@ const BoardsOfTheBest = async () => {
       >
         {data?.fetchBoardsOfTheBest.map((el, index) => (
           <Link
-            href={`/${el._id}`}
+            href={`/board/${el._id}`}
             key={el._id + index}
             className="shrink-0 p-1 rounded-md"
           >

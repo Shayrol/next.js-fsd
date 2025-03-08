@@ -21,7 +21,7 @@ export default function BoardsSearch({ query }: { query: IProps }) {
   };
 
   return (
-    <div className="flex w-full min-w-[180px] max-w-[640px] rounded-[8px] gap-2 p-3 relative bg-gray-50 hover:bg-gray-100/90">
+    <div className="flex w-full gap-2 p-3 relative bg-gray-50 hover:bg-gray-100/90  border border-gray-300 rounded-[8px]">
       <Image
         src={"/vote/main-search.svg"}
         alt="search-image"
@@ -33,7 +33,7 @@ export default function BoardsSearch({ query }: { query: IProps }) {
         type="text"
         placeholder="제목을 검색해 주세요."
         onChange={onChangeSearch}
-        className="w-[584px] min-w-[140px] h-[24px] font-normal text-gray-500 bg-transparent outline-none"
+        className="w-full  h-[24px] font-normal text-gray-500 bg-transparent outline-none"
       />
     </div>
   );

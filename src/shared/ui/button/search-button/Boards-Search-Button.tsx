@@ -75,7 +75,7 @@ export default function BoardsSearchButton({ query }: { query: IProps }) {
   return (
     <button
       onClick={onClickSubmit}
-      className="flex justify-center items-center w-full max-w-[64px] h-[48px] rounded-[8px] px-4 py-3 gap-2 font-semibold text-white bg-black hover:bg-black/90"
+      className="flex justify-center items-center w-[200px] h-[48px] rounded-[8px] px-4 py-3 gap-2 font-semibold max-md:w-full text-white bg-black hover:bg-black/90"
     >
       검색
     </button>

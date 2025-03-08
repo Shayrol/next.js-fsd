@@ -25,7 +25,7 @@ export default function BoardsOptions() {
   console.log("data: ", date);
 
   return (
-    <article className="flex gap-4 w-full min-w-[640px]">
+    <article className="flex gap-4 justify-center items-center w-full  max-md:flex-col">
       <DatePickerWithRange query={{ date, setDate }} />
       <BoardsSearch query={{ search, setSearch }} />
       <BoardsSearchButton query={{ search, date }} />

@@ -22,14 +22,19 @@ interface IProps {
 
 export default function DatePickerWithRange({ query }: { query: IProps }) {
   return (
-    <div className={cn("grid gap-2", query.className)}>
+    <div
+      className={cn(
+        "w-full grid gap-2 border border-gray-300 rounded-[8px]",
+        query.className
+      )}
+    >
       <Popover>
         <PopoverTrigger asChild>
           <Button
             id="date"
             variant={"outline"}
             className={cn(
-              "w-[289px] h-[48px] p-3 gap-2 justify-start text-left font-normal border-none outline-none bg-gray-50",
+              "w-full min-w-[289px] h-full max-h-[48px] p-3 gap-2 justify-start text-left font-normal border-none outline-none bg-gray-50",
               !query.date?.from && !query.date?.to && "text-muted-foreground"
             )}
           >
