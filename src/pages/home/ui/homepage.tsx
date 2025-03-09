@@ -58,6 +58,7 @@ export default async function Home({
       startDate,
       endDate,
     },
+    fetchPolicy: "network-only",
   });
 
   // SSR API 요청 - Boards Count

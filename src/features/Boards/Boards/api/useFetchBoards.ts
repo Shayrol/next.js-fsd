@@ -31,8 +31,7 @@ export const BOARDS = gql`
 
 export const useFetchBoards = () => {
   const result = useQuery<Pick<Query, "fetchBoards">>(BOARDS, {
-    ssr: false,
-    fetchPolicy: "cache-first",
+    fetchPolicy: "network-only",
   });
 
   return result;

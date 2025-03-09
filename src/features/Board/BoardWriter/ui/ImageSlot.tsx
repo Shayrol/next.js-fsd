@@ -2,20 +2,33 @@
 
 import Image from "next/image";
 import { useState, useEffect, ChangeEvent } from "react";
+import { UseFormSetValue } from "react-hook-form";
+import { IForm } from "./BoardWriterForm";
 
 // 단일 이미지 슬롯 컴포넌트
 function ImageSlot({
   id,
-  imageFile,
+  file,
   setImageFile,
 }: {
-  id: string;
-  imageFile: File[];
-  setImageFile: React.Dispatch<React.SetStateAction<File[]>>;
+  id: number;
+  file: File | null;
+  setImageFile: React.Dispatch<React.SetStateAction<(File | null)[]>>;
 }) {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
-  console.log("imageUrl: ", imageFile);
-  console.log("imageUrl: ", imageUrl);
+
+  useEffect(() => {
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setImageUrl(url);
+    } else {
+      setImageUrl(null);
+    }
+
+    return () => {
+      if (imageUrl) URL.revokeObjectURL(imageUrl);
+    };
+  }, [file]);
 
   // 파일 선택 시 미리보기 생성
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -23,13 +36,9 @@ function ImageSlot({
 
     const file = e.target.files[0];
     if (file) {
-      const url = URL.createObjectURL(file);
-      setImageUrl(url);
-
-      // 배열에서 해당 id 인덱스에 파일 저장
       setImageFile((prev) => {
         const newFiles = [...prev];
-        newFiles[Number(id)] = file;
+        newFiles[id] = file;
         return newFiles;
       });
     }
@@ -38,27 +47,13 @@ function ImageSlot({
 
   // 이미지 제거
   const handleRemove = () => {
-    if (imageUrl) {
-      URL.revokeObjectURL(imageUrl); // 메모리 누수 방지
-    }
-    setImageUrl(null);
-
-    // 배열에서 해당 id의 이미지 제거
+    if (imageUrl) URL.revokeObjectURL(imageUrl);
     setImageFile((prev) => {
       const newFiles = [...prev];
-      newFiles[Number(id)] = undefined as unknown as File; // undefined 대신 빈 파일로 채움
+      newFiles[id] = null;
       return newFiles;
     });
   };
-
-  // 컴포넌트 언마운트 시 URL 정리
-  useEffect(() => {
-    return () => {
-      if (imageUrl) {
-        URL.revokeObjectURL(imageUrl);
-      }
-    };
-  }, [imageUrl]);
 
   return (
     <div className="flex justify-center items-center gap-2 w-[160px] h-auto">
@@ -79,7 +74,7 @@ function ImageSlot({
         </div>
       ) : (
         <label
-          htmlFor={id}
+          htmlFor={`file-upload-${id}`}
           className="flex flex-col justify-center items-center relative gap-2 w-[160px] 
             h-[160px] max-sm:w-full max-sm:h-auto aspect-[1/1] rounded-[8px]
             bg-[#F2F2F2] cursor-pointer border border-gray-200"
@@ -97,24 +92,42 @@ function ImageSlot({
       )}
       <input
         type="file"
-        id={id}
+        id={`file-upload-${id}`}
         style={{ display: "none" }}
         onChange={handleFileChange}
-        accept="image/*" // 이미지 파일만 선택 가능
+        accept="image/*"
       />
     </div>
   );
 }
 
-// 상위 컴포넌트에서 세 개의 슬롯 사용
-export default function ImageUploader() {
-  const [imageFile, setImageFile] = useState<File[]>([]);
+interface IImageUploader {
+  setValue: UseFormSetValue<IForm>;
+}
+
+// 상위 컴포넌트
+export default function ImageUploader(props: IImageUploader) {
+  const { setValue } = props;
+  const [imageFile, setImageFile] = useState<(File | null)[]>([
+    null,
+    null,
+    null,
+  ]);
+
+  useEffect(() => {
+    setValue("image", imageFile); // 폼 필드 "image"에 imageFile 반영
+  }, [imageFile]);
 
   return (
     <div className="flex justify-start items-center w-fit gap-4 max-sm:w-full max-sm:justify-center">
-      <ImageSlot id="0" imageFile={imageFile} setImageFile={setImageFile} />
-      <ImageSlot id="1" imageFile={imageFile} setImageFile={setImageFile} />
-      <ImageSlot id="2" imageFile={imageFile} setImageFile={setImageFile} />
+      {imageFile.map((file, index) => (
+        <ImageSlot
+          key={index}
+          id={index}
+          file={file}
+          setImageFile={setImageFile}
+        />
+      ))}
     </div>
   );
 }

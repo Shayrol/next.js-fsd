@@ -2,14 +2,14 @@
 
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
-import { ChangeEvent, Dispatch, SetStateAction } from "react";
+import React, { ChangeEvent, Dispatch, SetStateAction } from "react";
 
 interface IProps {
   search: string;
   setSearch: Dispatch<SetStateAction<string>>;
 }
 
-export default function BoardsSearch({ query }: { query: IProps }) {
+function BoardsSearch({ query }: { query: IProps }) {
   const params = useSearchParams();
   // const router = useRouter();
 
@@ -38,3 +38,5 @@ export default function BoardsSearch({ query }: { query: IProps }) {
     </div>
   );
 }
+
+export default React.memo(BoardsSearch);

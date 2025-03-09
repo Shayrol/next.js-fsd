@@ -61,7 +61,7 @@ export default function BoardsContents(props: IProps) {
             ))
           ) : (
             <div className="flex justify-center items-center px-6 py-12 text-[18px] font-medium">
-              내용이 없습니다.
+              검색된 내용이 없습니다.
             </div>
           )}
         </section>

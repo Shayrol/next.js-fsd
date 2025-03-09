@@ -20,7 +20,7 @@ interface IProps {
   className?: React.HTMLAttributes<HTMLDivElement>;
 }
 
-export default function DatePickerWithRange({ query }: { query: IProps }) {
+function DatePickerWithRange({ query }: { query: IProps }) {
   return (
     <div
       className={cn(
@@ -78,3 +78,5 @@ export default function DatePickerWithRange({ query }: { query: IProps }) {
     </div>
   );
 }
+
+export default React.memo(DatePickerWithRange);

@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
+import React from "react";
 import { DateRange } from "react-day-picker";
 
 interface IProps {
@@ -8,15 +9,9 @@ interface IProps {
   date: DateRange | undefined;
 }
 
-export default function BoardsSearchButton({ query }: { query: IProps }) {
+function BoardsSearchButton({ query }: { query: IProps }) {
   const params = useSearchParams(); // 현재 query string 가져오기
   const router = useRouter();
-
-  // fromDate와 toDate 값이 있을 경우 ISO 형식으로 변환
-  // const fromDate = query.date?.from ? query.date.from : undefined;
-  // const toDate = query.date?.to ? query.date.to : undefined;
-  // const fromUtcDate = fromDate ? fromDate.toISOString() : undefined;
-  // const toUtcDate = toDate ? toDate.toISOString() : undefined;
 
   const adjustToKst = (date: Date, isStart: boolean): string => {
     const kstOffset = 9 * 60 * 60 * 1000; // 9시간을 밀리초로
@@ -81,3 +76,5 @@ export default function BoardsSearchButton({ query }: { query: IProps }) {
     </button>
   );
 }
+
+export default React.memo(BoardsSearchButton);

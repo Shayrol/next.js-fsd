@@ -13,19 +13,21 @@ export default function BoardsOptions() {
   const fromDateValue = params?.get("from");
   const toDateValue = params?.get("to");
 
+  const isValidDate = (d: Date | undefined) =>
+    d instanceof Date && !isNaN(d.getTime());
   const fromDate = fromDateValue ? new Date(fromDateValue) : undefined;
   const toDate = toDateValue ? new Date(toDateValue) : undefined;
+  const validatedFrom = isValidDate(fromDate) ? fromDate : undefined;
+  const validatedTo = isValidDate(toDate) ? toDate : undefined;
 
   const [search, setSearch] = useState<string>(searchValue);
   const [date, setDate] = useState<DateRange | undefined>({
-    from: fromDate,
-    to: toDate,
+    from: validatedFrom,
+    to: validatedTo,
   });
 
-  console.log("data: ", date);
-
   return (
-    <article className="flex gap-4 justify-center items-center w-full  max-md:flex-col">
+    <article className="flex gap-4 justify-center items-center w-full max-md:flex-col">
       <DatePickerWithRange query={{ date, setDate }} />
       <BoardsSearch query={{ search, setSearch }} />
       <BoardsSearchButton query={{ search, date }} />
