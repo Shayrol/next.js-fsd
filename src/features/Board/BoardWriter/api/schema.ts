@@ -9,5 +9,5 @@ export const boardWriterSchema = yup.object().shape({
   address: yup.string(),
   addressDetail: yup.string(),
   youtubeUrl: yup.string().url("올바른 URL을 입력해주세요."), // URL 유효성 검사
-  image: yup.array().of(yup.mixed().nullable()).optional(),
+  // image: yup.array().of(yup.mixed().nullable()).optional(),
 });

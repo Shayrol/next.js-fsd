@@ -1,21 +1,33 @@
 "use client";
 
-import { Query } from "@/entities/api/graphql";
+// import { Query } from "@/entities/api/graphql";
 import { formatDate } from "@/lib/dateUtils";
 import RatingRead from "@/shared/ui/Rating/raiting-read";
 import Image from "next/image";
+import { useFetchBoardComments } from "../api/usefetchBoardComments";
 
-interface IProps {
-  data: Pick<Query, "fetchBoardComments">;
-}
+// interface IProps {
+//   data: Pick<Query, "fetchBoardComments">;
+// }
 
-export default function ReplyContents(props: IProps) {
-  const data = props.data;
+export default function ReplyContents({ boardId }: { boardId: string }) {
+  // const data = props.data;
+
+  const { data, loading } = useFetchBoardComments(boardId);
+
+  console.log(data?.fetchBoardComments);
+
+  if (loading)
+    return (
+      <p className="flex justify-center items-center w-full min-h-[64px] p-10 font-bold text-gray-500 border border-gary-200 rounded-[8px]">
+        loading...
+      </p>
+    );
 
   return (
     <article className="flex flex-col w-full">
-      {data.fetchBoardComments.length ? (
-        data.fetchBoardComments.map((el, index) => (
+      {data?.fetchBoardComments.length ? (
+        data?.fetchBoardComments.map((el, index) => (
           <section key={el._id} className="flex flex-col gap-2">
             {/* 댓글 헤더 (프로필 이미지, 작성자, 평점, 수정/삭제) */}
             <header className="flex flex-row justify-between items-center w-full h-[24px]">
@@ -62,7 +74,9 @@ export default function ReplyContents(props: IProps) {
           </section>
         ))
       ) : (
-        <p>등록된 댓글 없음</p>
+        <p className="flex justify-center items-center w-full min-h-[64px] p-10 font-bold text-gray-500 border border-gary-200 rounded-[8px]">
+          등록된 댓글 없음
+        </p>
       )}
     </article>
   );

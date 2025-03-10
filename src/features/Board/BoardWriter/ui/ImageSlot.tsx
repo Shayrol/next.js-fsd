@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 import { useState, useEffect, ChangeEvent } from "react";
-import { UseFormSetValue } from "react-hook-form";
-import { IForm } from "./BoardWriterForm";
+// import { UseFormSetValue } from "react-hook-form";
+// import { IForm } from "./BoardWriterForm";
 
 // 단일 이미지 슬롯 컴포넌트
 function ImageSlot({
@@ -102,21 +102,22 @@ function ImageSlot({
 }
 
 interface IImageUploader {
-  setValue: UseFormSetValue<IForm>;
+  ImageFileState: {
+    imageFile: (File | null)[];
+    setImageFile: React.Dispatch<React.SetStateAction<(File | null)[]>>;
+  };
 }
 
 // 상위 컴포넌트
 export default function ImageUploader(props: IImageUploader) {
-  const { setValue } = props;
-  const [imageFile, setImageFile] = useState<(File | null)[]>([
-    null,
-    null,
-    null,
-  ]);
+  const { imageFile, setImageFile } = props.ImageFileState;
+  // const [imageFile, setImageFile] = useState<(File | null)[]>([
+  //   null,
+  //   null,
+  //   null,
+  // ]);
 
-  useEffect(() => {
-    setValue("image", imageFile); // 폼 필드 "image"에 imageFile 반영
-  }, [imageFile]);
+  useEffect(() => {}, [imageFile]);
 
   return (
     <div className="flex justify-start items-center w-fit gap-4 max-sm:w-full max-sm:justify-center">

@@ -1,3 +1,4 @@
+import { Query } from "@/entities/api/graphql";
 import { gql, useQuery } from "@apollo/client";
 
 export const BOARD_COMMENT = gql`
@@ -19,7 +20,7 @@ export const BOARD_COMMENT = gql`
 `;
 
 export const useFetchBoardComments = (boardId: string) => {
-  const result = useQuery(BOARD_COMMENT, {
+  const result = useQuery<Pick<Query, "fetchBoardComments">>(BOARD_COMMENT, {
     variables: { page: 1, boardId },
   });
 

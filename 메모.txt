@@ -67,3 +67,24 @@ images: {
   unoptimized // 최적화 비활성화
 />
 이미지를 wedp로 최적화로 가져오는데 원본 이미지로 가져오기 위해서는 unoptimized 사용하면 된다.
+
+
+
+이미지 서버에 저장하기
+  이미지를 Storage에 저장하는 API 요청에 에러가 생기는데 백엔드을 통해 엔드포인트 서버로 가는게
+  아닌 다른 DB 즉 Storage에 가는과정에 오류가 생긴걸로 추측..
+
+  그래서 apollo-upload-client를 --dev로 설치를 해주고 ApolloProvider의 client에 들어가
+  createUploadLink함수를 불러온다.
+
+  const GLOBAL_STATE = new InMemoryCache();
+
+  const uploadLink = createUploadLink({
+    uri: process.env.NEXT_PUBLIC_GRAPHQL_URL,
+  }) as unknown as ApolloLink;
+
+  export const client = new ApolloClient({
+    link: ApolloLink.from([uploadLink]),
+    cache: GLOBAL_STATE,
+  });
+  이렇게 해주면 정상적으로 이미지를 Storage에 저장하고 이미지 다운받을 수 있는 url 반환한다.

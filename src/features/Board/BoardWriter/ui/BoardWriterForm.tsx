@@ -6,54 +6,67 @@ import ImageUploader from "./ImageSlot";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useFetchUploadFile } from "@/shared/api/useFetchUploadFile";
+import { useState } from "react";
 
 export interface IForm {
   writer: string;
   password: string;
   title: string;
   contents: string;
-  zipcode: string;
-  address: string;
-  addressDetail: string;
-  youtubeUrl: string;
-  image?: (File | null)[];
+  zipcode?: string;
+  address?: string;
+  addressDetail?: string;
+  youtubeUrl?: string;
+  // image?: (File | null)[];
 }
 
 export default function BoardWriterForm() {
   const router = useRouter();
-  const { handleSubmit, register, formState, setValue } = useForm<IForm>({
+  const { handleSubmit, register, formState } = useForm<IForm>({
     resolver: yupResolver(boardWriterSchema),
   });
 
+  const [imageFile, setImageFile] = useState<(File | null)[]>([
+    null,
+    null,
+    null,
+  ]);
+
   const [createBoard] = useFetchCreateBoard();
+  const [uploadFile] = useFetchUploadFile();
 
   const onClickSubmit = async (data: IForm) => {
-    console.log("dataImageddddddd", data.image);
-    try {
-      await createBoard({
-        variables: {
-          createBoardInput: {
-            writer: data.writer,
-            password: data.password,
-            title: data.title,
-            contents: data.contents,
-            youtubeUrl: data.youtubeUrl,
-            boardAddress: {
-              zipcode: data.zipcode,
-              address: data.address,
-              addressDetail: data.addressDetail,
-            },
-            images: data.image,
+    const resultImages = await Promise.all(
+      imageFile.map(async (el) => {
+        if (el) {
+          const result = await uploadFile({ variables: { file: el } });
+          return result.data?.uploadFile.url ?? "";
+        } else {
+          return "";
+        }
+      })
+    );
+
+    console.log("resultImages", resultImages);
+
+    await createBoard({
+      variables: {
+        createBoardInput: {
+          writer: data.writer,
+          password: data.password,
+          title: data.title,
+          contents: data.contents,
+          youtubeUrl: data.youtubeUrl,
+          boardAddress: {
+            zipcode: data.zipcode,
+            address: data.address,
+            addressDetail: data.addressDetail,
           },
+          images: resultImages,
         },
-        // refetchQueries: [{ query: BOARDS }],  // 서버컴포넌트에서 업데이트를 하고 있어 반영안됨.
-      });
-      alert("게시물이 등록되었습니다.");
-    } catch (error) {
-      console.log(error);
-    } finally {
-      router.push("/");
-    }
+      },
+    }).then(() => router.push("/"));
   };
 
   return (
@@ -179,7 +192,7 @@ export default function BoardWriterForm() {
       {/* 사진 */}
       <section className="flex flex-col gap-2 w-full max-sm:justify-center max-sm:items-center">
         <p className="flex justify-start w-full">사진 첨부</p>
-        <ImageUploader setValue={setValue} />
+        <ImageUploader ImageFileState={{ imageFile, setImageFile }} />
       </section>
 
       {/* 등록, 취소 */}
@@ -197,14 +210,3 @@ export default function BoardWriterForm() {
     </form>
   );
 }
-
-// 일단 resolvers에 타입 에러가 있지만 seValue의 이미지를 잘 가져오고 있고
-// 문제 없이 동작은 하고 있음
-// 여기서 게시물 등록을 이미지를 먼저 Storage에 업로드하고 반환 값을 넣어 저장을 해야
-// 에러가 없음(이미지 타입에러인 듯)
-
-// 그래서 우선 <ImageUploader setValue={setValue} />의 이미지 state를 props로 넘겨줘
-// 부모에서 관리하고 useForm을 사용하는 방식을 적용해보기
-// 또는 이미지 저장 API의 반환 값 가져와 이미지 타입 변경해서 resolvers 타입에러 확인하기
-
-// setValue도 Props 문제 없으니 작성자, 제목, 내용 등 모듈화로 분리해서 관리하기
