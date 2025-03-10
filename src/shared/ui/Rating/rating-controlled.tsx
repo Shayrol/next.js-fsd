@@ -2,11 +2,12 @@
 
 import Box from "@mui/material/Box";
 import Rating from "@mui/material/Rating";
+import { Dispatch, SetStateAction } from "react";
 
 interface IValueState {
   ValueState: {
     value: number | null; // number | null
-    setValue: React.Dispatch<React.SetStateAction<number | null>>;
+    setValue: Dispatch<SetStateAction<number>>;
   };
 }
 
@@ -21,7 +22,7 @@ const RatingControlled = (props: IValueState) => {
         name="simple-controlled"
         value={value}
         onChange={(event, newValue) => {
-          setValue(newValue);
+          setValue(newValue ?? 0);
         }}
       />
     </Box>

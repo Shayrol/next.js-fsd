@@ -58,11 +58,29 @@ import RatingControlled from "@/shared/ui/Rating/rating-controlled";
 import Image from "next/image";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useFetchCreateBoardCommentInput } from "../api/usefetchCreateBoardCommentInput";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { IFormInput } from "../type";
 
-export default function ReplyInput({ boardId }: { boardId: string }) {
-  const [value, setValue] = useState<number | null>(0);
+interface IFormInputProps {
+  boardId: string;
+  writer?: string | null;
+  setPassword?: Dispatch<SetStateAction<string>>;
+  contents?: string;
+  rating?: number;
+  edit?: boolean;
+  setEdit?: Dispatch<
+    SetStateAction<{
+      [key: string]: boolean;
+    }>
+  >;
+  id?: string;
+}
+
+export default function ReplyInput(props: IFormInputProps) {
+  const { boardId, writer, setPassword, contents, rating, edit, setEdit, id } =
+    props;
+
+  const [value, setValue] = useState<number>(rating ?? 0);
 
   const [createBoardCommentInput] = useFetchCreateBoardCommentInput();
   const {
@@ -72,10 +90,10 @@ export default function ReplyInput({ boardId }: { boardId: string }) {
     formState: { errors },
   } = useForm<IFormInput>({
     defaultValues: {
-      writer: "",
+      writer: writer ?? "",
       password: "",
-      contents: "",
-      rating: 0,
+      contents: contents ?? "",
+      rating: rating ?? 0,
     },
   });
 
@@ -99,61 +117,100 @@ export default function ReplyInput({ boardId }: { boardId: string }) {
 
   return (
     <article className="flex flex-col gap-6 w-full h-full">
-      <div className="flex justify-center items-center gap-2 w-full max-w-[60px] h-full max-h-[24px]">
-        <Image
-          src={"/board/reply/reply.svg"}
-          alt="reply-image"
-          width={0}
-          height={0}
-          sizes="100vw"
-          className="w-full h-full"
-        />
-        <p className="w-[28px] font-semibold text-black text-nowrap">댓글</p>
-      </div>
+      {!edit && (
+        <div className="flex justify-center items-center gap-2 w-full max-w-[60px] h-full max-h-[24px]">
+          <Image
+            src={"/board/reply/reply.svg"}
+            alt="reply-image"
+            width={0}
+            height={0}
+            sizes="100vw"
+            className="w-full h-full"
+          />
+          <p className="w-[28px] font-semibold text-black text-nowrap">댓글</p>
+        </div>
+      )}
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col gap-6 w-full h-full"
       >
-        <div>
+        {/* 별점, 작성자, 비밀번호 - (수정) */}
+        <div className="flex flex-col gap-6 w-full">
           <RatingControlled
             ValueState={{
               value,
               setValue,
             }}
           />
-          <div className="flex flexborder border-red-500">
-            <input
-              {...register("writer", { required: "작성자를 입력해 주세요." })}
-              type="text"
-              placeholder="작성자"
-              className="w-full outline-none board border-red-500"
-            />
-            {errors.writer && (
-              <span className="text-red-500">{errors.writer.message}</span>
-            )}
-            <input
-              {...register("password", {
-                required: "비밀번호를 입력해 주세요.",
-              })}
-              type="password"
-              placeholder="비밀번호"
-            />
-            {errors.password && (
-              <span className="text-red-500">{errors.password.message}</span>
-            )}
+          <div className="flex justify-start items-start gap-4 w-full max-sm:flex-col">
+            <div className="relative flex flex-col w-full max-w-[312px] gap-2">
+              <p className="flex gap-1 font-medium text-black">
+                작성자<span className="text-red-500">*</span>
+              </p>
+              <input
+                {...register("writer", { required: "작성자를 입력해 주세요." })}
+                type="text"
+                placeholder="작성자"
+                className={`w-full px-4 py-3 rounded-[8px] bg border border-gray-300
+                  ${!edit ? "bg-white" : "bg-gray-200"}`}
+                disabled={edit}
+              />
+              {errors.writer && (
+                <span className="absolute bottom-[-20px] right-0 text-[12px] text-red-500">
+                  {errors.writer.message}
+                </span>
+              )}
+            </div>
+            <div className="relative flex flex-col w-full max-w-[312px] gap-2">
+              <p className="flex gap-1 font-medium text-black">
+                비밀번호<span className="text-red-500">*</span>
+              </p>
+              <input
+                {...register("password", {
+                  required: "비밀번호를 입력해 주세요.",
+                })}
+                type="password"
+                placeholder="비밀번호를 입력해주세요."
+                className="w-full px-4 py-3 rounded-[8px] bg border border-gray-300"
+              />
+              {errors.password && (
+                <span className="absolute bottom-[-20px] right-0 text-[12px] text-red-500">
+                  {errors.password.message}
+                </span>
+              )}
+            </div>
           </div>
         </div>
-        <section className="flex flex-col items-end gap-4 w-full h-full max-h-[208px]">
+        <section className="relative flex flex-col items-end gap-4 w-full h-full max-h-[208px]">
           <ReplyTextArea register={register} name="contents" />
           {errors.contents && (
-            <span className="text-red-500">{errors.contents.message}</span>
+            <span className="absolute bottom-[50px] right-0 text-[12px] text-red-500">
+              {errors.contents.message}
+            </span>
           )}
-          <button
-            type="submit"
-            className="flex justify-center items-center gap-2 w-fit min-h-[48px] px-4 py-3 bg-[#2974E5] text-white font-semibold rounded-[8px] border border-[#2974E5] hover:bg-[#2974E5]/90 max-sm:w-full"
-          >
-            등록하기
-          </button>
+          {!edit ? (
+            <button
+              type="submit"
+              className="flex justify-center items-center gap-2 w-fit min-h-[48px] px-4 py-3 bg-[#2974E5] text-white font-semibold rounded-[8px] border border-[#2974E5] hover:bg-[#2974E5]/90 max-sm:w-full"
+            >
+              등록하기
+            </button>
+          ) : (
+            <section className="flex justify-end items-center w-full gap-4">
+              <button
+                type="button"
+                onClick={() =>
+                  setEdit && setEdit((prev) => ({ ...prev, [id!]: false }))
+                }
+                className="flex gap-2 px-4 py-3 font-normal text-black border border-black bg-white rounded-[8px]"
+              >
+                취소
+              </button>
+              <button className="flex gap-2 px-4 py-3 font-normal text-white border border-black bg-black rounded-[8px]">
+                수정하기
+              </button>
+            </section>
+          )}
         </section>
       </form>
     </article>

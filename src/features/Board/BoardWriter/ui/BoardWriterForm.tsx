@@ -142,7 +142,7 @@ export default function BoardWriterForm() {
       <hr className="w-full border border-b-gray-100" />
 
       {/* 주소 */}
-      <section className="flex flex-col w-full gap-2">
+      {/* <section className="flex flex-col w-full gap-2">
         <div className="flex flex-col gap-2 min-w-[220px]">
           <p className="flex gap-1">주소</p>
           <div className="flex gap-2">
@@ -172,7 +172,7 @@ export default function BoardWriterForm() {
           className="flex gap-2 px-4 py-3 outline-none border border-gray-200 rounded-[8px] bg-white"
         />
       </section>
-      <hr className="w-full border border-b-gray-100" />
+      <hr className="w-full border border-b-gray-100" /> */}
 
       {/* 유튜브 */}
       <section className="flex flex-col w-full gap-2 relative">
@@ -197,7 +197,11 @@ export default function BoardWriterForm() {
 
       {/* 등록, 취소 */}
       <section className="flex justify-end items-center gap-4 w-full h-fit">
-        <button className="flex justify-center items-center gap-2 w-fit min-h-[48px] px-4 py-3 bg-white text-black font-semibold rounded-[8px] border border-black hover:bg-gray-100/90 max-sm:w-full">
+        <button
+          type="button"
+          onClick={() => router.back()}
+          className="flex justify-center items-center gap-2 w-fit min-h-[48px] px-4 py-3 bg-white text-black font-semibold rounded-[8px] border border-black hover:bg-gray-100/90 max-sm:w-full"
+        >
           취소
         </button>
         <button
