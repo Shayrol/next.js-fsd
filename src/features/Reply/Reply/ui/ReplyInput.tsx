@@ -50,6 +50,8 @@
 //   );
 // }
 
+// 게시글 댓글, 댓글 수정에 사용된 댓글 입력 폼 컴포넌트
+
 "use client";
 
 // import { ReplyButton } from "@/shared/ui/button/reply-button";
@@ -60,11 +62,12 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { useFetchCreateBoardCommentInput } from "../api/usefetchCreateBoardCommentInput";
 import { Dispatch, SetStateAction, useState } from "react";
 import { IFormInput } from "../type";
+import { useFetchUpdateBoardCommentInput } from "../api/usefetchUpdateBoardCommentInput";
+import { client } from "@/shared/api/apollo-client";
 
 interface IFormInputProps {
   boardId: string;
   writer?: string | null;
-  setPassword?: Dispatch<SetStateAction<string>>;
   contents?: string;
   rating?: number;
   edit?: boolean;
@@ -77,16 +80,18 @@ interface IFormInputProps {
 }
 
 export default function ReplyInput(props: IFormInputProps) {
-  const { boardId, writer, setPassword, contents, rating, edit, setEdit, id } =
-    props;
+  const { boardId, writer, contents, rating, edit, setEdit, id } = props;
 
-  const [value, setValue] = useState<number>(rating ?? 0);
+  const [value, setValue] = useState<number>(rating ?? 0); // 별점
 
   const [createBoardCommentInput] = useFetchCreateBoardCommentInput();
+  const [updateBoardCommentInput] = useFetchUpdateBoardCommentInput();
+
   const {
     register,
     handleSubmit,
     reset,
+    setError,
     formState: { errors },
   } = useForm<IFormInput>({
     defaultValues: {
@@ -97,6 +102,7 @@ export default function ReplyInput(props: IFormInputProps) {
     },
   });
 
+  // 게시물 댓글 등록
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     console.log("Form Data:", data);
     await createBoardCommentInput({
@@ -115,6 +121,37 @@ export default function ReplyInput(props: IFormInputProps) {
     setValue(0);
   };
 
+  // 게시물 댓글 수정 - (boardId가 아닌 댓글 id로 수정하기)
+  const onEdit: SubmitHandler<IFormInput> = async (data) => {
+    try {
+      await updateBoardCommentInput({
+        variables: {
+          updateBoardCommentInput: {
+            rating: value,
+            contents: data.contents,
+          },
+          boardCommentId: id,
+          password: data.password,
+        },
+        // refetchQueries: ["fetchBoardComments"],
+      });
+
+      // 화면 업데이트가 이루어지지 않아서 강제로 업데이트 해줌
+      await client.refetchQueries({ include: ["fetchBoardComments"] });
+
+      if (setEdit) {
+        setEdit((prev) => ({ ...prev, [id!]: false }));
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        setError("password", {
+          type: "manual",
+          message: "비밀번호가 일치하지 않습니다.",
+        });
+      }
+    }
+  };
+
   return (
     <article className="flex flex-col gap-6 w-full h-full">
       {!edit && (
@@ -131,7 +168,7 @@ export default function ReplyInput(props: IFormInputProps) {
         </div>
       )}
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={!edit ? handleSubmit(onSubmit) : handleSubmit(onEdit)}
         className="flex flex-col gap-6 w-full h-full"
       >
         {/* 별점, 작성자, 비밀번호 - (수정) */}
@@ -206,7 +243,10 @@ export default function ReplyInput(props: IFormInputProps) {
               >
                 취소
               </button>
-              <button className="flex gap-2 px-4 py-3 font-normal text-white border border-black bg-black rounded-[8px]">
+              <button
+                type="submit"
+                className="flex gap-2 px-4 py-3 font-normal text-white border border-black bg-black rounded-[8px]"
+              >
                 수정하기
               </button>
             </section>

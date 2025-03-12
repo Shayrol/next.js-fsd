@@ -7,6 +7,7 @@ export default async function Board({ boardId }: { boardId: string }) {
   const { data } = await client.query<Pick<Query, "fetchBoard">>({
     query: BOARD,
     variables: { boardId },
+    fetchPolicy: "network-only",
   });
 
   return (

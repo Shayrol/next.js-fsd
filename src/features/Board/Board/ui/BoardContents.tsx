@@ -18,6 +18,8 @@ export default function BoardContents(props: IProps) {
   const data = props.data;
   const router = useRouter();
 
+  console.log("board-image: ", data.fetchBoard.images);
+
   return (
     <article className="flex flex-col gap-6 w-full">
       {/* 제목 */}
@@ -55,7 +57,7 @@ export default function BoardContents(props: IProps) {
         <hr className="border-b border-[#e4e4e4]" />
 
         {/* 주소 */}
-        <section className="flex justify-end w-full">
+        {/* <section className="flex justify-end w-full">
           <div
             title="주소"
             className={`w-fit rounded-sm px-3 py-2 border shadow-md shadow-black/15 cursor-default ${
@@ -67,7 +69,7 @@ export default function BoardContents(props: IProps) {
             {data.fetchBoard.boardAddress?.addressDetail ||
               "등록된 주소가 없습니다."}
           </div>
-        </section>
+        </section> */}
       </section>
 
       {/* 이미지 */}
@@ -155,7 +157,7 @@ export default function BoardContents(props: IProps) {
             priority={false}
           />
         </button>
-        <Link href={`/${data.fetchBoard._id}/edit`}>
+        <Link href={`/board/${data.fetchBoard._id}/edit`}>
           <Image
             src={"/board/edit-button.svg"}
             alt="main-button"

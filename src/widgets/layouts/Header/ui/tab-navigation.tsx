@@ -37,7 +37,7 @@ export default function TabNavigation() {
   return (
     <ul className="flex justify-between items-center gap-4">
       <li className="mr-[28px]">
-        <Logo />
+        <Logo width={56} height={32} />
       </li>
       {HeaderTag.map((el) => (
         <li

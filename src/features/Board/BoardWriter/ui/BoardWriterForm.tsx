@@ -2,12 +2,17 @@
 
 import { boardWriterSchema } from "../api/schema";
 import { useFetchCreateBoard } from "../api/useFetchCreateBoard";
-import ImageUploader from "./ImageSlot";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useFetchUploadFile } from "@/shared/api/useFetchUploadFile";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useFetchUpdateBoard } from "../api/useFetchUpdateBoard";
+import { useFetchBoard } from "../../Board/api/useFetchBoard";
+import {
+  ImageType,
+  ImageUploader,
+} from "@/shared/ui/ImageUploader/ImageUploader";
 
 export interface IForm {
   writer: string;
@@ -18,60 +23,164 @@ export interface IForm {
   address?: string;
   addressDetail?: string;
   youtubeUrl?: string;
-  // image?: (File | null)[];
 }
 
-export default function BoardWriterForm() {
-  const router = useRouter();
-  const { handleSubmit, register, formState } = useForm<IForm>({
-    resolver: yupResolver(boardWriterSchema),
-  });
+interface IProps {
+  edit: boolean;
+}
 
-  const [imageFile, setImageFile] = useState<(File | null)[]>([
-    null,
-    null,
-    null,
-  ]);
+export default function BoardWriterForm({ edit }: IProps) {
+  const params = useParams();
+  const boardId = String(params?.boardId);
+  const { data } = useFetchBoard(boardId);
+  const router = useRouter();
+
+  // 이미지 상태 관리 📕
+  const [images, setImages] = useState<ImageType[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  console.log("images: ", images);
+  console.log("images: ", data?.fetchBoard.images);
+
+  const { handleSubmit, register, reset, formState, setError } = useForm<IForm>(
+    {
+      resolver: yupResolver(boardWriterSchema),
+      defaultValues: {
+        writer: "",
+        password: "",
+        title: "",
+        contents: "",
+        youtubeUrl: "",
+      },
+    }
+  );
 
   const [createBoard] = useFetchCreateBoard();
   const [uploadFile] = useFetchUploadFile();
+  const [updateBoard] = useFetchUpdateBoard();
 
-  const onClickSubmit = async (data: IForm) => {
-    const resultImages = await Promise.all(
-      imageFile.map(async (el) => {
-        if (el) {
-          const result = await uploadFile({ variables: { file: el } });
-          return result.data?.uploadFile.url ?? "";
-        } else {
-          return "";
-        }
+  // 수정 시 Form의 초기 값 불러오기
+  useEffect(() => {
+    if (data) {
+      reset({
+        writer: data.fetchBoard.writer ?? "",
+        password: "",
+        title: data.fetchBoard.title ?? "",
+        contents: data.fetchBoard.contents ?? "",
+        youtubeUrl: data.fetchBoard.youtubeUrl ?? "",
+      });
+    }
+  }, [data, reset]);
+
+  // 이미지 변경 처리 📕
+  const handleImagesChange = (updatedImages: ImageType[]) => {
+    setImages(updatedImages);
+  };
+
+  // 이미지 업로드 및 URL 가져오기 📕
+  const processImages = async () => {
+    // 1. 새로 추가된 이미지 파일 수집
+    const newImageFiles = images
+      .filter((img) => img.isNew && !img.isDeleted && img.file)
+      .map((img) => img.file as File);
+
+    // 2. 유지할 기존 이미지 URL 수집
+    const keptImageUrls = images
+      .filter((img) => !img.isNew && !img.isDeleted)
+      .map((img) =>
+        img.url.startsWith("http://storage.googleapis.com/")
+          ? img.url.replace("http://storage.googleapis.com/", "")
+          : img.url
+      );
+
+    // 3. 새 이미지 업로드 및 URL 가져오기
+    const uploadResults = await Promise.all(
+      newImageFiles.map(async (file) => {
+        const result = await uploadFile({ variables: { file } });
+        return result.data?.uploadFile.url ?? "";
       })
     );
 
-    console.log("resultImages", resultImages);
+    // 4. 기존 이미지와 새 이미지 URL 합치기
+    const allImageUrls = [...keptImageUrls, ...uploadResults];
 
-    await createBoard({
-      variables: {
-        createBoardInput: {
-          writer: data.writer,
-          password: data.password,
-          title: data.title,
-          contents: data.contents,
-          youtubeUrl: data.youtubeUrl,
-          boardAddress: {
-            zipcode: data.zipcode,
-            address: data.address,
-            addressDetail: data.addressDetail,
+    console.log("allImageUrls: ", allImageUrls);
+    return allImageUrls;
+  };
+
+  const onClickSubmit = async (data: IForm) => {
+    try {
+      setIsSubmitting(true);
+
+      // 이미지 처리 📕
+      const uploadImages = await processImages();
+
+      // 게시글 생성
+      await createBoard({
+        variables: {
+          createBoardInput: {
+            writer: data.writer,
+            password: data.password,
+            title: data.title,
+            contents: data.contents,
+            youtubeUrl: data.youtubeUrl,
+            boardAddress: {
+              zipcode: data.zipcode,
+              address: data.address,
+              addressDetail: data.addressDetail,
+            },
+            images: uploadImages,
           },
-          images: resultImages,
         },
-      },
-    }).then(() => router.push("/"));
+      });
+
+      router.push("/");
+    } catch (error) {
+      console.error("게시글 등록 오류:", error);
+      alert("게시글 등록 중 오류가 발생했습니다.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const onClickUpdate = async (data: IForm) => {
+    try {
+      setIsSubmitting(true);
+
+      // 이미지 처리 📕
+      const uploadImages = await processImages();
+      // 게시글 수정
+      await updateBoard({
+        variables: {
+          updateBoardInput: {
+            title: data.title,
+            contents: data.contents,
+            youtubeUrl: data.youtubeUrl,
+            images: uploadImages,
+          },
+          password: data.password,
+          boardId,
+        },
+      });
+
+      router.push(`/board/${boardId}`);
+    } catch (error) {
+      if (error instanceof Error) {
+        setError("password", {
+          type: "manual",
+          message: "비밀번호가 일치하지 않습니다.",
+        });
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
     <form
-      onSubmit={handleSubmit(onClickSubmit)}
+      onSubmit={
+        !edit ? handleSubmit(onClickSubmit) : handleSubmit(onClickUpdate)
+      }
       className="flex flex-col gap-10 justify-center items-center w-full h-fit max-sm:gap-4"
     >
       {/* 작성자 */}
@@ -84,7 +193,11 @@ export default function BoardWriterForm() {
             {...register("writer")}
             type="text"
             placeholder="작성자 명을 입력해 주세요."
-            className="flex gap-2 px-4 py-3 outline-none border border-gray-200 rounded-[8px] bg-white"
+            defaultValue={!edit ? "" : String(data?.fetchBoard.writer)}
+            disabled={!edit ? false : true}
+            className={`flex gap-2 px-4 py-3 outline-none border border-gray-200 rounded-[8px]
+                ${!edit ? "bg-white" : "bg-gray-200"}
+              `}
           />
           <p className="text-[12px] text-red-500 absolute bottom-[-20px] right-1">
             {formState.errors.writer?.message}
@@ -117,6 +230,7 @@ export default function BoardWriterForm() {
           {...register("title")}
           type="text"
           placeholder="제목을 입력해 주세요."
+          defaultValue={!edit ? "" : String(data?.fetchBoard.title)}
           className="flex gap-2 px-4 py-3 outline-none border border-gray-200 rounded-[8px] bg-white"
         />
         <p className="text-[12px] text-red-500 absolute bottom-[-20px] right-1">
@@ -133,6 +247,7 @@ export default function BoardWriterForm() {
         <textarea
           {...register("contents")}
           placeholder="내용을 입력해 주세요."
+          defaultValue={!edit ? "" : String(data?.fetchBoard.contents)}
           className="w-full px-4 py-3 min-h-[336px] outline-none border border-gray-200 rounded-[8px] bg-white resize-none max-sm:min-h-[120px]"
         />
         <p className="text-[12px] text-red-500 absolute bottom-[-20px] right-1">
@@ -141,39 +256,6 @@ export default function BoardWriterForm() {
       </section>
       <hr className="w-full border border-b-gray-100" />
 
-      {/* 주소 */}
-      {/* <section className="flex flex-col w-full gap-2">
-        <div className="flex flex-col gap-2 min-w-[220px]">
-          <p className="flex gap-1">주소</p>
-          <div className="flex gap-2">
-            <input
-              {...register("zipcode")}
-              type="text"
-              readOnly
-              placeholder="01234"
-              className="px-4 py-3 w-[82px] outline-none border border-gray-200 rounded-[8px] bg-white"
-            />
-            <button className="flex justify-center items-center gap-2 w-[130px] min-h-[48px] px-4 py-3 border border-black rounded-[8px] text-nowrap font-semibold">
-              우편번호 검색
-            </button>
-          </div>
-        </div>
-
-        <input
-          {...register("address")}
-          type="text"
-          placeholder="주소를 입력해 주세요."
-          className="flex gap-2 px-4 py-3 outline-none border border-gray-200 rounded-[8px] bg-white"
-        />
-        <input
-          {...register("addressDetail")}
-          type="text"
-          placeholder="상세주소"
-          className="flex gap-2 px-4 py-3 outline-none border border-gray-200 rounded-[8px] bg-white"
-        />
-      </section>
-      <hr className="w-full border border-b-gray-100" /> */}
-
       {/* 유튜브 */}
       <section className="flex flex-col w-full gap-2 relative">
         <p className="flex gap-1">유튜브 링크</p>
@@ -181,6 +263,7 @@ export default function BoardWriterForm() {
           {...register("youtubeUrl")}
           type="text"
           placeholder="링크를 입력해 주세요."
+          defaultValue={!edit ? "" : String(data?.fetchBoard.youtubeUrl)}
           className="flex gap-2 px-4 py-3 outline-none border border-gray-200 rounded-[8px] bg-white"
         />
         <p className="text-[12px] text-red-500 absolute bottom-[-20px] right-1">
@@ -192,7 +275,14 @@ export default function BoardWriterForm() {
       {/* 사진 */}
       <section className="flex flex-col gap-2 w-full max-sm:justify-center max-sm:items-center">
         <p className="flex justify-start w-full">사진 첨부</p>
-        <ImageUploader ImageFileState={{ imageFile, setImageFile }} />
+        <div className="flex justify-start items-center w-full">
+          {/* 이미지 업로더 📕 */}
+          <ImageUploader
+            initialImages={data?.fetchBoard.images || []}
+            onChange={handleImagesChange}
+            disabled={isSubmitting}
+          />
+        </div>
       </section>
 
       {/* 등록, 취소 */}
@@ -201,14 +291,16 @@ export default function BoardWriterForm() {
           type="button"
           onClick={() => router.back()}
           className="flex justify-center items-center gap-2 w-fit min-h-[48px] px-4 py-3 bg-white text-black font-semibold rounded-[8px] border border-black hover:bg-gray-100/90 max-sm:w-full"
+          disabled={isSubmitting}
         >
           취소
         </button>
         <button
           type="submit"
+          disabled={isSubmitting}
           className="flex justify-center items-center gap-2 w-fit min-h-[48px] px-4 py-3 bg-[#2974E5] text-white font-semibold rounded-[8px] border border-[#2974E5] hover:bg-[#2974E5]/90 max-sm:w-full"
         >
-          등록하기
+          {isSubmitting ? "처리 중..." : edit ? "수정하기" : "등록하기"}
         </button>
       </section>
     </form>

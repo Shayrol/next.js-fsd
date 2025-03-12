@@ -7,6 +7,7 @@ import Image from "next/image";
 import { useFetchBoardComments } from "../api/usefetchBoardComments";
 import { useState } from "react";
 import ReplyInput from "./ReplyInput";
+import { useFetchDeleteBoardComment } from "../api/usefetchDeleteboardCommentInput";
 
 // interface IProps {
 //   data: Pick<Query, "fetchBoardComments">;
@@ -98,9 +99,10 @@ import ReplyInput from "./ReplyInput";
 // }
 
 export default function ReplyContents({ boardId }: { boardId: string }) {
-  const [edit, setEdit] = useState<{ [key: string]: boolean }>({});
-  const [password, setPassword] = useState("");
   const { data, loading } = useFetchBoardComments(boardId);
+  const [deleteBoardComment] = useFetchDeleteBoardComment();
+
+  const [edit, setEdit] = useState<{ [key: string]: boolean }>({});
 
   console.log(data?.fetchBoardComments);
 
@@ -110,18 +112,38 @@ export default function ReplyContents({ boardId }: { boardId: string }) {
     setEdit({ [id]: true });
   };
 
+  const onDelete = async (id: string) => {
+    const password = prompt("비밀번호를 입력해 주세요,");
+
+    try {
+      await deleteBoardComment({
+        variables: {
+          password,
+          boardCommentId: id,
+        },
+        refetchQueries: ["fetchBoardComments"],
+      });
+      alert("삭제 완료");
+    } catch (error) {
+      if (error instanceof Error) {
+        alert("비밀번호가 일치하지 않습니다.");
+      }
+    }
+  };
+
   console.log("edit: ", edit);
   return (
     <article className="flex flex-col w-full">
       {data?.fetchBoardComments.length ? (
+        // {replyData?.length ? (
         data?.fetchBoardComments.map((el, index) => (
+          // replyData.map((el, index) => (
           <section key={el._id} className="flex flex-col gap-2">
             {edit[el._id] ? (
               // ✅ 수정 모드일 때 ReplyInput 표시
               <ReplyInput
                 boardId={boardId}
                 writer={el.writer}
-                setPassword={setPassword}
                 contents={el.contents}
                 rating={el.rating}
                 edit={edit[el._id]}
@@ -160,7 +182,11 @@ export default function ReplyContents({ boardId }: { boardId: string }) {
                     >
                       수정
                     </button>
-                    <button type="button" className="hover:underline">
+                    <button
+                      type="button"
+                      onClick={() => onDelete(el._id)}
+                      className="hover:underline"
+                    >
                       삭제
                     </button>
                   </div>
