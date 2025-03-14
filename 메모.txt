@@ -88,3 +88,79 @@ images: {
     cache: GLOBAL_STATE,
   });
   이렇게 해주면 정상적으로 이미지를 Storage에 저장하고 이미지 다운받을 수 있는 url 반환한다.
+
+
+
+
+
+
+🎈 리페치 성능 개선
+1. 댓글 등록, 수정, 삭제 요청 후 댓글 목록 API 요청없이 업데이트 하기
+   ReplyInput, Reply 참고
+
+const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+  console.log("Form Data:", data);
+  await createBoardCommentInput({
+    variables: {
+      createBoardCommentInput: {
+        writer: data.writer,
+        password: data.password,
+        rating: value,
+        contents: data.contents,
+      },
+      boardId,
+    },
+    refetchQueries: ["fetchBoardComments"],
+  });
+  reset();
+  setValue(0);
+};
+
+현재 이렇게 댓글을 추가하고 refetch를 통해 댓글 목록을 업데이트를 하고 있다.
+그럼 등록 API / 리페치 API로 2번의 API 요청이 일어나는데
+리페치 API를 보내지 않고 ApolloCache를 수정해 업데이트 하는 방법으로 업데이트를 할 것이다.
+
+refetchQueries: ["fetchBoardComments"]를 지우고 그 자리에 update()를 사용한다.
+
+update(cache, {data}) {
+  cache.modify({
+    fields: {
+      fetchBoardComments: (prev) => {
+        return [data.createBoardComment, ...prev]
+      }
+    }
+  })
+}
+이렇게 해주면 등록 API만 요청으로 댓글 목록도 업데이트 할 수 있다.
+여기서 data는 createBoardCommentInput의 데이터 값이다.
+
+삭제 같은 경우 추가되는 점이 있다.
+update(cache, {data}) {
+  cache.modify({
+    fields: {
+      fetchBoardComments: (prev, { readField }) => {
+        const deletedId = data.deleteBoardComment
+        const filteredPrev = prev.filter(
+          (el) => readField("_id", el) !== deletedId
+        );
+        return [...filteredPrev]
+      }
+    }
+  })
+}
+readField를 추가를 했는데 그냥 el이 아닌 _id로 명확하게 지정을 해줘야한다.
+이유가 prev를 출력을 해보면 ref로 id 값이 있어 el로 id값을 가져올 수 없다.
+그래서 readField를 통해 ref에 들어가 _id를 가져와야 한다.
+(el._id 가 아닌 이유는 delete에 반환 값이 _id만 있어 굳이 사용할 필요없다.)
+
+하지만 updateBoardComment는 refetchQueries, update() 없이도 댓글 목록이 업데이트가 된다.
+정확한 이유는 모르겠지만 같은 BoardComment 타입의 id를 사용하고 있어 캐싱에 자동으로
+업데이트가 되지 않나 싶음.
+
+
+cache.modify / cache.writeQuery 의 차이
+modify: 있는 데이터를 수정 할 수 있다.
+writeQuery: 없는 데이터를 추가, 수정 할 수 있다.
+
+
+🎈 옵티미스틱UI: 성공을 예상하고 화면에 미리 업데이트 하기

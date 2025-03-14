@@ -5,8 +5,10 @@ import { formatDate } from "@/lib/dateUtils";
 import VideoPlayer from "@/shared/ui/player/video-player/Video-Player";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
+import { useLikeBoard } from "../api/useLikeBoard";
+import { BOARD } from "../api/useFetchBoard";
 
 const FetchBoardContents = dynamic(() => import("./contents"), { ssr: false });
 
@@ -16,9 +18,38 @@ interface IProps {
 
 export default function BoardContents(props: IProps) {
   const data = props.data;
+  const boardId = data.fetchBoard._id;
   const router = useRouter();
+  const params = useParams();
 
-  console.log("board-image: ", data.fetchBoard.images);
+  const [likeBoard] = useLikeBoard();
+
+  // Like Count
+  const onLike = async () => {
+    await likeBoard({
+      variables: {
+        boardId,
+      },
+      // 낙관적 업데이트로 API 요청 성공 후 업데이트가 아닌
+      // 성공했다는 가정에 미리 화면을 수정하고 API 요청이 끝나면 update로 캐시 수정
+      optimisticResponse: {
+        likeBoard: (data.fetchBoard.likeCount ?? 0) + 1,
+      },
+      update(cache, { data }) {
+        cache.modify({
+          id: cache.identify({
+            __typename: "Board",
+            _id: String(params?.boardId),
+          }),
+          fields: {
+            fetchBoard() {
+              return data?.likeBoard;
+            },
+          },
+        });
+      },
+    });
+  };
 
   return (
     <article className="flex flex-col gap-6 w-full">
@@ -119,7 +150,10 @@ export default function BoardContents(props: IProps) {
             {data.fetchBoard.dislikeCount}
           </p>
         </button>
-        <button className="flex flex-col justify-center items-center gap-1 w-full max-w-[24px] h-full max-h-[48px]">
+        <button
+          onClick={onLike}
+          className="flex flex-col justify-center items-center gap-1 w-full max-w-[24px] h-full max-h-[48px]"
+        >
           <Image
             src={"/vote/main-like.svg"}
             alt="like"
@@ -136,16 +170,7 @@ export default function BoardContents(props: IProps) {
 
       {/* 목록, 수정 */}
       <section className="flex justify-center items-center gap-6 w-full h-[40px]">
-        {/* <Link href={"/"}>
-          <Image
-            src={"/board/main-button.svg"}
-            alt="main-button"
-            width={0}
-            height={0}
-            sizes="100vw"
-            className="w-fit h-full"
-          />
-        </Link> */}
+        {/* 목록 */}
         <button onClick={() => router.back()} className="w-fit h-full">
           <Image
             src="/board/main-button.svg"
@@ -157,6 +182,7 @@ export default function BoardContents(props: IProps) {
             priority={false}
           />
         </button>
+        {/* 수정 */}
         <Link href={`/board/${data.fetchBoard._id}/edit`}>
           <Image
             src={"/board/edit-button.svg"}
@@ -173,4 +199,4 @@ export default function BoardContents(props: IProps) {
   );
 }
 
-// 버튼 이미지 로드 문제 해결하기
+// likeCount 해결하기

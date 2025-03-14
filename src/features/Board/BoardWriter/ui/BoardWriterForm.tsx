@@ -101,6 +101,8 @@ export default function BoardWriterForm({ edit }: IProps) {
       })
     );
 
+    console.log("files: ", uploadResults);
+
     // 4. 기존 이미지와 새 이미지 URL 합치기
     const allImageUrls = [...keptImageUrls, ...uploadResults];
 

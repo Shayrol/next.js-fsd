@@ -8,6 +8,7 @@ import { useFetchBoardComments } from "../api/usefetchBoardComments";
 import { useState } from "react";
 import ReplyInput from "./ReplyInput";
 import { useFetchDeleteBoardComment } from "../api/usefetchDeleteboardCommentInput";
+import { BoardComment } from "@/entities/api/graphql";
 
 // interface IProps {
 //   data: Pick<Query, "fetchBoardComments">;
@@ -121,7 +122,20 @@ export default function ReplyContents({ boardId }: { boardId: string }) {
           password,
           boardCommentId: id,
         },
-        refetchQueries: ["fetchBoardComments"],
+        // refetchQueries: ["fetchBoardComments"],
+        update(cache, { data }) {
+          cache.modify({
+            fields: {
+              fetchBoardComments: (prev, { readField }) => {
+                const deleteId = data.deleteBoardComment;
+                const filteredPrev = prev.filter(
+                  (el: BoardComment) => readField("_id", el) !== deleteId
+                );
+                return [...filteredPrev];
+              },
+            },
+          });
+        },
       });
       alert("삭제 완료");
     } catch (error) {
