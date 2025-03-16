@@ -24,8 +24,6 @@ export const BOARD = gql`
         email
         name
         picture
-        # userPoint
-        # createdAt
       }
       createdAt
     }

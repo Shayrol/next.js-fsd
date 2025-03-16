@@ -6,16 +6,22 @@ import Image from "next/image";
 
 interface IProps {
   data: Board;
+  loading: boolean;
 }
 
 export default function BoardsOfTheBestItem(props: IProps) {
   const data = props.data;
+  // const loading = props.loading;
 
   return (
     <section className="flex gap-2 w-full h-[152px] max-md:w-[280px]">
       {/* 게시물 이미지 */}
       <Image
-        src={data.images?.[0] ?? "/not-images/not-image.svg"}
+        src={
+          data.images?.[0]
+            ? `http://storage.googleapis.com/${data.images?.[0]}`
+            : "/not-images/not-image.svg"
+        }
         alt="BoardsImage"
         width={112}
         height={152}
