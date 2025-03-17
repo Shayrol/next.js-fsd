@@ -39,9 +39,6 @@ export default function BoardWriterForm({ edit }: IProps) {
   const [images, setImages] = useState<ImageType[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  console.log("images: ", images);
-  console.log("images: ", data?.fetchBoard.images);
-
   const { handleSubmit, register, reset, formState, setError } = useForm<IForm>(
     {
       resolver: yupResolver(boardWriterSchema),

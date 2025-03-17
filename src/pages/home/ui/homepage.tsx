@@ -3,7 +3,6 @@ import { Boards } from "@/features/Boards/Boards";
 import { BOARDS } from "@/features/Boards/Boards/api/useFetchBoards";
 import { BOARDS_COUNT } from "@/features/Boards/Boards/api/useFetchBoardsCount";
 import BoardsOfTheBest from "@/features/Boards/BoardsOfTheBest/ui/BoardsOfTheBest";
-// import BoardsOfTheBest from "@/features/Boards/BoardsOfTheBest/ui/BoardsOfTheBest";
 import { client } from "@/shared/api/apollo-client";
 
 // 타입 정의 (Promise 없이 일반 객체로)
