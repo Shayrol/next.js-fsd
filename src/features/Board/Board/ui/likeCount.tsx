@@ -1,30 +1,41 @@
-import { Dispatch, SetStateAction } from "react";
+"use client";
+
 import { useLikeBoard } from "../api/useLikeBoard";
-import { Board } from "@/entities/api/graphql";
+import { Query } from "@/entities/api/graphql";
 import Image from "next/image";
 
-interface IProps {
-  setData: Dispatch<SetStateAction<Board>>;
-  data: Board;
-}
-
-export default function LikeCount(props: IProps) {
+export default function LikeCount({
+  data,
+}: {
+  data: Pick<Query, "fetchBoard"> | undefined;
+}) {
   const [likeBoard] = useLikeBoard();
-  const setData = props.setData;
-  const boardId = props.data._id;
-  const data = props.data;
+  const boardId = data?.fetchBoard._id;
 
   const onLike = async () => {
     try {
-      const { data: mutationData } = await likeBoard({
+      void likeBoard({
         variables: { boardId },
-      });
+        optimisticResponse: {
+          likeBoard: (data?.fetchBoard.likeCount ?? 0) + 1, // 숫자 값만 반환
+        },
 
-      // mutationData.likeBoard는 Int!로 반환된 좋아요 수
-      setData((prev) => ({
-        ...prev,
-        likeCount: Number(mutationData?.likeBoard), // 최신 좋아요 수로 업데이트
-      }));
+        update(cache, { data }) {
+          if (typeof data?.likeBoard === "number") {
+            cache.modify({
+              id: cache.identify({
+                __typename: "Board",
+                _id: String(boardId),
+              }),
+              fields: {
+                likeCount() {
+                  return data.likeBoard;
+                },
+              },
+            });
+          }
+        },
+      });
     } catch (error) {
       console.error("좋아요 처리 오류:", error);
     }
@@ -43,7 +54,7 @@ export default function LikeCount(props: IProps) {
         sizes="100vw"
         className="w-full h-full"
       />
-      <p className="text-[#f66a6a] font-normal">{data.likeCount}</p>
+      <p className="text-[#f66a6a] font-normal">{data?.fetchBoard.likeCount}</p>
     </button>
   );
 }

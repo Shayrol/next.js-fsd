@@ -1,32 +1,42 @@
-import { Dispatch, SetStateAction } from "react";
-import { Board } from "@/entities/api/graphql";
+"use client";
+
+import { Query } from "@/entities/api/graphql";
 import Image from "next/image";
 import { useDisLikeBoard } from "../api/useDisLikeBoard";
 
-interface IProps {
-  setData: Dispatch<SetStateAction<Board>>;
-  data: Board;
-}
-
-export default function DisLikeCount(props: IProps) {
+export default function DisLikeCount({
+  data,
+}: {
+  data: Pick<Query, "fetchBoard"> | undefined;
+}) {
   const [dislikeBoard] = useDisLikeBoard();
-  const setData = props.setData;
-  const boardId = props.data._id;
-  const data = props.data;
+  const boardId = data?.fetchBoard._id;
 
   const onDisLike = async () => {
     try {
-      const { data: mutationData } = await dislikeBoard({
+      await dislikeBoard({
         variables: {
           boardId,
         },
+        optimisticResponse: {
+          dislikeBoard: (data?.fetchBoard.dislikeCount ?? 0) + 1,
+        },
+        update(cache, { data }) {
+          if (typeof data?.dislikeBoard === "number") {
+            cache.modify({
+              id: cache.identify({
+                __typename: "Board",
+                _id: String(boardId),
+              }),
+              fields: {
+                dislikeCount() {
+                  return data.dislikeBoard;
+                },
+              },
+            });
+          }
+        },
       });
-
-      // mutationData.likeBoard는 Int!로 반환된 좋아요 수
-      setData((prev) => ({
-        ...prev,
-        dislikeCount: Number(mutationData?.dislikeBoard), // 최신 좋아요 수로 업데이트
-      }));
     } catch (error) {
       console.error("안좋아요 처리 오류:", error);
     }
@@ -45,7 +55,9 @@ export default function DisLikeCount(props: IProps) {
         sizes="100vw"
         className="w-full h-full"
       />
-      <p className="text-[#5f5f5f] font-normal">{data.dislikeCount}</p>
+      <p className="text-[#5f5f5f] font-normal">
+        {data?.fetchBoard.dislikeCount}
+      </p>
     </button>
   );
 }

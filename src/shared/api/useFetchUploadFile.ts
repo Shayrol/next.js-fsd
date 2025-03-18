@@ -1,3 +1,5 @@
+// 이미지 등록 API
+
 import { Mutation } from "@/entities/api/graphql";
 import { gql, useMutation } from "@apollo/client";
 

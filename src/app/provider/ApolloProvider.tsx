@@ -23,7 +23,6 @@ export const ApolloClientProvider = ({
   const { accessToken } = useAccessTokenStore();
   console.log("accessToken: ", accessToken);
   const client = new ApolloClient({
-    // ssrMode: typeof window === "undefined", // ssr 요청에는 true로 최적화 csr또한 최적화 된다.
     link: ApolloLink.from([uploadLink]),
     cache: GLOBAL_STATE,
     headers: {

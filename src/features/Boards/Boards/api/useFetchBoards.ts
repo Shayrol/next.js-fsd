@@ -29,9 +29,22 @@ export const BOARDS = gql`
   }
 `;
 
-export const useFetchBoards = () => {
+interface IProps {
+  page: number;
+  search: string;
+  from: Date | undefined;
+  to: Date | undefined;
+}
+
+export const useFetchBoards = (props: IProps) => {
   const result = useQuery<Pick<Query, "fetchBoards">>(BOARDS, {
-    fetchPolicy: "network-only",
+    variables: {
+      page: props.page,
+      search: props.search,
+      from: props.from,
+      to: props.to,
+    },
+    fetchPolicy: "cache-first",
   });
 
   return result;

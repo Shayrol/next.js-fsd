@@ -8,11 +8,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useFetchUploadFile } from "@/shared/api/useFetchUploadFile";
 import { useEffect, useState } from "react";
 import { useFetchUpdateBoard } from "../api/useFetchUpdateBoard";
-import { useFetchBoard } from "../../Board/api/useFetchBoard";
 import {
   ImageType,
   ImageUploader,
 } from "@/shared/ui/ImageUploader/ImageUploader";
+import { Query } from "@/entities/api/graphql";
 
 export interface IForm {
   writer: string;
@@ -27,12 +27,12 @@ export interface IForm {
 
 interface IProps {
   edit: boolean;
+  data?: Pick<Query, "fetchBoard"> | undefined;
 }
 
-export default function BoardWriterForm({ edit }: IProps) {
+export default function BoardWriterForm({ edit, data }: IProps) {
   const params = useParams();
   const boardId = String(params?.boardId);
-  const { data } = useFetchBoard(boardId);
   const router = useRouter();
 
   // 이미지 상태 관리 📕
@@ -131,9 +131,21 @@ export default function BoardWriterForm({ edit }: IProps) {
             images: uploadImages,
           },
         },
+        update(cache, { data }) {
+          cache.modify({
+            fields: {
+              fetchBoards: (prev) => {
+                return [data?.createBoard, ...prev];
+              },
+              fetchBoardsCount: (prev) => {
+                return prev + 1;
+              },
+            },
+          });
+        },
       });
 
-      router.push("/");
+      router.back();
     } catch (error) {
       console.error("게시글 등록 오류:", error);
       alert("게시글 등록 중 오류가 발생했습니다.");
@@ -159,6 +171,15 @@ export default function BoardWriterForm({ edit }: IProps) {
           },
           password: data.password,
           boardId,
+        },
+        update(cache, { data }) {
+          cache.modify({
+            fields: {
+              fetchBoard: () => {
+                return data?.updateBoard;
+              },
+            },
+          });
         },
       });
 
@@ -305,3 +326,7 @@ export default function BoardWriterForm({ edit }: IProps) {
     </form>
   );
 }
+
+// board skeleton ui 생성하기
+// 로그인 처리
+// 숙박권 구매

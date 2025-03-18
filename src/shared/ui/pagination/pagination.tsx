@@ -1,13 +1,12 @@
 "use client";
 
+import { Query } from "@/entities/api/graphql";
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useRef, useState } from "react";
 
 interface IProps {
-  query: {
-    count: number | undefined;
-  };
+  count?: Pick<Query, "fetchBoardsCount"> | undefined;
 }
 
 export default function Pagination(props: IProps) {
@@ -20,14 +19,15 @@ export default function Pagination(props: IProps) {
   const page = searchParamsPage?.get("page");
 
   // queryString page / 현재페이지 불러오기 없으면 1page
-  const pageNumber = page ? Number(page) : 1;
+  const pageNumber = page ? parseInt(page, 10) : 1;
   // 첫 번째 page 1, 11, 21...
   const startPageNum = Math.floor((pageNumber - 1) / 10) * 10 + 1;
   // 첫 번째 page 저장(이전, 다음 페이지 이동 및 계산을 위함)
   const [startPage, setStartPage] = useState(startPageNum);
   // 마지막 page 번호 불러오기 (총860개 일때 86 반환)
-  const lastPage = Math.ceil((props.query.count ?? 10) / 10);
-  console.log("count: ", props.query.count);
+  const lastPage = Math.ceil((props.count?.fetchBoardsCount ?? 10) / 10);
+  console.log("count: ", props.count?.fetchBoardsCount);
+  console.log("now-count: ", startPage);
   console.log("lastPage: ", lastPage);
   const searchParams = useSearchParams();
 
@@ -94,8 +94,8 @@ export default function Pagination(props: IProps) {
               }`}
             />
           </li>
-          <span className="flex flex-row justify-center items-center gap-4 w-[224px] h-[32px]">
-            {new Array(5).fill(1).map((el, index) => {
+          <span className="flex flex-row justify-center items-center gap-4 w-fit h-[32px]">
+            {new Array(10).fill(1).map((el, index) => {
               if (index + startPage <= lastPage) {
                 return (
                   <li

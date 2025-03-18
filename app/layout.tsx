@@ -3,7 +3,7 @@ import { Header } from "@/widgets/layouts/Header";
 import { Banner } from "@/widgets/layouts/Banner";
 import { ApolloClientProvider } from "@/app/provider/ApolloProvider";
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;

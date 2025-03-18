@@ -11,8 +11,22 @@ export const BOARDS_COUNT = gql`
   }
 `;
 
-export const useFetchBoardsCount = () => {
-  const result = useQuery<Pick<Query, "fetchBoardsCount">>(BOARDS_COUNT);
+interface IProps {
+  page: number;
+  search: string;
+  from: Date | undefined;
+  to: Date | undefined;
+}
+
+export const useFetchBoardsCount = (props: IProps) => {
+  const result = useQuery<Pick<Query, "fetchBoardsCount">>(BOARDS_COUNT, {
+    variables: {
+      page: props.page,
+      search: props.search,
+      from: props.from,
+      to: props.to,
+    },
+  });
 
   return result;
 };
