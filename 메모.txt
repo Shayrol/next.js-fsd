@@ -195,3 +195,16 @@ sameSite = CSRF 보안해준다.
 
 하지만 해당 accessToken을 HttpOnly없이 저장을 하게 되면 XSS 보안에 취약하지만
 가장 많이 사용하고 있는 방식이 쿠키에 secure, sameSite를 통해 쿠키를 저장한다.
+
+
+🎈 middleware.ts
+루트에 미들웨어가 실행되지 않는 문제가 있었다.
+그래서 app 폴더 안에 넣어봐도 않되어 찾던 중 src 폴더가 있으면 해당 폴더에
+생성을 해야한다는 글을 보고 해봤는데 잘 살행이 되었다.
+src/middleware.ts
+
+
+🎈 graphql-request
+해당 라이브러리는 REST API 처럼 url를 통해 요청하는 방식이다.
+사용한 이유는 ApolloProvider에서는 useMutation으로 refreshToken을 실행해 받아올 수가
+없어 fetch 또는 해당 라이브러리를 통해 refreshToken을 요청해줘야 한다.

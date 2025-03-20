@@ -26,6 +26,8 @@ export default function BoardsOptions() {
     to: validatedTo,
   });
 
+  console.log("datE: ", date);
+
   return (
     <article className="flex gap-4 justify-center items-center w-full max-md:flex-col">
       <DatePickerWithRange query={{ date, setDate }} />

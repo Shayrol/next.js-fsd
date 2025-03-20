@@ -19,7 +19,11 @@ export const FETCH_USER_LOGGED_IN = gql`
 `;
 
 export const useFetchUserLoggedIn = () => {
-  const result =
-    useQuery<Pick<Query, "fetchUserLoggedIn">>(FETCH_USER_LOGGED_IN);
+  const result = useQuery<Pick<Query, "fetchUserLoggedIn">>(
+    FETCH_USER_LOGGED_IN,
+    {
+      fetchPolicy: "network-only",
+    }
+  );
   return result;
 };

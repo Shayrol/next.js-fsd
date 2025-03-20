@@ -16,7 +16,7 @@ const HeaderTag = [
   {
     path: "/B",
     element: (
-      <Link href={"/B"} className="block w-full h-[40px] p-2">
+      <Link href={"/testpage"} className="block w-full h-[40px] p-2">
         숙박권 구매
       </Link>
     ),

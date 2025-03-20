@@ -41,8 +41,8 @@ export const useFetchBoards = (props: IProps) => {
     variables: {
       page: props.page,
       search: props.search,
-      from: props.from,
-      to: props.to,
+      startDate: props.from,
+      endDate: props.to,
     },
     fetchPolicy: "cache-first",
   });

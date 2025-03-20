@@ -27,58 +27,10 @@ export async function generateMetadata({
 }
 
 export default async function Home() {
-  //   {
-  //   // params,
-  //   searchParams,
-  // }: {
-  //   // params: Params;
-  //   searchParams: SearchParams;
-  // }
-  // const slug = params.slug;
-
-  // 서버 컴포넌트에서 query string 값 가져오기
-  // const {
-  //   page: pageNumber,
-  //   search: searchString,
-  //   from: fromDate,
-  //   to: toDate,
-  // } = await searchParams;
-
-  // API 요청 값 가공
-  // const page = pageNumber ? Number(pageNumber) : 1;
-  // const search = searchString ? String(searchString) : "";
-  // const startDate = fromDate ? new Date(String(fromDate)) : undefined;
-  // const endDate = toDate ? new Date(String(toDate)) : undefined;
-
-  // SSR API 요청 - Boards
-  // const { data } = await client.query<Pick<Query, "fetchBoards">>({
-  //   query: BOARDS,
-  //   variables: {
-  //     page,
-  //     search,
-  //     startDate,
-  //     endDate,
-  //   },
-  //   fetchPolicy: "network-only",
-  // });
-
-  // SSR API 요청 - Boards Count
-  // const { data: dataCount } = await client.query<
-  //   Pick<Query, "fetchBoardsCount">
-  // >({
-  //   query: BOARDS_COUNT,
-  //   variables: {
-  //     search,
-  //     startDate,
-  //     endDate,
-  //   },
-  // });
-
   return (
     <main className="flex flex-col justify-center items-center gap-10 w-full">
       <BoardsOfTheBest />
       <Boards />
-      {/* <Boards query={{ data, dataCount }} /> */}
     </main>
   );
 }

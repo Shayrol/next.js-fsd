@@ -1,21 +1,11 @@
 "use client";
 
 import BoardsContents from "./BoardsContents";
-// import { Query } from "@/entities/api/graphql";
 import { WriterBoardsButton } from "@/shared/ui/button/write-button";
 import BoardsOptions from "./BoardsOptions";
-// import { useSearchParams } from "next/navigation";
-
-// interface IProps {
-//   query: {
-//     data: Pick<Query, "fetchBoards">;
-//     dataCount: Pick<Query, "fetchBoardsCount">;
-//   };
-// }
 
 export default function Boards() {
-  // const data = props.query.data;
-  // const count = props.query.dataCount;
+  console.log("Boards 실행");
 
   return (
     <section className="flex flex-col justify-center items-start gap-6 w-full h-fit">
@@ -25,7 +15,6 @@ export default function Boards() {
         <WriterBoardsButton />
       </article>
       <BoardsContents />
-      {/* <BoardsContents query={{ data, count }} /> */}
     </section>
   );
 }

@@ -8,20 +8,15 @@ import { useFetchBoardsCount } from "../api/useFetchBoardsCount";
 import { useSearchParams } from "next/navigation";
 import SkeletonUI from "./SkeletonUI";
 
-// interface IProps {
-//   query: {
-//     data: Pick<Query, "fetchBoards"> | undefined;
-//     count: Pick<Query, "fetchBoardsCount"> | undefined;
-//   };
-// }
-
 export default function BoardsContents() {
+  console.log("BoardsContents");
+
   const searchParams = useSearchParams();
 
   const page: string | null | undefined = searchParams?.get("page");
   const search: string | null | undefined = searchParams?.get("search");
-  const startDate: string | null | undefined = searchParams?.get("startDate");
-  const endDate: string | null | undefined = searchParams?.get("endDate");
+  const startDate: string | null | undefined = searchParams?.get("from");
+  const endDate: string | null | undefined = searchParams?.get("to");
 
   const pageNumber = page ? parseInt(page, 10) : 1; // 페이지 값이 없으면 기본값 1
   const searchQuery = search ? search : ""; // 기본값 빈 문자열

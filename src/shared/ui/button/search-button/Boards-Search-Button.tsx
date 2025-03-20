@@ -37,6 +37,9 @@ function BoardsSearchButton({ query }: { query: IProps }) {
   const fromUtcDate = fromDate ? adjustToKst(fromDate, true) : undefined;
   const toUtcDate = toDate ? adjustToKst(toDate, false) : undefined;
 
+  console.log("Button date: ", fromUtcDate);
+  console.log("Button date: ", toUtcDate);
+
   const onClickSubmit = async () => {
     // 기존 query string을 기반으로 새로운 URLSearchParams 객체 생성
     const updatedParams = new URLSearchParams(params?.toString());
