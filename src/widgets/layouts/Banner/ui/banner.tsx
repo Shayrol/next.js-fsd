@@ -9,7 +9,7 @@ import { usePathname } from "next/navigation";
 
 export default function Banner() {
   const pathname = usePathname();
-  const BANNER = ["/"];
+  const BANNER = ["/", "/travel"];
   const banner = BANNER.includes(String(pathname));
 
   return (
