@@ -9,7 +9,7 @@ import { LoginSchema } from "../api/schema";
 import { useLoginUser } from "../api/useLoginUser";
 import { useRouter } from "next/navigation";
 import { useAccessTokenStore } from "@/stores/tokenStore";
-// import Cookies from "js-cookie";
+import Cookies from "js-cookie";
 // import { useApolloClient } from "@apollo/client";
 
 interface IForm {
@@ -23,6 +23,8 @@ export default function LoginPage() {
   const [loginUser] = useLoginUser();
   // const client = useApolloClient();
   // const ownHoursCookieAccessToken = 1 * 60 * 60 * 1000;
+  const date = new Date();
+  date.setTime(date.getTime() + 2 * 60 * 60 * 1000); // 2시간
 
   const { handleSubmit, register, reset, formState, setError } = useForm<IForm>(
     {
@@ -40,11 +42,11 @@ export default function LoginPage() {
       });
       const accessToken = result.data?.loginUser.accessToken;
       setAccessToken(accessToken ?? "");
-      // Cookies.set("accessToken", accessToken ?? "", {
-      //   secure: false,
-      //   sameSite: "Strict",
-      //   expires: 1,
-      // });
+      Cookies.set("accessToken", accessToken ?? "", {
+        secure: false,
+        sameSite: "Strict",
+        expires: date,
+      });
       router.back();
     } catch (error) {
       if (error instanceof Error) {

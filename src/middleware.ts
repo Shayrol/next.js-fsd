@@ -5,7 +5,7 @@ export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   const accessToken = request.cookies.get("accessToken");
 
-  if (pathname.startsWith("/testpage")) {
+  if (pathname.startsWith("/travel")) {
     if (!accessToken) {
       return NextResponse.redirect(new URL("/login", request.url));
     }
@@ -15,5 +15,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/testpage"],
+  matcher: ["/travel"],
 };

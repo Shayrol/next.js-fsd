@@ -1,1 +1,1 @@
-export { default as WriterBoardsButton } from "./Writer-Boards-Button";
+export { default as WriterButton } from "./Writer-Button";

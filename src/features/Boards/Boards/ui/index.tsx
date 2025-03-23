@@ -1,7 +1,7 @@
 "use client";
 
 import BoardsContents from "./BoardsContents";
-import { WriterBoardsButton } from "@/shared/ui/button/write-button";
+import { WriterButton } from "@/shared/ui/button/write-button";
 import SearchOptions from "../../../../shared/ui/searchOption/SearchOptions";
 
 export default function Boards() {
@@ -12,7 +12,7 @@ export default function Boards() {
       <h1 className="font-bold text-[28px]">트립토크 게시판</h1>
       <article className="flex w-full h-full justify-center items-end gap-2 max-lg:flex-col-reverse">
         <SearchOptions />
-        <WriterBoardsButton />
+        <WriterButton name={"트립토크 등록"} link={"/board/new"} />
       </article>
       <BoardsContents />
     </section>

@@ -1,11 +1,11 @@
 "use client";
 
-import { BoardsSearchButton } from "@/shared/ui/button/search-button";
 import { DatePickerWithRange } from "@/shared/ui/input/datePicker";
-import { BoardsSearch } from "@/shared/ui/input/search";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { DateRange } from "react-day-picker";
+import SearchButton from "../button/search-button/Search-Button";
+import SearchInput from "../input/search/Search-Input";
 
 export default function SearchOptions() {
   const params = useSearchParams();
@@ -31,8 +31,8 @@ export default function SearchOptions() {
   return (
     <article className="flex gap-4 justify-center items-center w-full max-md:flex-col mr-14 max-lg:mr-0">
       <DatePickerWithRange query={{ date, setDate }} />
-      <BoardsSearch query={{ search, setSearch }} />
-      <BoardsSearchButton query={{ search, date }} />
+      <SearchInput query={{ search, setSearch }} />
+      <SearchButton query={{ search, date }} />
     </article>
   );
 }

@@ -23,6 +23,8 @@ export const ApolloClientProvider = ({
   children: React.ReactNode;
 }) => {
   const { accessToken, setAccessToken } = useAccessTokenStore();
+  const date = new Date();
+  date.setTime(date.getTime() + 2 * 60 * 60 * 1000); // 2시간
   // const cookieAccessToken = Cookies.get("accessToken");
 
   // 새로고침시 refreshToken
@@ -36,7 +38,7 @@ export const ApolloClientProvider = ({
         Cookies.set("accessToken", newAccessToken ?? "", {
           secure: false,
           sameSite: "Strict",
-          expires: 1,
+          expires: date,
         });
       }
     });

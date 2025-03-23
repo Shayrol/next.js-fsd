@@ -1,1 +1,1 @@
-export { default as BoardsSearch } from "./Boards-Search";
+export { default as BoardsSearch } from "./Search-Input";

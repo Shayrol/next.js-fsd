@@ -9,7 +9,7 @@ interface IProps {
   date: DateRange | undefined;
 }
 
-function BoardsSearchButton({ query }: { query: IProps }) {
+function SearchButton({ query }: { query: IProps }) {
   const params = useSearchParams(); // 현재 query string 가져오기
   const router = useRouter();
 
@@ -80,4 +80,4 @@ function BoardsSearchButton({ query }: { query: IProps }) {
   );
 }
 
-export default React.memo(BoardsSearchButton);
+export default React.memo(SearchButton);

@@ -9,7 +9,7 @@ interface IProps {
   setSearch: Dispatch<SetStateAction<string>>;
 }
 
-function BoardsSearch({ query }: { query: IProps }) {
+function SearchInput({ query }: { query: IProps }) {
   const params = useSearchParams();
   // const router = useRouter();
 
@@ -39,4 +39,4 @@ function BoardsSearch({ query }: { query: IProps }) {
   );
 }
 
-export default React.memo(BoardsSearch);
+export default React.memo(SearchInput);
