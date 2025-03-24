@@ -4,22 +4,9 @@ import { WriterButton } from "@/shared/ui/button/write-button";
 import SearchOptions from "@/shared/ui/searchOption/SearchOptions";
 import TravelsOption from "./travels-option";
 import TravelsAvailability from "./travels-availability";
-import { useFetchTravelProducts } from "../api/useFetchTravelProducts";
-import { useSearchParams } from "next/navigation";
 import TravelsContents from "./travels-contents";
 
 export default function Travels() {
-  const searchParams = useSearchParams();
-
-  const isSoldout =
-    searchParams?.get("availability") === "closed" ? true : false;
-  const search = searchParams?.get("search") ? searchParams.get("search") : "";
-  const page = searchParams?.get("page") ? Number(searchParams.get("page")) : 1;
-
-  const { data } = useFetchTravelProducts({ isSoldout, search, page });
-
-  console.log("travels: ", data?.fetchTravelproducts);
-
   return (
     <section className="flex flex-col gap-6 w-full rounded-2xl">
       <p>여기에서만 예약할 수 있는 숙소</p>

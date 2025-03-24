@@ -41,7 +41,8 @@ function SearchButton({ query }: { query: IProps }) {
   console.log("Button date: ", toUtcDate);
 
   const onClickSubmit = async () => {
-    // 기존 query string을 기반으로 새로운 URLSearchParams 객체 생성
+    // 현재 페이지 경로 유지
+    const currentPath = window.location.pathname; // 현재 경로를 가져옴
     const updatedParams = new URLSearchParams(params?.toString());
 
     // 기존 query string을 그대로 두고, 새로운 값만 업데이트
@@ -67,7 +68,7 @@ function SearchButton({ query }: { query: IProps }) {
     updatedParams.set("page", "1");
 
     // 새로운 query string으로 URL을 갱신하면서 리다이렉트
-    router.replace(`/?${updatedParams.toString()}`);
+    router.replace(`${currentPath}?${updatedParams.toString()}`);
   };
 
   return (

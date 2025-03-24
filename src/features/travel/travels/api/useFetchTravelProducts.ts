@@ -28,6 +28,7 @@ const TRAVEL_PRODUCTS = gql`
         _id
         email
         name
+        picture
       }
       createdAt
     }
