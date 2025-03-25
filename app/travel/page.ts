@@ -1,1 +1,1 @@
-export { TravelPage as default } from "@/pages/travelPage";
+export { TravelsPage as default } from "@/pages/travelsPage";

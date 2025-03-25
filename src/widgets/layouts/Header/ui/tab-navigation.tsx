@@ -44,7 +44,8 @@ export default function TabNavigation() {
           key={el.path}
           className={`flex justify-center items-center font-bold text-base whitespace-nowrap
             ${
-              pathName === el.path
+              pathName === el.path ||
+              (el.path === "/travel" && pathName?.startsWith("/travel"))
                 ? "border-b-2 border-black"
                 : "border-b-2 border-transparent"
             } 

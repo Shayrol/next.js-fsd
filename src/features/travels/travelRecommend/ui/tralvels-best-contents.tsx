@@ -3,13 +3,12 @@ import Image from "next/image";
 
 export default function TravelsBestContents({ el }: { el: Travelproduct }) {
   return (
-    <div className="aspect-[1] relative bg-gray-200 rounded-[16px] flex items-center justify-center border border-red-500">
+    <div className="aspect-[1] min-w-[240px] relative bg-gray-200 rounded-[16px] flex items-center justify-center border border-red-500">
       <Image
         src={`https://storage.googleapis.com/${el.images?.[0]}`}
         alt="best-image"
         fill
         className="object-cover rounded-[16px]"
-        // layout="intrinsic" // 이미지 비율 유지
       />
       <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent to-black/50 rounded-[16px]" />
 
