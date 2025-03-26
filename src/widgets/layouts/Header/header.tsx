@@ -6,11 +6,14 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { useFetchUserLoggedIn } from "@/entities/api/auth/useFetchUserLoggedIn";
+import { useUserStore } from "@/stores/userStore";
+import { useEffect } from "react";
 
 export default function Header() {
   const pathname = usePathname();
   const HIDDEN_HEADER = ["/login", "/signup"];
   const header = HIDDEN_HEADER.includes(String(pathname));
+  const { user, setUser } = useUserStore();
 
   // 1. 페이지 접속 시 자동으로 API 요청
   const { data, loading } = useFetchUserLoggedIn();
@@ -23,7 +26,17 @@ export default function Header() {
   //   query: LOGIN_USER,
   // })
 
-  // console.log("User Data:", data?.fetchUserLoggedIn);
+  useEffect(() => {
+    if (data?.fetchUserLoggedIn && user?._id !== data.fetchUserLoggedIn._id) {
+      setUser({
+        _id: data.fetchUserLoggedIn._id,
+        name: data.fetchUserLoggedIn.name,
+        email: data.fetchUserLoggedIn.email,
+        picture: data.fetchUserLoggedIn.picture ?? null,
+        createdAt: data.fetchUserLoggedIn.createdAt,
+      });
+    }
+  }, [data, setUser, user]);
 
   return (
     <>

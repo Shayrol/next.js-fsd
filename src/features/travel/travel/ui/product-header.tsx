@@ -3,6 +3,7 @@
 "use client";
 
 import { Query } from "@/entities/api/graphql";
+import { useUserStore } from "@/stores/userStore";
 import Image from "next/image";
 
 export default function ProductHeader({
@@ -10,6 +11,8 @@ export default function ProductHeader({
 }: {
   data: Pick<Query, "fetchTravelproduct"> | undefined;
 }) {
+  const { user } = useUserStore();
+
   return (
     <header className="flex flex-col gap-2 w-full">
       {/* title, delete, link, location, bookmark */}
@@ -20,14 +23,18 @@ export default function ProductHeader({
         </h1>
         <div className="flex justify-center items-center gap-4 ml-5">
           {/* delete */}
-          <button className="flex justify-center items-center min-w-6">
-            <Image
-              src={"/travel/travel/travel-delete.svg"}
-              alt="delete"
-              width={15}
-              height={17}
-            />
-          </button>
+          {user?._id === data?.fetchTravelproduct._id ? (
+            <button className="flex justify-center items-center min-w-6">
+              <Image
+                src={"/travel/travel/travel-delete.svg"}
+                alt="delete"
+                width={15}
+                height={17}
+              />
+            </button>
+          ) : (
+            <></>
+          )}
           {/* link */}
           <button className="flex justify-center items-center min-w-6">
             <Image

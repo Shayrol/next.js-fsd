@@ -4,6 +4,7 @@
 
 import { Query, Travelproduct } from "@/entities/api/graphql";
 import Image from "next/image";
+import { useState } from "react";
 
 export default function ProductInfo({
   data,
@@ -11,28 +12,60 @@ export default function ProductInfo({
   data: Pick<Query, "fetchTravelproduct"> | undefined;
 }) {
   const dataInfo: Travelproduct | undefined = data?.fetchTravelproduct;
+  const [pickImage, setPickImage] = useState<number>(0);
+
+  console.log("dataInfo: ", dataInfo);
+
+  const onClickPickImage = (index: number) => {
+    setPickImage(index);
+  };
 
   return (
     <section className="flex gap-6 w-full">
       {/* main image */}
-      <div className="bg-black flex justify-center items-center text-white w-[640px] h-[640px] rounded-[8px]">
-        main image
-      </div>
+      {dataInfo?.images ? (
+        <div className="relative bg-black flex justify-center items-center text-white w-[640px] h-[480px] rounded-[8px]">
+          <Image
+            src={`https://storage.googleapis.com/${dataInfo?.images?.[pickImage]}`}
+            alt="pick image"
+            fill
+            className="rounded-[8px]"
+          />
+        </div>
+      ) : (
+        <div className="bg-black flex justify-center items-center text-white w-[640px] h-[480px] rounded-[8px]">
+          main image
+        </div>
+      )}
 
       {/* side images */}
-      <div className="flex flex-col gap-4 min-w-[180px] min-h-[180px]">
-        <div className="bg-black flex justify-center items-center text-white w-full h-[136px] rounded-[8px]">
-          image
-        </div>
-        <div className="bg-black flex justify-center items-center text-white w-full h-[136px] rounded-[8px]">
-          image
-        </div>
-        <div className="bg-black flex justify-center items-center text-white w-full h-[136px] rounded-[8px]">
-          image
-        </div>
-        <div className="bg-black flex justify-center items-center text-white w-full h-[136px] rounded-[8px]">
-          image
-        </div>
+      <div
+        className="flex flex-col gap-4 min-w-[180px] h-[480px] overflow-y-auto scrollbar-hide"
+        style={{
+          scrollbarWidth: "none",
+          msOverflowStyle: "none",
+        }}
+      >
+        {dataInfo?.images ? (
+          dataInfo.images.map((el, index) => (
+            <div
+              key={el}
+              onClick={() => onClickPickImage(index)}
+              className="relative w-[180px] h-[136px]"
+            >
+              <Image
+                src={`https://storage.googleapis.com/${el}`}
+                alt="side image"
+                fill
+                className="rounded-[8px] object-cover"
+              />
+            </div>
+          ))
+        ) : (
+          <div className="bg-black flex justify-center items-center text-white w-full min-h-[136px] rounded-[8px]">
+            image
+          </div>
+        )}
       </div>
 
       {/* price, seller */}
