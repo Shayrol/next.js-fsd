@@ -22,9 +22,9 @@ const HeaderTag = [
     ),
   },
   {
-    path: "/C",
+    path: "/mypage",
     element: (
-      <Link href={"/C"} className="block w-full h-[40px] p-2">
+      <Link href={"/mypage"} className="block w-full h-[40px] p-2">
         마이 페이지
       </Link>
     ),
@@ -44,8 +44,10 @@ export default function TabNavigation() {
           key={el.path}
           className={`flex justify-center items-center font-bold text-base whitespace-nowrap
             ${
-              pathName === el.path ||
-              (el.path === "/travel" && pathName?.startsWith("/travel"))
+              (el.path === "/" &&
+                (pathName === "/" || pathName?.startsWith("/board"))) ||
+              (el.path === "/travel" && pathName?.startsWith("/travel")) ||
+              (el.path === "/mypage" && pathName?.startsWith("/mypage"))
                 ? "border-b-2 border-black"
                 : "border-b-2 border-transparent"
             } 

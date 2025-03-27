@@ -24,23 +24,24 @@ export default function ProductInfo({
     <section className="flex gap-6 w-full">
       {/* main image */}
       {dataInfo?.images ? (
-        <div className="relative bg-black flex justify-center items-center text-white w-[640px] h-[480px] rounded-[8px]">
+        <div className="relative flex justify-center items-start text-white h-full aspect-[4/3] rounded-[8px]">
           <Image
             src={`https://storage.googleapis.com/${dataInfo?.images?.[pickImage]}`}
             alt="pick image"
-            fill
-            className="rounded-[8px]"
+            width={640} // 직접 너비 지정
+            height={480} // 4:3 비율 유지
+            className="rounded-[8px] object-cover"
           />
         </div>
       ) : (
-        <div className="bg-black flex justify-center items-center text-white w-[640px] h-[480px] rounded-[8px]">
+        <div className="bg-black flex justify-center items-center text-white w-full max-w-[640px] aspect-[4/3] rounded-[8px]">
           main image
         </div>
       )}
 
       {/* side images */}
       <div
-        className="flex flex-col gap-4 min-w-[180px] h-[480px] overflow-y-auto scrollbar-hide"
+        className="flex flex-col gap-4 w-[180px] h-[480px] overflow-y-auto scrollbar-hide"
         style={{
           scrollbarWidth: "none",
           msOverflowStyle: "none",
@@ -51,12 +52,12 @@ export default function ProductInfo({
             <div
               key={el}
               onClick={() => onClickPickImage(index)}
-              className="relative w-[180px] h-[136px]"
+              className="relative w-full aspect-[4/3]" // 👈 w-full로 설정하여 부모 크기에 맞춤
             >
               <Image
                 src={`https://storage.googleapis.com/${el}`}
                 alt="side image"
-                fill
+                fill // 👈 이미지가 부모 div의 크기에 맞춰지도록 fill 사용
                 className="rounded-[8px] object-cover"
               />
             </div>
@@ -113,3 +114,6 @@ export default function ProductInfo({
     </section>
   );
 }
+
+// 이미지 비율 처리 완료
+// 가격 및 판매자 비율 처리 및 모바일 환경 ui 구현하기

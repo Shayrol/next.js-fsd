@@ -26,6 +26,7 @@ export default function Header() {
   //   query: LOGIN_USER,
   // })
 
+  // 로그인 정보를 통해 travel작성자 확인 및 마이 페이지 정보 표시 위함
   useEffect(() => {
     if (data?.fetchUserLoggedIn && user?._id !== data.fetchUserLoggedIn._id) {
       setUser({
