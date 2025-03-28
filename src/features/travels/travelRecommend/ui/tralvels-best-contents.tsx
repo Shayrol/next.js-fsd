@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function TravelsBestContents({ el }: { el: Travelproduct }) {
   return (
-    <div className="aspect-[1] min-w-[240px] relative bg-gray-200 rounded-[16px] flex items-center justify-center border border-red-500">
+    <div className="aspect-[1] min-w-[240px] relative bg-gray-200 rounded-[16px] flex items-center justify-center">
       <Image
         src={`https://storage.googleapis.com/${el.images?.[0]}`}
         alt="best-image"

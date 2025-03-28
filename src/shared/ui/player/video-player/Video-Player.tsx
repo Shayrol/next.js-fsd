@@ -16,11 +16,11 @@ export default function VideoPlayer({ url }: { url: string }) {
     <ReactPlayer
       url={url}
       controls
-      width="822px"
-      height="464px"
-      playing={false} // 자동 재생
-      loop={false} // 반복 재생
-      volume={1} // 볼륨 100%
+      playing={false}
+      loop={false}
+      volume={1}
+      width="100%"
+      height="100%"
     />
   );
 }

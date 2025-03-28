@@ -81,7 +81,7 @@ export default function BoardContents({ boardId }: { boardId: string }) {
       {/* 동영상 */}
       {data?.fetchBoard.youtubeUrl !== null &&
         data?.fetchBoard.youtubeUrl !== "" && (
-          <section className="flex justify-center items-center gap-[10px] w-full h-full max-h-[512px] py-6 bg-[#e3e2e2]">
+          <section className="flex justify-center items-center gap-[10px] w-full h-[512px] aspect-auto py-6 bg-[#e3e2e2]">
             <VideoPlayer url={String(data?.fetchBoard.youtubeUrl)} />
           </section>
         )}

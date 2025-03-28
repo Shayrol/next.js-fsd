@@ -11,8 +11,13 @@ import { useEffect } from "react";
 
 export default function Header() {
   const pathname = usePathname();
+  // const HIDDEN_HEADER = ["/login", "/signup"];
+  // const header = HIDDEN_HEADER.includes(String(pathname));
   const HIDDEN_HEADER = ["/login", "/signup"];
-  const header = HIDDEN_HEADER.includes(String(pathname));
+  const header =
+    HIDDEN_HEADER.includes(String(pathname)) ||
+    (String(pathname).startsWith("/travel/") && pathname !== "/travel");
+
   const { user, setUser } = useUserStore();
 
   // 1. 페이지 접속 시 자동으로 API 요청
