@@ -1,0 +1,25 @@
+.custom-quill .ql-container {
+  border: none !important; /* 기본 테두리 제거 */
+}
+
+.custom-quill {
+  width: 100% !important;
+  height: 477px !important;
+  /* border-radius: 8px !important; */
+  /* border: none !important; */
+}
+
+.custom-quill .ql-editor {
+  /* min-height: 400px !important; */
+  font-size: 16px !important;
+  padding: 16px !important;
+  border-radius: 0 0 8px 8px !important;
+  border: 1px solid #d4d3d3;
+  border-top: none;
+}
+
+.custom-quill .ql-toolbar {
+  border-radius: 8px 8px 0 0 !important;
+  background-color: #f8f9fa !important;
+  /* border-bottom: 1px solid #d4d3d3 !important; */
+}

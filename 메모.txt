@@ -208,3 +208,39 @@ src/middleware.ts
 해당 라이브러리는 REST API 처럼 url를 통해 요청하는 방식이다.
 사용한 이유는 ApolloProvider에서는 useMutation으로 refreshToken을 실행해 받아올 수가
 없어 fetch 또는 해당 라이브러리를 통해 refreshToken을 요청해줘야 한다.
+
+
+
+
+
+
+
+// travel location 추가 및 댓글 추가
+// 공유하기 추가, location 아이콘 hover 추가
+// 등록하기 추가
+// 삭제 추가
+// 마이페이지 추가
+// 포인트 충전 추가
+
+// 마이페이지의 각 탭은 폴더 기반 라우팅으로 폴더를 생성을 해 경로를
+// 만들어 주는게 더 좋고
+// 여기서 layout 처럼 모든 탭에 보여주게 하기 위해서
+// mypage 폴더에 layout 폴더 생성을 해 다음과 같이 하면 된다. (예시)
+// /mypage/layout.tsx
+// export default function MyPageLayout({ children }: { children: React.ReactNode }) {
+//   return (
+//     <div>
+//       {/* 내 정보 고정 */}
+//       <section style={{ padding: '20px', borderBottom: '1px solid #ddd' }}>
+//         <h2>마이 페이지</h2>
+//         <div>
+//           <p>이름: 김상훈</p>
+//           <p>포인트: 23,000 P</p>
+//         </div>
+//       </section>
+
+//       {/* 아래 컴포넌트만 변경 */}
+//       <main>{children}</main>
+//     </div>
+//   );
+// }

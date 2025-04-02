@@ -326,7 +326,3 @@ export default function BoardWriterForm({ edit, data }: IProps) {
     </form>
   );
 }
-
-// board skeleton ui 생성하기
-// 로그인 처리
-// 숙박권 구매

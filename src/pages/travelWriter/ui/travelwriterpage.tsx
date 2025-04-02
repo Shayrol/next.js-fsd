@@ -1,9 +1,11 @@
 "use client";
 
+import { TravelWriter } from "@/features/travel/travelWriter";
+
 export default function TravelWriterPage() {
   return (
-    <div>
-      <div>travelWriterPage</div>
-    </div>
+    <main className="flex justify-center items-center w-full max-w-[1280px] h-full">
+      <TravelWriter />
+    </main>
   );
 }
