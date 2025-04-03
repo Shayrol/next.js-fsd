@@ -12,6 +12,8 @@ import {
   ImageUploader,
 } from "@/shared/ui/ImageUploader/ImageUploader";
 import { useFetchUploadFile } from "@/shared/api/useFetchUploadFile";
+import { useFetchCreateTravelProduct } from "../api/useFetchCreateTravelProduct";
+import { useRouter } from "next/navigation";
 // import dynamic from "next/dynamic";
 // const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 
@@ -28,7 +30,10 @@ interface IForm {
 }
 
 export default function TravelWriterForm({ edit }: IProps) {
+  const router = useRouter();
+
   const [uploadFile] = useFetchUploadFile();
+  const [createTravelProduct] = useFetchCreateTravelProduct();
 
   const {
     handleSubmit,
@@ -39,7 +44,14 @@ export default function TravelWriterForm({ edit }: IProps) {
     setValue,
     trigger,
   } = useForm<IForm>({
+    mode: "onChange",
     resolver: yupResolver(travelWriterSchema),
+    defaultValues: {
+      name: "",
+      remark: "",
+      contents: "",
+      price: undefined,
+    },
   });
 
   // 이미지
@@ -89,11 +101,6 @@ export default function TravelWriterForm({ edit }: IProps) {
     trigger("contents"); // 에러처리을 하기 위함
   };
 
-  // 등록
-  const onClickSubmit = (data: IForm) => {
-    console.log("form: ", data);
-  };
-
   // 태그
   const [tags, setTags] = useState<string[]>([]);
   const [inputValue, setInputValue] = useState("");
@@ -112,6 +119,49 @@ export default function TravelWriterForm({ edit }: IProps) {
     setTags(tags.filter((t) => t !== tag));
   };
 
+  // 등록
+  const onClickSubmit = async (data: IForm) => {
+    try {
+      setIsSubmitting(true);
+
+      const uploadImages = await processImages();
+
+      await createTravelProduct({
+        variables: {
+          createTravelproductInput: {
+            name: data.name,
+            remarks: data.remark,
+            contents: data.contents,
+            price: data.price,
+            tags: tags,
+            travelproductAddress: {
+              zipcode: "",
+              address: "",
+              addressDetail: "",
+            },
+            images: uploadImages,
+          },
+        },
+        update(cache, { data }) {
+          cache.modify({
+            fields: {
+              fetchTravelproducts: (prev) => {
+                return [data?.createTravelproduct, ...prev];
+              },
+            },
+          });
+        },
+      });
+
+      router.back();
+    } catch (error) {
+      console.error("게시글 등록 오류:", error);
+      alert("게시글 등록 중 오류가 발생했습니다.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <form
       onSubmit={
@@ -120,7 +170,7 @@ export default function TravelWriterForm({ edit }: IProps) {
       className="flex flex-col gap-10 w-full"
     >
       {/* 상품명 */}
-      <div className="flex flex-col gap-2">
+      <div className="relative flex flex-col gap-2">
         <p className="flex gap-1">
           상품명<span className="text-red-500">*</span>
         </p>
@@ -134,10 +184,16 @@ export default function TravelWriterForm({ edit }: IProps) {
                 ${!edit ? "bg-white" : "bg-gray-200"}
               `}
         />
+        {/* name error */}
+        {formState.errors.name && (
+          <p className="absolute bottom-[-20px] font-normal text-[13px] text-red-500">
+            {formState.errors.name.message}
+          </p>
+        )}
       </div>
 
       {/* 한줄 요약 */}
-      <div className="flex flex-col gap-2">
+      <div className="relative flex flex-col gap-2">
         <p className="flex gap-1">
           한줄 요약<span className="text-red-500">*</span>
         </p>
@@ -151,10 +207,16 @@ export default function TravelWriterForm({ edit }: IProps) {
                 ${!edit ? "bg-white" : "bg-gray-200"}
               `}
         />
+        {/* remark error */}
+        {formState.errors.remark && (
+          <p className="absolute bottom-[-20px] font-normal text-[13px] text-red-500">
+            {formState.errors.remark.message}
+          </p>
+        )}
       </div>
 
       {/* 상품 설명 */}
-      <div className="flex flex-col gap-2 mb-10">
+      <div className="relative flex flex-col gap-2 mb-10">
         <p className="flex gap-1">
           상품 설명<span className="text-red-500">*</span>
         </p>
@@ -163,10 +225,16 @@ export default function TravelWriterForm({ edit }: IProps) {
           onChange={onChangeContents}
           placeholder="내용을 입력해 주세요."
         />
+        {/* contents error */}
+        {formState.errors.contents && (
+          <p className="absolute bottom-[-65px] font-normal text-[13px] text-red-500">
+            {formState.errors.contents.message}
+          </p>
+        )}
       </div>
 
       {/* 판매 가격 */}
-      <div className="flex flex-col gap-2">
+      <div className="relative flex flex-col gap-2">
         <p className="flex gap-1">
           판매 가격<span className="text-red-500">*</span>
         </p>
@@ -180,6 +248,12 @@ export default function TravelWriterForm({ edit }: IProps) {
                 ${!edit ? "bg-white" : "bg-gray-200"}
               `}
         />
+        {/* price error */}
+        {formState.errors.price && (
+          <p className="absolute bottom-[-20px] font-normal text-[13px] text-red-500">
+            {formState.errors.price.message}
+          </p>
+        )}
       </div>
 
       {/* 태그 */}
@@ -219,11 +293,32 @@ export default function TravelWriterForm({ edit }: IProps) {
           disabled={isSubmitting}
         />
       </div>
-      <button type="submit">등록</button>
+      <div className="flex justify-end items-center gap-4 w-full">
+        <button
+          type="button"
+          onClick={() => router.back()}
+          className="flex justify-center items-center px-4 py-3 border border-black rounded-[8px] bg-white font-semibold text-[16px]"
+        >
+          취소
+        </button>
+        <button
+          type="submit"
+          disabled={!formState.isValid}
+          className={`flex justify-center items-center px-4 py-3 border font-semibold text-[16px] rounded-[8px]
+            ${
+              formState.isValid
+                ? " border-[#2974E5] bg-[#2974E5] text-white"
+                : " border-gray-300 bg-gray-300 text-gray-100"
+            }
+          `}
+        >
+          등록하기
+        </button>
+      </div>
     </form>
   );
 }
 
 // 주소 추가하기 + 라이브러리
-// 등록 취소 추가
-// 등록, 수정 api 연동 및 함수 생성
+// 수정 api 연동 및 함수 생성
+// 주소 register 추가 (수정시 기존 데이터 값 불러와 삽입하기 위함)
