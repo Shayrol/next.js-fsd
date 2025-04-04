@@ -14,8 +14,12 @@ import {
 import { useFetchUploadFile } from "@/shared/api/useFetchUploadFile";
 import { useFetchCreateTravelProduct } from "../api/useFetchCreateTravelProduct";
 import { useRouter } from "next/navigation";
+import KakaoMap from "@/shared/ui/kakao/kakaoMap/kakap-map";
 // import dynamic from "next/dynamic";
 // const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
+// const KakaoMap = dynamic(() => import("@/shared/ui/kakao/kakaoMap/kakap-map"), {
+//   ssr: false,
+// });
 
 interface IProps {
   edit: boolean;
@@ -283,6 +287,68 @@ export default function TravelWriterForm({ edit }: IProps) {
       </div>
 
       {/* 주소 */}
+      <div className="flex gap-10 w-full max-md:flex-col">
+        <div className="flex flex-col gap-10 w-[396px] max-md:w-full">
+          {/* 상세주소 */}
+          <div className="flex flex-col gap-2 w-full">
+            <p className="flex gap-1">
+              주소<span className="text-red-500">*</span>
+            </p>
+            <div className="flex justify-start items-center gap-2">
+              <input
+                type="text"
+                placeholder="01234"
+                disabled={true}
+                className="flex justify-center items-center px-4 py-3 border border-gray-200 rounded-[8px] w-[82px]"
+              />
+              <button className="flex justify-center items-center px-4 py-3 gap-2 border border-black bg-white font-semibold text-[18px] text-black rounded-[8px] text-nowrap">
+                우편번호 검색
+              </button>
+            </div>
+            <input
+              type="text"
+              placeholder="상세주소를 입력해 주세요."
+              className="flex justify-center items-center px-4 py-3 border border-gray-200 rounded-[8px] w-full"
+            />
+          </div>
+
+          {/* 위도 경도 */}
+          <div className="flex flex-col gap-4 w-full">
+            {/* 위도 */}
+            <div className="flex flex-col gap-2">
+              <p className="flex justify-start items-center gap-1 w-full font-medium text-[16px] text-black">
+                위도(LAT)
+              </p>
+              <input
+                type="text"
+                disabled={true}
+                placeholder="주소를 먼저 입력해 주세요."
+                className="px-4 py-3 w-full bg-gray-100 font-normal text-[16px] text-gray-500 rounded-[8px]"
+              />
+            </div>
+            {/* 경도 */}
+            <div className="flex flex-col gap-2">
+              <p className="flex justify-start items-center gap-1 w-full font-medium text-[16px] text-black">
+                경도(LNG)
+              </p>
+              <input
+                type="text"
+                placeholder="주소를 먼저 입력해 주세요."
+                disabled={true}
+                className="px-4 py-3 w-full bg-gray-100 font-normal text-[16px] text-gray-500 rounded-[8px]"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Map */}
+        <div className="flex flex-col gap-4 w-full">
+          <p className="font-medium text-[16px] text-black">상세 위치</p>
+          <div className="w-full h-full border border-gray-100 rounded-[16px] overflow-hidden max-md:aspect-[16/9]">
+            <KakaoMap />
+          </div>
+        </div>
+      </div>
 
       {/* 사진 */}
       <div className="flex flex-col gap-2">
@@ -293,18 +359,20 @@ export default function TravelWriterForm({ edit }: IProps) {
           disabled={isSubmitting}
         />
       </div>
-      <div className="flex justify-end items-center gap-4 w-full">
+
+      {/* 등록, 취소 */}
+      <div className="flex justify-end items-center gap-4 w-full max-md:justify-center">
         <button
           type="button"
           onClick={() => router.back()}
-          className="flex justify-center items-center px-4 py-3 border border-black rounded-[8px] bg-white font-semibold text-[16px]"
+          className="flex justify-center items-center px-4 py-3 border border-black rounded-[8px] bg-white font-semibold text-[16px] max-md:w-full"
         >
           취소
         </button>
         <button
           type="submit"
           disabled={!formState.isValid}
-          className={`flex justify-center items-center px-4 py-3 border font-semibold text-[16px] rounded-[8px]
+          className={`flex justify-center items-center px-4 py-3 border font-semibold text-[16px] rounded-[8px] max-md:w-full
             ${
               formState.isValid
                 ? " border-[#2974E5] bg-[#2974E5] text-white"

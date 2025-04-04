@@ -4,9 +4,10 @@
 
 .custom-quill {
   width: 100% !important;
-  height: 477px !important;
-  /* border-radius: 8px !important; */
-  /* border: none !important; */
+  /* height: 477px !important; */
+  min-height: 120px !important;
+  max-height: 477px !important;
+  aspect-ratio: 16 / 9 !important;
 }
 
 .custom-quill .ql-editor {
