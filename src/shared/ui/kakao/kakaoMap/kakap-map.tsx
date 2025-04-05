@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 import { Map } from "react-kakao-maps-sdk";
 
 const KakaoMap = () => {
-  const apiKey: string | undefined = process.env.NEXT_PUBLIC_KAKAO_MAP_KEY;
   const [scriptLoad, setScriptLoad] = useState<boolean>(false);
 
   useEffect(() => {
+    const apiKey: string | undefined = process.env.NEXT_PUBLIC_KAKAO_MAP_KEY;
     const script: HTMLScriptElement = document.createElement("script");
     script.async = true;
     script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${apiKey}&autoload=false`;

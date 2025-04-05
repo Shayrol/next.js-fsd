@@ -6,7 +6,7 @@ import ReactQuill from "react-quill-new";
 import "react-quill/dist/quill.snow.css";
 import { travelWriterSchema } from "../api/schema";
 import "./quillStyles.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ImageType,
   ImageUploader,
@@ -15,6 +15,7 @@ import { useFetchUploadFile } from "@/shared/api/useFetchUploadFile";
 import { useFetchCreateTravelProduct } from "../api/useFetchCreateTravelProduct";
 import { useRouter } from "next/navigation";
 import KakaoMap from "@/shared/ui/kakao/kakaoMap/kakap-map";
+import PostcodeModal from "./postcode-modal";
 // import dynamic from "next/dynamic";
 // const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 // const KakaoMap = dynamic(() => import("@/shared/ui/kakao/kakaoMap/kakap-map"), {
@@ -31,10 +32,15 @@ interface IForm {
   remark: string;
   contents: string;
   price: number;
+  zonecode: string;
+  addressDetail: string;
+  lat: string;
+  lng: string;
 }
 
 export default function TravelWriterForm({ edit }: IProps) {
   const router = useRouter();
+  // const [post, setPost] = useState({ zonecode: "" });
 
   const [uploadFile] = useFetchUploadFile();
   const [createTravelProduct] = useFetchCreateTravelProduct();
@@ -47,6 +53,7 @@ export default function TravelWriterForm({ edit }: IProps) {
     setError,
     setValue,
     trigger,
+    watch,
   } = useForm<IForm>({
     mode: "onChange",
     resolver: yupResolver(travelWriterSchema),
@@ -55,6 +62,10 @@ export default function TravelWriterForm({ edit }: IProps) {
       remark: "",
       contents: "",
       price: undefined,
+      zonecode: "",
+      addressDetail: "",
+      lat: "",
+      lng: "",
     },
   });
 
@@ -123,8 +134,12 @@ export default function TravelWriterForm({ edit }: IProps) {
     setTags(tags.filter((t) => t !== tag));
   };
 
+  // 주소
+  const zonecode = watch("zonecode");
+
   // 등록
   const onClickSubmit = async (data: IForm) => {
+    console.log("data: ", data);
     try {
       setIsSubmitting(true);
 
@@ -296,16 +311,17 @@ export default function TravelWriterForm({ edit }: IProps) {
             </p>
             <div className="flex justify-start items-center gap-2">
               <input
+                {...register("zonecode")}
                 type="text"
                 placeholder="01234"
+                value={zonecode}
                 disabled={true}
                 className="flex justify-center items-center px-4 py-3 border border-gray-200 rounded-[8px] w-[82px]"
               />
-              <button className="flex justify-center items-center px-4 py-3 gap-2 border border-black bg-white font-semibold text-[18px] text-black rounded-[8px] text-nowrap">
-                우편번호 검색
-              </button>
+              <PostcodeModal setValue={setValue} />
             </div>
             <input
+              {...register("addressDetail")}
               type="text"
               placeholder="상세주소를 입력해 주세요."
               className="flex justify-center items-center px-4 py-3 border border-gray-200 rounded-[8px] w-full"
@@ -387,6 +403,20 @@ export default function TravelWriterForm({ edit }: IProps) {
   );
 }
 
-// 주소 추가하기 + 라이브러리
 // 수정 api 연동 및 함수 생성
 // 주소 register 추가 (수정시 기존 데이터 값 불러와 삽입하기 위함)
+
+// post를 통해 roadAddress 값을 가지고 추가 카카오에서 제공하는 API를 통해
+// 좌표(lat, lng)의 값을 가져오는 API를 통해 가져옴
+// 해야할 것은 위도 경도 입력란을 수정하지 못하게 하고 해당 API 값을 넣어주는 것을 목표로 함
+// setValue로 값을 넣어 주고 watch로 값을 보여주기
+// 추가로 KakaoMap에도 lat, lng 값을 넣어 위치 표기를 하고
+// 가능하면 지도 이동을 하면 해당 lat, lng의 값이 변경 되었으면 좋겠음
+// 그럴려면 위도, 경도를 state로 해야하나? 수정하기에 불러올 때 reset은 어떻게 해줘야하지?
+// 추가로 마커도 생성할 것
+
+// 정리
+// 1. 입력란 위도, 경도 값 넣기
+// 2. KakaoMap에 lat, lng 값 넣어 위치 표기
+// 3. 지도 마커 표시
+// 4. 지도 이동시 lat, lng 값 변경되게 하기
