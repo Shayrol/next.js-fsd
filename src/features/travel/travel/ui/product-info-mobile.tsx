@@ -76,7 +76,7 @@ export default function ProductInfoMobile({
 
         <div className="flex justify-center items-center gap-4 ml-5">
           {/* delete */}
-          {user?._id === data?._id ? (
+          {user?._id === data?.seller?._id ? (
             <button className="flex justify-center items-center min-w-6">
               <Image
                 src={"/travel/travel/travel-delete.svg"}

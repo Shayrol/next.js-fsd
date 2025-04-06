@@ -39,6 +39,8 @@ export default function PostcodeModal({ setValue }: IProps) {
       setValue("zonecode", data.zonecode); // 선택된 우편번호 설정
 
       const coords = await getCoordsByAddress(address); // 주소로 좌표 가져오기
+      setValue("lat", coords.latitude); // 위도 설정
+      setValue("lng", coords.longitude); // 경도 설정
       console.log("좌표:", coords); // 좌표 확인
     } catch (error) {
       console.error("좌표 가져오기 실패:", error);

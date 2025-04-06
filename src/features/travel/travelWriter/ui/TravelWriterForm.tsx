@@ -136,6 +136,8 @@ export default function TravelWriterForm({ edit }: IProps) {
 
   // 주소
   const zonecode = watch("zonecode");
+  const latitude = watch("lat");
+  const longitude = watch("lng");
 
   // 등록
   const onClickSubmit = async (data: IForm) => {
@@ -145,7 +147,7 @@ export default function TravelWriterForm({ edit }: IProps) {
 
       const uploadImages = await processImages();
 
-      await createTravelProduct({
+      const result = await createTravelProduct({
         variables: {
           createTravelproductInput: {
             name: data.name,
@@ -154,9 +156,11 @@ export default function TravelWriterForm({ edit }: IProps) {
             price: data.price,
             tags: tags,
             travelproductAddress: {
-              zipcode: "",
+              zipcode: data.zonecode,
               address: "",
-              addressDetail: "",
+              addressDetail: data.addressDetail,
+              lat: Number(data.lat),
+              lng: Number(data.lng),
             },
             images: uploadImages,
           },
@@ -172,7 +176,7 @@ export default function TravelWriterForm({ edit }: IProps) {
         },
       });
 
-      router.back();
+      router.push(`/travel/${result.data?.createTravelproduct._id}`);
     } catch (error) {
       console.error("게시글 등록 오류:", error);
       alert("게시글 등록 중 오류가 발생했습니다.");
@@ -337,8 +341,9 @@ export default function TravelWriterForm({ edit }: IProps) {
               </p>
               <input
                 type="text"
-                disabled={true}
                 placeholder="주소를 먼저 입력해 주세요."
+                value={latitude}
+                disabled={true}
                 className="px-4 py-3 w-full bg-gray-100 font-normal text-[16px] text-gray-500 rounded-[8px]"
               />
             </div>
@@ -350,6 +355,7 @@ export default function TravelWriterForm({ edit }: IProps) {
               <input
                 type="text"
                 placeholder="주소를 먼저 입력해 주세요."
+                value={longitude}
                 disabled={true}
                 className="px-4 py-3 w-full bg-gray-100 font-normal text-[16px] text-gray-500 rounded-[8px]"
               />
@@ -361,7 +367,13 @@ export default function TravelWriterForm({ edit }: IProps) {
         <div className="flex flex-col gap-4 w-full">
           <p className="font-medium text-[16px] text-black">상세 위치</p>
           <div className="w-full h-full border border-gray-100 rounded-[16px] overflow-hidden max-md:aspect-[16/9]">
-            <KakaoMap />
+            {latitude && longitude ? (
+              <KakaoMap latitude={latitude} longitude={longitude} />
+            ) : (
+              <div className="flex justify-center items-center w-full h-full bg-gray-100 font-medium text-[14px] text-gray-600">
+                주소를 먼저 입력해 주세요.
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -380,7 +392,7 @@ export default function TravelWriterForm({ edit }: IProps) {
       <div className="flex justify-end items-center gap-4 w-full max-md:justify-center">
         <button
           type="button"
-          onClick={() => router.back()}
+          onClick={() => router.push("/travel")}
           className="flex justify-center items-center px-4 py-3 border border-black rounded-[8px] bg-white font-semibold text-[16px] max-md:w-full"
         >
           취소
@@ -403,20 +415,8 @@ export default function TravelWriterForm({ edit }: IProps) {
   );
 }
 
-// 수정 api 연동 및 함수 생성
-// 주소 register 추가 (수정시 기존 데이터 값 불러와 삽입하기 위함)
-
-// post를 통해 roadAddress 값을 가지고 추가 카카오에서 제공하는 API를 통해
-// 좌표(lat, lng)의 값을 가져오는 API를 통해 가져옴
-// 해야할 것은 위도 경도 입력란을 수정하지 못하게 하고 해당 API 값을 넣어주는 것을 목표로 함
-// setValue로 값을 넣어 주고 watch로 값을 보여주기
-// 추가로 KakaoMap에도 lat, lng 값을 넣어 위치 표기를 하고
-// 가능하면 지도 이동을 하면 해당 lat, lng의 값이 변경 되었으면 좋겠음
-// 그럴려면 위도, 경도를 state로 해야하나? 수정하기에 불러올 때 reset은 어떻게 해줘야하지?
-// 추가로 마커도 생성할 것
-
-// 정리
-// 1. 입력란 위도, 경도 값 넣기
-// 2. KakaoMap에 lat, lng 값 넣어 위치 표기
-// 3. 지도 마커 표시
-// 4. 지도 이동시 lat, lng 값 변경되게 하기
+// 1. 지도 마커 표시
+// 2. 수정하기 적용 - 구매하기 대신 수정하기 버튼 추가
+// 3. 본인 게시글 삭제 기능 추가
+// 4. travel 댓글 추가
+// 5. 구매 기능 추가 - 포트원

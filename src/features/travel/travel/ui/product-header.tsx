@@ -15,7 +15,15 @@ export default function ProductHeader({
 }) {
   const { user } = useUserStore();
   const router = useRouter();
-  console.log("user: ", user);
+
+  const handleBackClick = () => {
+    const prevPath = sessionStorage.getItem("travelListPrevPath");
+    if (prevPath) {
+      router.push(prevPath);
+    } else {
+      router.push("/travel");
+    }
+  };
 
   return (
     <>
@@ -28,7 +36,7 @@ export default function ProductHeader({
           </h1>
           <div className="flex justify-center items-center gap-4 ml-5">
             {/* delete */}
-            {user?._id === data?.fetchTravelproduct._id ? (
+            {user?._id === data?.fetchTravelproduct.seller?._id ? (
               <button className="flex justify-center items-center min-w-6">
                 <Image
                   src={"/travel/travel/travel-delete.svg"}
@@ -89,7 +97,7 @@ export default function ProductHeader({
       {/* mobile */}
       <header className="min-[810px]:hidden">
         <div className="flex flex-row justify-between items-center gap-[10px] px-5 w-full">
-          <button onClick={() => router.back()}>
+          <button onClick={handleBackClick}>
             <Image
               src={"/pagination/prev.svg"}
               alt="prev"

@@ -3,7 +3,12 @@
 import { useEffect, useState } from "react";
 import { Map } from "react-kakao-maps-sdk";
 
-const KakaoMap = () => {
+interface IProps {
+  latitude: string;
+  longitude: string;
+}
+
+const KakaoMap = ({ latitude, longitude }: IProps) => {
   const [scriptLoad, setScriptLoad] = useState<boolean>(false);
 
   useEffect(() => {
@@ -22,7 +27,7 @@ const KakaoMap = () => {
     <>
       {scriptLoad ? (
         <Map
-          center={{ lat: 33.5563, lng: 126.79581 }}
+          center={{ lat: Number(latitude), lng: Number(longitude) }}
           style={{ width: "100%", height: "100%" }}
           level={3}
         ></Map>
