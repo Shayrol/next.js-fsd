@@ -1,1 +1,1 @@
-export { TravelWriterPage as default } from "@/pages/travelWriter/index";
+export { TravelWriterPage as default } from "@/pages/travelWriterPage/index";

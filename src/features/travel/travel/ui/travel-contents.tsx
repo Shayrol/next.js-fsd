@@ -1,11 +1,13 @@
 "use client";
 
-import { useFetchTravelProduct } from "../api/useFetchTravelProduct";
+import { Query } from "@/entities/api/graphql";
 import TravelProduct from "./travel-product";
 
-export default function TravelContents({ travelId }: { travelId: string }) {
-  const { data } = useFetchTravelProduct({ travelId });
-
+export default function TravelContents({
+  data,
+}: {
+  data: Pick<Query, "fetchTravelproduct"> | undefined;
+}) {
   console.log("travel data: ", data?.fetchTravelproduct);
 
   return (

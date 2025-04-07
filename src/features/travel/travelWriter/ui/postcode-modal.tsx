@@ -20,8 +20,8 @@ interface IForm {
   price: number;
   zonecode: string;
   addressDetail: string;
-  lat: string;
-  lng: string;
+  lat: number;
+  lng: number;
 }
 
 interface IProps {

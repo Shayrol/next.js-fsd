@@ -13,9 +13,11 @@ import {
 } from "@/shared/ui/ImageUploader/ImageUploader";
 import { useFetchUploadFile } from "@/shared/api/useFetchUploadFile";
 import { useFetchCreateTravelProduct } from "../api/useFetchCreateTravelProduct";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import KakaoMap from "@/shared/ui/kakao/kakaoMap/kakap-map";
 import PostcodeModal from "./postcode-modal";
+import { Query } from "@/entities/api/graphql";
+import { useFetchUpdateTravelProduct } from "../api/useFetchUpdateTravelProduct";
 // import dynamic from "next/dynamic";
 // const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 // const KakaoMap = dynamic(() => import("@/shared/ui/kakao/kakaoMap/kakap-map"), {
@@ -24,7 +26,7 @@ import PostcodeModal from "./postcode-modal";
 
 interface IProps {
   edit: boolean;
-  // data?: Pick<Query, "fetchBoard"> | undefined;
+  data?: Pick<Query, "fetchTravelproduct"> | undefined;
 }
 
 interface IForm {
@@ -34,40 +36,34 @@ interface IForm {
   price: number;
   zonecode: string;
   addressDetail: string;
-  lat: string;
-  lng: string;
+  lat: number;
+  lng: number;
 }
 
-export default function TravelWriterForm({ edit }: IProps) {
+export default function TravelWriterForm({ edit, data }: IProps) {
+  const params = useParams();
+  const travelproductId = String(params?.travelId);
   const router = useRouter();
-  // const [post, setPost] = useState({ zonecode: "" });
 
   const [uploadFile] = useFetchUploadFile();
   const [createTravelProduct] = useFetchCreateTravelProduct();
+  const [updateTravelProduct] = useFetchUpdateTravelProduct();
 
-  const {
-    handleSubmit,
-    register,
-    reset,
-    formState,
-    setError,
-    setValue,
-    trigger,
-    watch,
-  } = useForm<IForm>({
-    mode: "onChange",
-    resolver: yupResolver(travelWriterSchema),
-    defaultValues: {
-      name: "",
-      remark: "",
-      contents: "",
-      price: undefined,
-      zonecode: "",
-      addressDetail: "",
-      lat: "",
-      lng: "",
-    },
-  });
+  const { handleSubmit, register, reset, formState, setValue, trigger, watch } =
+    useForm<IForm>({
+      mode: "onChange",
+      resolver: yupResolver(travelWriterSchema),
+      defaultValues: {
+        name: "",
+        remark: "",
+        contents: "",
+        price: undefined,
+        zonecode: "",
+        addressDetail: "",
+        lat: undefined,
+        lng: undefined,
+      },
+    });
 
   // 이미지
   const [images, setImages] = useState<ImageType[]>([]);
@@ -118,6 +114,15 @@ export default function TravelWriterForm({ edit }: IProps) {
 
   // 태그
   const [tags, setTags] = useState<string[]>([]);
+
+  // tags의 state의 초기 값으로 해당 data를 넣었지만 새로고침으로 값을 불러오지 못함
+  // data를 불러오는 중으로 생긴 문제로 생각함 (SSR이 아닌 CSR로 데이터를 불러오고 있음..)
+  useEffect(() => {
+    if (data?.fetchTravelproduct?.tags) {
+      setTags(data.fetchTravelproduct.tags);
+    }
+  }, [data]);
+
   const [inputValue, setInputValue] = useState("");
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -135,7 +140,6 @@ export default function TravelWriterForm({ edit }: IProps) {
   };
 
   // 주소
-  const zonecode = watch("zonecode");
   const latitude = watch("lat");
   const longitude = watch("lng");
 
@@ -159,8 +163,8 @@ export default function TravelWriterForm({ edit }: IProps) {
               zipcode: data.zonecode,
               address: "",
               addressDetail: data.addressDetail,
-              lat: Number(data.lat),
-              lng: Number(data.lng),
+              lat: data.lat,
+              lng: data.lng,
             },
             images: uploadImages,
           },
@@ -185,6 +189,69 @@ export default function TravelWriterForm({ edit }: IProps) {
     }
   };
 
+  // 수정
+  const onClickUpdate = async (data: IForm) => {
+    try {
+      setIsSubmitting(true);
+
+      const uploadImages = await processImages();
+
+      const result = await updateTravelProduct({
+        variables: {
+          updateTravelproductInput: {
+            name: data.name,
+            remarks: data.remark,
+            contents: data.contents,
+            price: data.price,
+            tags: tags,
+            travelproductAddress: {
+              zipcode: data.zonecode,
+              address: "",
+              addressDetail: data.addressDetail,
+              lat: data.lat,
+              lng: data.lng,
+            },
+            images: uploadImages,
+          },
+          travelproductId,
+        },
+        update(cache, { data }) {
+          cache.modify({
+            fields: {
+              fetchTravelproduct: () => {
+                return [data?.updateTravelproduct];
+              },
+            },
+          });
+        },
+      });
+
+      router.push(`/travel/${result.data?.updateTravelproduct._id}`);
+    } catch (error) {
+      console.error("게시글 등록 오류:", error);
+      alert("게시글 등록 중 오류가 발생했습니다.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // 수정 시 Form의 초기 값 불러오기
+  useEffect(() => {
+    if (data) {
+      reset({
+        name: data.fetchTravelproduct.name ?? "",
+        remark: data.fetchTravelproduct.remarks ?? "",
+        contents: data.fetchTravelproduct.contents ?? "",
+        price: data.fetchTravelproduct.price ?? undefined,
+        zonecode: data.fetchTravelproduct.travelproductAddress?.zipcode ?? "",
+        addressDetail:
+          data.fetchTravelproduct.travelproductAddress?.addressDetail ?? "",
+        lat: data.fetchTravelproduct.travelproductAddress?.lat ?? undefined,
+        lng: data.fetchTravelproduct.travelproductAddress?.lng ?? undefined,
+      });
+    }
+  }, [data, reset]);
+
   return (
     <form
       onSubmit={
@@ -202,9 +269,8 @@ export default function TravelWriterForm({ edit }: IProps) {
           type="text"
           placeholder="상품명을 입력해 주세요."
           // defaultValue={!edit ? "" : String(data?.fetchBoard.writer)}
-          disabled={!edit ? false : true}
           className={`flex gap-2 px-4 py-3 w-full outline-none border border-gray-200 rounded-[8px]
-                ${!edit ? "bg-white" : "bg-gray-200"}
+            ${!edit ? "bg-white" : "bg-gray-200"}
               `}
         />
         {/* name error */}
@@ -225,7 +291,6 @@ export default function TravelWriterForm({ edit }: IProps) {
           type="text"
           placeholder="상품을 한줄로 요약해 주세요."
           // defaultValue={!edit ? "" : String(data?.fetchBoard.writer)}
-          disabled={!edit ? false : true}
           className={`flex gap-2 px-4 py-3 w-full outline-none border border-gray-200 rounded-[8px]
                 ${!edit ? "bg-white" : "bg-gray-200"}
               `}
@@ -247,6 +312,7 @@ export default function TravelWriterForm({ edit }: IProps) {
           className="custom-quill"
           onChange={onChangeContents}
           placeholder="내용을 입력해 주세요."
+          value={!edit ? "" : watch("contents")}
         />
         {/* contents error */}
         {formState.errors.contents && (
@@ -266,7 +332,6 @@ export default function TravelWriterForm({ edit }: IProps) {
           type="text"
           placeholder="판매 가격을 입력해 주세요. (원 단위)"
           // defaultValue={!edit ? "" : String(data?.fetchBoard.writer)}
-          disabled={!edit ? false : true}
           className={`flex gap-2 px-4 py-3 w-full outline-none border border-gray-200 rounded-[8px]
                 ${!edit ? "bg-white" : "bg-gray-200"}
               `}
@@ -298,7 +363,6 @@ export default function TravelWriterForm({ edit }: IProps) {
           onChange={(e) => setInputValue(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="태그를 입력해 주세요."
-          // defaultValue={!edit ? "" : String(data?.fetchBoard.writer)}
           className={`flex gap-2 px-4 py-3 w-full outline-none border border-gray-200 rounded-[8px]
                 ${!edit ? "bg-white" : "bg-gray-200"}
               `}
@@ -318,7 +382,7 @@ export default function TravelWriterForm({ edit }: IProps) {
                 {...register("zonecode")}
                 type="text"
                 placeholder="01234"
-                value={zonecode}
+                // value={zonecode}
                 disabled={true}
                 className="flex justify-center items-center px-4 py-3 border border-gray-200 rounded-[8px] w-[82px]"
               />
@@ -340,9 +404,10 @@ export default function TravelWriterForm({ edit }: IProps) {
                 위도(LAT)
               </p>
               <input
+                {...register("lat")}
                 type="text"
                 placeholder="주소를 먼저 입력해 주세요."
-                value={latitude}
+                // value={latitude}
                 disabled={true}
                 className="px-4 py-3 w-full bg-gray-100 font-normal text-[16px] text-gray-500 rounded-[8px]"
               />
@@ -353,9 +418,10 @@ export default function TravelWriterForm({ edit }: IProps) {
                 경도(LNG)
               </p>
               <input
+                {...register("lng")}
                 type="text"
                 placeholder="주소를 먼저 입력해 주세요."
-                value={longitude}
+                // value={longitude}
                 disabled={true}
                 className="px-4 py-3 w-full bg-gray-100 font-normal text-[16px] text-gray-500 rounded-[8px]"
               />
@@ -368,7 +434,14 @@ export default function TravelWriterForm({ edit }: IProps) {
           <p className="font-medium text-[16px] text-black">상세 위치</p>
           <div className="w-full h-full border border-gray-100 rounded-[16px] overflow-hidden max-md:aspect-[16/9]">
             {latitude && longitude ? (
-              <KakaoMap latitude={latitude} longitude={longitude} />
+              <KakaoMap
+                latitude={latitude}
+                longitude={longitude}
+                title={
+                  data?.fetchTravelproduct.travelproductAddress
+                    ?.addressDetail ?? ""
+                }
+              />
             ) : (
               <div className="flex justify-center items-center w-full h-full bg-gray-100 font-medium text-[14px] text-gray-600">
                 주소를 먼저 입력해 주세요.
@@ -382,7 +455,7 @@ export default function TravelWriterForm({ edit }: IProps) {
       <div className="flex flex-col gap-2">
         <p className="flex gap-1">사진 첨부</p>
         <ImageUploader
-          initialImages={[]}
+          initialImages={data?.fetchTravelproduct.images || []}
           onChange={handleImagesChange}
           disabled={isSubmitting}
         />
@@ -408,7 +481,7 @@ export default function TravelWriterForm({ edit }: IProps) {
             }
           `}
         >
-          등록하기
+          {!edit ? "등록하기" : "수정하기"}
         </button>
       </div>
     </form>

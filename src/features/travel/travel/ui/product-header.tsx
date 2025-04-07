@@ -7,6 +7,7 @@ import { useUserStore } from "@/stores/userStore";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useFetchDeleteTravelProduct } from "../../travelWriter/api/useFetchDeleteTravelProduct";
 
 export default function ProductHeader({
   data,
@@ -16,12 +17,26 @@ export default function ProductHeader({
   const { user } = useUserStore();
   const router = useRouter();
 
+  const [deleteTravleProduct] = useFetchDeleteTravelProduct();
+
   const handleBackClick = () => {
     const prevPath = sessionStorage.getItem("travelListPrevPath");
     if (prevPath) {
       router.push(prevPath);
     } else {
       router.push("/travel");
+    }
+  };
+
+  const onClickDelete = async () => {
+    try {
+      await deleteTravleProduct({
+        variables: {
+          travelproductId: data?.fetchTravelproduct._id,
+        },
+      }).then(void router.push("/travel"));
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -37,7 +52,10 @@ export default function ProductHeader({
           <div className="flex justify-center items-center gap-4 ml-5">
             {/* delete */}
             {user?._id === data?.fetchTravelproduct.seller?._id ? (
-              <button className="flex justify-center items-center min-w-6">
+              <button
+                onClick={onClickDelete}
+                className="flex justify-center items-center min-w-6"
+              >
                 <Image
                   src={"/travel/travel/travel-delete.svg"}
                   alt="delete"

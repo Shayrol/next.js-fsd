@@ -6,6 +6,8 @@ import { Query, Travelproduct } from "@/entities/api/graphql";
 import Image from "next/image";
 import { useState } from "react";
 import ProductInfoMobile from "./product-info-mobile";
+import { useUserStore } from "@/stores/userStore";
+import Link from "next/link";
 
 export default function ProductInfo({
   data,
@@ -14,6 +16,7 @@ export default function ProductInfo({
 }) {
   const dataInfo: Travelproduct | undefined = data?.fetchTravelproduct;
   const [pickImage, setPickImage] = useState<number>(0);
+  const { user } = useUserStore();
 
   console.log("dataInfo: ", dataInfo);
 
@@ -100,9 +103,18 @@ export default function ProductInfo({
                 </li>
               </ol>
             </div>
-            <button className="flex justify-center items-center gap-2 px-4 py-3 w-full rounded-[8px] font-semibold text-[20px] text-white bg-[#2974E5] hover:bg-[#2974E5]/90">
-              구매하기
-            </button>
+            {user?._id !== data?.fetchTravelproduct.seller?._id ? (
+              <button className="flex justify-center items-center gap-2 px-4 py-3 w-full rounded-[8px] font-semibold text-[20px] text-white bg-[#2974E5] hover:bg-[#2974E5]/90">
+                구매하기
+              </button>
+            ) : (
+              <Link
+                href={`/travel/${dataInfo?._id}/edit`}
+                className="flex justify-center items-center gap-2 px-4 py-3 w-full rounded-[8px] font-semibold text-[20px] text-white bg-[#2974E5] hover:bg-[#2974E5]/90"
+              >
+                수정하기
+              </Link>
+            )}
           </div>
 
           {/* seller */}

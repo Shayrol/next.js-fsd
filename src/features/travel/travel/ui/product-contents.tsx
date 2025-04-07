@@ -1,3 +1,5 @@
+// 내용 + 모바일(제목, 부제목, 태그, 가격) 정보 표시
+
 "use client";
 
 import { Query } from "@/entities/api/graphql";

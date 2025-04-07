@@ -11,6 +11,6 @@ export const travelWriterSchema = yup.object().shape({
     .required("판매 가격을 입력해 주세요."),
   zonecode: yup.string().required("우편번호를 등록해 주세요"),
   addressDetail: yup.string().required("상세주소를 입력해 주세요."),
-  lat: yup.string().required("위도를 입력해 주세요."),
-  lng: yup.string().required("경도를 입력해 주세요."),
+  lat: yup.number().required("위도를 입력해 주세요."),
+  lng: yup.number().required("경도를 입력해 주세요."),
 });
