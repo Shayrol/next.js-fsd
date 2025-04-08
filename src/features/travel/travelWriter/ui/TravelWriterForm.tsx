@@ -488,8 +488,6 @@ export default function TravelWriterForm({ edit, data }: IProps) {
   );
 }
 
-// 1. 지도 마커 표시
-// 2. 수정하기 적용 - 구매하기 대신 수정하기 버튼 추가
-// 3. 본인 게시글 삭제 기능 추가
-// 4. travel 댓글 추가
-// 5. 구매 기능 추가 - 포트원
+// 1. travel 댓글 추가
+// 2. 구매 기능 추가 - 포트원
+// 3. 마이페이지

@@ -1,6 +1,6 @@
 "use client";
 
-import { IFormInput } from "@/features/Reply/Reply/type";
+import { IFormInput } from "@/features/Reply/Reply/Board/type";
 import { UseFormRegister } from "react-hook-form";
 
 interface ReplyTextAreaProps {

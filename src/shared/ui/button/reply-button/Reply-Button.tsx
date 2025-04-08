@@ -1,6 +1,6 @@
 "use client";
 
-import { useFetchCreateBoardCommentInput } from "@/features/Reply/Reply/api/usefetchCreateBoardCommentInput";
+import { useFetchCreateBoardCommentInput } from "@/features/Reply/Reply/Board/api/usefetchCreateBoardCommentInput";
 
 interface IReplyButtonProps {
   query: {

@@ -1,5 +1,5 @@
 import { Board } from "@/features/Board/Board";
-import { Reply } from "@/features/Reply/Reply";
+import { Reply } from "@/features/Reply/Reply/Board";
 
 type Params = { boardId: string };
 

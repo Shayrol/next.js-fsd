@@ -112,7 +112,7 @@ export default function ReplyInput(props: IFormInputProps) {
       {!edit && (
         <div className="flex justify-center items-center gap-2 w-full max-w-[60px] h-full max-h-[24px]">
           <Image
-            src={"/board/reply/reply.svg"}
+            src={"/reply/reply.svg"}
             alt="reply-image"
             width={0}
             height={0}
