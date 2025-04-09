@@ -6,8 +6,11 @@ import TravelContents from "./travel-contents";
 import { useFetchTravelProductQuestions } from "../api/useFetchTravelProductQuestions";
 import { formatDate } from "@/lib/dateUtils";
 import TravelAnswerList from "./travel-question-answers";
+import { useState } from "react";
+import TravelInput from "./travel-input";
 
 export default function TravelQuestions({ travelId }: { travelId: string }) {
+  const [activeInputId, setActiveInputId] = useState<string | null>(null);
   const { data } = useFetchTravelProductQuestions({
     page: 1,
     travelproductId: travelId,
@@ -48,10 +51,32 @@ export default function TravelQuestions({ travelId }: { travelId: string }) {
                   {formatDate(el.createdAt)}
                 </p>
               </div>
+
+              {/* 대댓글 입력 버튼 */}
+              <button
+                type="button"
+                onClick={() =>
+                  setActiveInputId((prev: string) =>
+                    prev === el._id ? null : el._id
+                  )
+                }
+                className="flex gap-2"
+              >
+                <Image
+                  src={"/reply/reply-question.svg"}
+                  alt="reply-image"
+                  width={24}
+                  height={24}
+                />
+                <p className="font-light text-[14px] text-black">답변하기</p>
+              </button>
             </section>
 
             {/* 대댓글 */}
             <TravelAnswerList questionId={el._id} />
+            {activeInputId === el._id && (
+              <TravelInput travelId={travelId} questionId={el._id} />
+            )}
           </section>
         ))
       ) : (
