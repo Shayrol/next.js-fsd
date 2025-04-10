@@ -56,7 +56,7 @@ export default function TravelQuestions({ travelId }: { travelId: string }) {
               <button
                 type="button"
                 onClick={() =>
-                  setActiveInputId((prev: string) =>
+                  setActiveInputId((prev: string | null) =>
                     prev === el._id ? null : el._id
                   )
                 }
@@ -75,7 +75,11 @@ export default function TravelQuestions({ travelId }: { travelId: string }) {
             {/* 대댓글 */}
             <TravelAnswerList questionId={el._id} />
             {activeInputId === el._id && (
-              <TravelInput travelId={travelId} questionId={el._id} />
+              <TravelInput
+                travelId={travelId}
+                questionId={el._id}
+                setActiveInputId={setActiveInputId}
+              />
             )}
           </section>
         ))

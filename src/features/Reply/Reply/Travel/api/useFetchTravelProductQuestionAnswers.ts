@@ -3,7 +3,7 @@
 import { Query } from "@/entities/api/graphql";
 import { gql, useQuery } from "@apollo/client";
 
-const FETCH_TRAVEL_PRODUCT_QUESTION_ANSWERS = gql`
+export const FETCH_TRAVEL_PRODUCT_QUESTION_ANSWERS = gql`
   query fetchTravelproductQuestionAnswers(
     $page: Int
     $travelproductQuestionId: ID!
@@ -14,10 +14,6 @@ const FETCH_TRAVEL_PRODUCT_QUESTION_ANSWERS = gql`
     ) {
       _id
       contents
-      travelproductQuestion {
-        _id
-        contents
-      }
       user {
         _id
         name

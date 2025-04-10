@@ -25,26 +25,37 @@ export default function TravelAnswerList({
   }
 
   return (
-    <div className="ml-6 mt-2 flex flex-col gap-2">
+    <div className="pl-6 mt-2 flex flex-col gap-3 w-full">
       {answerData.fetchTravelproductQuestionAnswers.map((answer) => (
-        <div key={answer._id} className="flex flex-col gap-1">
-          <div className="flex gap-1">
-            <Image
-              src={
-                answer.user.picture
-                  ? `https://storage.googleapis.com/${answer.user.picture}`
-                  : "/not-images/not-profile.svg"
-              }
-              alt="profile"
-              width={20}
-              height={20}
-            />
-            <p className="text-[13px] text-gray-500">{answer.user.name}</p>
+        <div
+          key={answer._id}
+          className="flex justify-center items-start gap-2 w-full"
+        >
+          <Image
+            src={"/reply/return.svg"}
+            alt="return"
+            width={24}
+            height={24}
+          />
+          <div className="flex flex-col gap-1 w-full">
+            <div className="flex gap-1">
+              <Image
+                src={
+                  answer.user.picture
+                    ? `https://storage.googleapis.com/${answer.user.picture}`
+                    : "/not-images/not-profile.svg"
+                }
+                alt="profile"
+                width={20}
+                height={20}
+              />
+              <p className="text-[13px] text-gray-500">{answer.user.name}</p>
+            </div>
+            <TravelContents contents={answer.contents} />
+            <p className="text-[12px] text-[#818181]">
+              {formatDate(answer.createdAt)}
+            </p>
           </div>
-          <TravelContents contents={answer.contents} />
-          <p className="text-[12px] text-[#818181]">
-            {formatDate(answer.createdAt)}
-          </p>
         </div>
       ))}
     </div>
