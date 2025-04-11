@@ -5,15 +5,18 @@ export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   const accessToken = request.cookies.get("accessToken");
 
-  if (pathname.startsWith("/travel")) {
-    if (!accessToken) {
-      return NextResponse.redirect(new URL("/login", request.url));
-    }
+  // 보호할 경로들
+  const protectedPaths = ["/travel", "/mypage"];
+
+  const isProtected = protectedPaths.some((path) => pathname.startsWith(path));
+
+  if (isProtected && !accessToken) {
+    return NextResponse.redirect(new URL("/login", request.url));
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/travel"],
+  matcher: ["/travel", "/mypage"],
 };

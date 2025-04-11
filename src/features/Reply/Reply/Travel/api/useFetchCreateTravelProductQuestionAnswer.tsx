@@ -12,10 +12,6 @@ const CREATE_TRAVEL_PRODUCT_QUESTION_ANSWER = gql`
     ) {
       _id
       contents
-      travelproductQuestion {
-        _id
-        contents
-      }
       user {
         _id
         name

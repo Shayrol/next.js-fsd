@@ -1,4 +1,5 @@
 // 댓글 입력
+"use client";
 
 import { useForm } from "react-hook-form";
 import { useFetchCreateTravelProductQuestion } from "../api/useFetchCreateTravelProductQuestion";
@@ -55,22 +56,34 @@ export default function TravelInput(props: ITravelInputProps) {
   };
 
   const onSubmitQuestionAnswer = async (data: IForm) => {
-    await createTravelProductQusetionAnswer({
-      variables: {
-        createTravelproductQuestionAnswerInput: {
-          contents: data.contents,
+    console.log("data", data);
+    console.log("props.questionId", props.questionId);
+
+    try {
+      await createTravelProductQusetionAnswer({
+        variables: {
+          createTravelproductQuestionAnswerInput: {
+            contents: data.contents,
+          },
+          travelproductQuestionId: props.questionId,
         },
-        travelproductQuestionId: props.questionId,
-      },
-      // refetchQueries: [
-      //   {
-      //     query: FETCH_TRAVEL_PRODUCT_QUESTION_ANSWERS,
-      //     variables: {
-      //       travelproductQuestionId: props.questionId,
-      //     },
-      //   },
-      // ],
-    });
+        refetchQueries: [
+          {
+            query: FETCH_TRAVEL_PRODUCT_QUESTION_ANSWERS,
+            variables: {
+              travelproductQuestionId: props.questionId,
+              page: 1,
+            },
+          },
+        ],
+      }).then(() => {
+        props.setActiveInputId?.((prev: string | null) =>
+          prev === String(props.questionId) ? null : String(props.questionId)
+        );
+      });
+    } catch (error) {
+      console.log("error", error);
+    }
   };
 
   return (
@@ -116,6 +129,3 @@ export default function TravelInput(props: ITravelInputProps) {
     </form>
   );
 }
-
-// 대댓글 등록은 되는데 에러가 있음 refetch, update도 안해도 에러..
-// 새로고침하면 등록 되어있음

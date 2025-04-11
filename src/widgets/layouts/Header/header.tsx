@@ -14,7 +14,10 @@ export default function Header() {
   // const HIDDEN_HEADER = ["/login", "/signup"];
   // const header = HIDDEN_HEADER.includes(String(pathname));
   const HIDDEN_HEADER = ["/login", "/signup"];
-  const header = HIDDEN_HEADER.includes(String(pathname));
+  const header =
+    HIDDEN_HEADER.includes(String(pathname)) ||
+    (String(pathname).startsWith("/travel/") && pathname !== "/travel");
+
   // || (String(pathname).startsWith("/travel/") && pathname !== "/travel");
 
   const { user, setUser } = useUserStore();
