@@ -1,9 +1,15 @@
 "use client";
 
+import ActivityContents from "./activity-contents";
+import ActivityOptionButton from "./activity-option-button";
+import ActivitySearch from "./activity-search";
+
 export default function MyPageActivity() {
   return (
     <section className="flex flex-col gap-6 w-full">
-      <div>거래내역&북마크</div>
+      <ActivityOptionButton />
+      <ActivitySearch />
+      <ActivityContents />
     </section>
   );
 }

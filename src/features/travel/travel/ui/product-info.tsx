@@ -18,8 +18,6 @@ export default function ProductInfo({
   const [pickImage, setPickImage] = useState<number>(0);
   const { user } = useUserStore();
 
-  console.log("dataInfo: ", dataInfo);
-
   const onClickPickImage = (index: number) => {
     setPickImage(index);
   };
@@ -132,7 +130,7 @@ export default function ProductInfo({
                 height={40}
               />
               <p className="font-medium text-[16px] text-gray-800">
-                {dataInfo?.seller?.name}
+                {dataInfo?.seller ? dataInfo?.seller?.name : "null"}
               </p>
             </div>
           </div>

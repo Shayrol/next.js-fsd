@@ -21,12 +21,11 @@ const TRAVEL_PRODUCTS = gql`
       }
       buyer {
         _id
-        email
         name
+        picture
       }
       seller {
         _id
-        email
         name
         picture
       }

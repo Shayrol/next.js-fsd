@@ -7,6 +7,8 @@ import TravelContents from "./travel-contents";
 export default function Travel({ travelId }: { travelId: string }) {
   const { data } = useFetchTravelProduct({ travelId });
 
+  console.log("Travel data: ", data);
+
   return (
     <section className="flex flex-col justify-center items-center w-full gap-10">
       <TravelContents data={data} />

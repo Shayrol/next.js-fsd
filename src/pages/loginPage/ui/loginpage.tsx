@@ -7,7 +7,7 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { LoginSchema } from "../api/schema";
 import { useLoginUser } from "../api/useLoginUser";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useAccessTokenStore } from "@/stores/tokenStore";
 import Cookies from "js-cookie";
 // import { useApolloClient } from "@apollo/client";
@@ -19,6 +19,9 @@ interface IForm {
 
 export default function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams?.get("callbackUrl") || "/";
+
   const { setAccessToken } = useAccessTokenStore();
   const [loginUser] = useLoginUser();
   // const client = useApolloClient();
@@ -47,7 +50,7 @@ export default function LoginPage() {
         sameSite: "Strict",
         expires: date,
       });
-      router.back();
+      router.push(callbackUrl);
     } catch (error) {
       if (error instanceof Error) {
         reset({ password: "" });

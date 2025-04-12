@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { memo } from "react";
 
 const MenuList = [
   { name: "거래내역&북마크", path: "/mypage/activity" },
@@ -10,11 +11,7 @@ const MenuList = [
   { name: "비밀번호 변경", path: "/mypage/change-password" },
 ];
 
-export default function MyPageLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+function MyPageLayout({ children }: { children: React.ReactNode }) {
   const pathName = usePathname();
 
   return (
@@ -71,3 +68,6 @@ export default function MyPageLayout({
     </main>
   );
 }
+
+const MyPageLayoutWrap = memo(MyPageLayout);
+export default MyPageLayoutWrap;

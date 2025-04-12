@@ -10,8 +10,13 @@ export function middleware(request: NextRequest) {
 
   const isProtected = protectedPaths.some((path) => pathname.startsWith(path));
 
+  // 로그인 하지 않은 상태에서 보호된 경로 접근할 때 접근할 경로 쿼리스트링으로 저장
+  // 이후 로그인 페이지에서 리다이렉트로 이동할 때 사용
   if (isProtected && !accessToken) {
-    return NextResponse.redirect(new URL("/login", request.url));
+    const callbackUrl = request.nextUrl.pathname;
+    return NextResponse.redirect(
+      new URL(`/login?callbackUrl=${callbackUrl}`, request.url)
+    );
   }
 
   return NextResponse.next();

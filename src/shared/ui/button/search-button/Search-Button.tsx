@@ -6,7 +6,7 @@ import { DateRange } from "react-day-picker";
 
 interface IProps {
   search: string;
-  date: DateRange | undefined;
+  date?: DateRange | undefined;
 }
 
 function SearchButton({ query }: { query: IProps }) {
