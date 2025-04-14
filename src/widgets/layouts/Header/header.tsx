@@ -42,9 +42,12 @@ export default function Header() {
         email: data.fetchUserLoggedIn.email,
         picture: data.fetchUserLoggedIn.picture ?? null,
         createdAt: data.fetchUserLoggedIn.createdAt,
+        point: data.fetchUserLoggedIn.userPoint?.amount ?? 0,
       });
     }
   }, [data, setUser, user]);
+
+  console.log("user", data?.fetchUserLoggedIn);
 
   return (
     <>
@@ -101,9 +104,3 @@ export default function Header() {
     </>
   );
 }
-
-// 세로고침 후 skeleton loading ui 생성하기
-// 로그인 페이지에서 로그인 후 layout/header의 로그인 유저 정보 리렌더링 필요
-// refetch를 로그인 버튼에 했지만 해당 headers의 Authorization에 accessToken이
-// 아직 없어 에러가 생김 그래서 header 컴포넌트에 useEffect로 refetch를 했지만
-// 안됨...

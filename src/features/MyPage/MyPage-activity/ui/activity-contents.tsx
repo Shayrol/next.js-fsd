@@ -9,6 +9,10 @@ import { useEffect, useState } from "react";
 import { useUserStore } from "@/stores/userStore";
 import { Travelproduct } from "@/entities/api/graphql";
 import Link from "next/link";
+import Pagination from "@/shared/ui/pagination/pagination";
+import { useFetchTravelProductsCountISold } from "../api/useFetchTravelProductsCountISold";
+import { useFetchTravelProductsCountIPicked } from "../api/useFetchTravelProductsCountIPicked";
+import { useFetchDeleteTravelProduct } from "@/features/travel/travelWriter/api/useFetchDeleteTravelProduct";
 
 export default function ActivityContents() {
   const searchParams = useSearchParams();
@@ -17,6 +21,11 @@ export default function ActivityContents() {
   const tab = searchParams?.get("tab") || "my-product";
   const { user } = useUserStore();
 
+  // 나의 상품 삭제 st
+  const [deleteTravelProduct] = useFetchDeleteTravelProduct();
+  // 나의 상품 삭제 ed
+
+  // 나의 상품 st
   const { data: ISoldData } = useFetchTravelProductsISold(
     { search, page },
     {
@@ -24,13 +33,27 @@ export default function ActivityContents() {
       // skip: tab !== "my-product",
     }
   );
+  const { data: ISoldCount } = useFetchTravelProductsCountISold({
+    skip: user === null || tab !== "my-product",
+  });
+  // 나의 상품 ed
 
+  // 북마크 상품 st
   const { data: IPickedData } = useFetchTravelProductsIPicked(
     { search, page },
     { skip: user === null || tab !== "bookmark" }
   );
+
+  const { data: IPickedCount } = useFetchTravelProductsCountIPicked({
+    skip: user === null || tab !== "bookmark",
+  });
+  // 북마크 상품 ed
+
   const [sold, setSold] = useState<Travelproduct[] | undefined>();
+  const [soldCount] = useState(ISoldCount?.fetchTravelproductsCountISold);
+
   const [picked, setPicked] = useState<Travelproduct[] | undefined>();
+  const [pickedCount] = useState(IPickedCount?.fetchTravelproductsCountIPicked);
 
   useEffect(() => {
     if (ISoldData?.fetchTravelproductsISold) {
@@ -54,7 +77,36 @@ export default function ActivityContents() {
   // }, [tab, refetchISold, refetchIPicked, soldCalled, pickedCalled]);
 
   const data = tab === "my-product" ? sold : picked;
+  const count = tab === "my-product" ? soldCount : pickedCount;
   console.log("data", data);
+  console.log("count", count);
+
+  const onClickDelete = async (travelproductId: string) => {
+    try {
+      await deleteTravelProduct({
+        variables: {
+          travelproductId,
+        },
+        update(cache) {
+          cache.modify({
+            fields: {
+              fetchTravelproductsISold(existingRefs = [], { readField }) {
+                return existingRefs.filter(
+                  (productRef: any) =>
+                    readField("_id", productRef) !== travelproductId
+                );
+              },
+            },
+          });
+        },
+      });
+      alert("삭제되었습니다.");
+    } catch (error) {
+      if (error instanceof Error) {
+        alert("삭제에 실패했습니다.");
+      }
+    }
+  };
 
   return (
     <section
@@ -100,31 +152,39 @@ export default function ActivityContents() {
                   </p>
                   {/* seller - 가운데 정렬 + ... 처리 */}
                   <div className="flex justify-center items-center max-w-[100px] bg-gray-100">
-                    <p className="w-[100px] truncate text-center">{el.name}</p>
+                    <p className="w-[100px] truncate text-center">
+                      {el.seller?.name}
+                    </p>
                   </div>
                   {/* createdAt */}
                   <p className="flex justify-center items-center gap-2 min-w-[100px] font-normal text-[16px] text-gray-900">
                     {formatDate(el.createdAt)}
                   </p>
                   {/* delete */}
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation(); // 이벤트 전파 방지
-                      e.preventDefault(); // 기본 동작 방지
-                    }}
-                    className="absolute right-1.5 hidden group-hover:block transition-opacity duration-200"
-                  >
-                    <Image
-                      src="/mypage/delete.svg"
-                      alt="trash"
-                      width={24}
-                      height={24}
-                    />
-                  </button>
+                  {tab === "my-product" && (
+                    <button
+                      onClick={(e) => {
+                        onClickDelete(el._id);
+                        e.stopPropagation(); // 이벤트 전파 방지
+                        e.preventDefault(); // 기본 동작 방지
+                      }}
+                      className={`absolute right-1.5 hidden group-hover:block transition-opacity duration-200
+                        ${tab === "my-product" ? "block" : "hidden"}
+                      `}
+                    >
+                      <Image
+                        src="/mypage/delete.svg"
+                        alt="trash"
+                        width={24}
+                        height={24}
+                      />
+                    </button>
+                  )}
                 </li>
               </Link>
             ))}
           </ul>
+          <Pagination count={count} />
         </div>
       ) : (
         <div className="flex justify-center items-center w-full aspect-[16/9]">
@@ -137,6 +197,6 @@ export default function ActivityContents() {
   );
 }
 
-// pagination 추가하기
-// 북마크 기능 추가하기 (게시글 상세페이지에서 북마크 추가하기)
-// 나의 상품 삭제 기능 추가하기 (버튼 구현 완료 상태)
+// travel 상세 페이지 seller가 null인 문제 해결하기
+// point 조회 페이지 구현
+// 비밀번호 변경 페이지 구현

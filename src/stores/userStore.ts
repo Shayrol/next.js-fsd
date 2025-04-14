@@ -6,6 +6,7 @@ interface User {
   email: string;
   picture: string | null;
   createdAt: Date;
+  point: number;
 }
 
 interface UserStore {

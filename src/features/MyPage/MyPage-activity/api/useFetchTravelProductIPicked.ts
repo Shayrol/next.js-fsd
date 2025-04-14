@@ -12,6 +12,10 @@ const FETCH_TRAVEL_PRODUCTS_I_PICKED = gql`
         _id
         name
       }
+      seller {
+        _id
+        name
+      }
       soldAt
     }
   }

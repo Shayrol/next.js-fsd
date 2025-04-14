@@ -8,6 +8,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useFetchDeleteTravelProduct } from "../../travelWriter/api/useFetchDeleteTravelProduct";
+import Bookmark from "./bookmark";
 
 export default function ProductHeader({
   data,
@@ -17,7 +18,7 @@ export default function ProductHeader({
   const { user } = useUserStore();
   const router = useRouter();
 
-  const [deleteTravleProduct] = useFetchDeleteTravelProduct();
+  const [deleteTravelProduct] = useFetchDeleteTravelProduct();
 
   const handleBackClick = () => {
     const prevPath = sessionStorage.getItem("travelListPrevPath");
@@ -30,7 +31,7 @@ export default function ProductHeader({
 
   const onClickDelete = async () => {
     try {
-      await deleteTravleProduct({
+      await deleteTravelProduct({
         variables: {
           travelproductId: data?.fetchTravelproduct._id,
         },
@@ -86,7 +87,11 @@ export default function ProductHeader({
             </button>
 
             {/* bookmark */}
-            <div className="flex justify-center items-center gap-1 min-w-[53px] px-2 py-1 rounded-[8px] bg-black/40">
+            <Bookmark
+              count={data?.fetchTravelproduct.pickedCount}
+              travelId={data?.fetchTravelproduct._id}
+            />
+            {/* <div className="flex justify-center items-center gap-1 min-w-[53px] px-2 py-1 rounded-[8px] bg-black/40">
               <Image
                 src={"/travel/travels/bookmark.svg"}
                 alt="bookmark"
@@ -97,7 +102,7 @@ export default function ProductHeader({
               <div className="w-[17px] h-[20px] flex justify-center items-center text-white shadow-md text-[14px] font-medium leading-[20px] tracking-[0%] rounded">
                 {data?.fetchTravelproduct.pickedCount}
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
 

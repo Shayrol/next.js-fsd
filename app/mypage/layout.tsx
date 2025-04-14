@@ -1,5 +1,6 @@
 "use client";
 
+import { useUserStore } from "@/stores/userStore";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -13,6 +14,7 @@ const MenuList = [
 
 function MyPageLayout({ children }: { children: React.ReactNode }) {
   const pathName = usePathname();
+  const { user } = useUserStore();
 
   return (
     <main className="flex flex-col justify-center items-start gap-10 w-full max-w-[1280px] h-full">
@@ -29,7 +31,7 @@ function MyPageLayout({ children }: { children: React.ReactNode }) {
             height={40}
             className="rounded-full"
           />
-          <p className="font-medium text-[16px] text-[#333333]">홍길동</p>
+          <p className="font-medium text-[16px] text-[#333333]">{user?.name}</p>
         </div>
         <hr className="w-full border border-gray-100" />
 
@@ -37,7 +39,9 @@ function MyPageLayout({ children }: { children: React.ReactNode }) {
         <div className="flex items-center gap-2">
           <Image src={"/mypage/point.svg"} alt="point" width={24} height={24} />
           <div className="flex gap-1">
-            <p className="font-medium text-[20px] text-black">23,000</p>
+            <p className="font-medium text-[20px] text-black">
+              {user?.point?.toLocaleString()}
+            </p>
             <span className="font-medium text-[20px] text-black ">P</span>
           </div>
         </div>

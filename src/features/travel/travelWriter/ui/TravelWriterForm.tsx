@@ -45,6 +45,7 @@ export default function TravelWriterForm({ edit, data }: IProps) {
   const travelproductId = String(params?.travelId);
   const router = useRouter();
 
+  const [contents, setContents] = useState("");
   const [uploadFile] = useFetchUploadFile();
   const [createTravelProduct] = useFetchCreateTravelProduct();
   const [updateTravelProduct] = useFetchUpdateTravelProduct();
@@ -107,10 +108,16 @@ export default function TravelWriterForm({ edit, data }: IProps) {
 
   // 내용
   const onChangeContents = (value: string) => {
-    // register를 사용하지 못해 강제로 값 넣기
-    setValue("contents", value);
-    trigger("contents"); // 에러처리을 하기 위함
+    setContents(value); // ReactQuill용
+    setValue("contents", value); // react-hook-form용
+    trigger("contents"); // 유효성 검사
   };
+
+  useEffect(() => {
+    if (edit) {
+      setContents(watch("contents") || "");
+    }
+  }, [edit, watch("contents")]);
 
   // 태그
   const [tags, setTags] = useState<string[]>([]);
@@ -170,10 +177,15 @@ export default function TravelWriterForm({ edit, data }: IProps) {
           },
         },
         update(cache, { data }) {
+          const newProduct = data?.createTravelproduct;
+
           cache.modify({
             fields: {
               fetchTravelproducts: (prev) => {
-                return [data?.createTravelproduct, ...prev];
+                return [newProduct, ...prev];
+              },
+              fetchTravelproductsISold: (prev = []) => {
+                return [newProduct, ...prev];
               },
             },
           });
@@ -312,7 +324,8 @@ export default function TravelWriterForm({ edit, data }: IProps) {
           className="custom-quill"
           onChange={onChangeContents}
           placeholder="내용을 입력해 주세요."
-          value={!edit ? "" : watch("contents")}
+          // value={!edit ? "" : watch("contents")}
+          value={contents}
         />
         {/* contents error */}
         {formState.errors.contents && (

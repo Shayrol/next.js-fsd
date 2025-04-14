@@ -6,6 +6,7 @@ import Image from "next/image";
 // import Image from "next/image";
 import { A11y } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
+import Bookmark from "./bookmark";
 
 export default function ProductInfoMobile({
   data,
@@ -111,7 +112,8 @@ export default function ProductInfoMobile({
           </button>
 
           {/* bookmark */}
-          <div className="flex justify-center items-center gap-1 min-w-[53px] px-2 py-1 rounded-[8px] bg-black/40">
+          <Bookmark count={data?.pickedCount} travelId={data?._id} />
+          {/* <div className="flex justify-center items-center gap-1 min-w-[53px] px-2 py-1 rounded-[8px] bg-black/40">
             <Image
               src={"/travel/travels/bookmark.svg"}
               alt="bookmark"
@@ -122,7 +124,7 @@ export default function ProductInfoMobile({
             <div className="w-[17px] h-[20px] flex justify-center items-center text-white shadow-md text-[14px] font-medium leading-[20px] tracking-[0%] rounded">
               {data?.pickedCount}
             </div>
-          </div>
+          </div> */}
         </div>
       </section>
     </section>
