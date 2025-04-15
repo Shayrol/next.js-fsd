@@ -1,13 +1,14 @@
 "use client";
 
+import { ActionButtonList } from "../../constants/option-button-list";
+import MyPageOptionButton from "../../ui/mypage-option-button";
 import ActivityContents from "./activity-contents";
-import ActivityOptionButton from "./activity-option-button";
 import ActivitySearch from "./activity-search";
 
 export default function MyPageActivity() {
   return (
     <section className="flex flex-col gap-6 w-full">
-      <ActivityOptionButton />
+      <MyPageOptionButton list={ActionButtonList} />
       <ActivitySearch />
       <ActivityContents />
     </section>

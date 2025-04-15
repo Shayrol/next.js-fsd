@@ -196,7 +196,3 @@ export default function ActivityContents() {
     </section>
   );
 }
-
-// travel 상세 페이지 seller가 null인 문제 해결하기
-// point 조회 페이지 구현
-// 비밀번호 변경 페이지 구현
