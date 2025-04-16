@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { useSearchParams } from "next/navigation";
 import React, { ChangeEvent, Dispatch, SetStateAction } from "react";
 
 interface IProps {
@@ -10,12 +9,6 @@ interface IProps {
 }
 
 function SearchInput({ query }: { query: IProps }) {
-  const params = useSearchParams();
-  // const router = useRouter();
-
-  console.log("input search: ", params?.get("page"));
-  console.log("input search: ", query.search);
-
   const onChangeSearch = (event: ChangeEvent<HTMLInputElement>) => {
     query.setSearch(event.target.value);
   };

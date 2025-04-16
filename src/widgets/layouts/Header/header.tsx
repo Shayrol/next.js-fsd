@@ -7,7 +7,8 @@ import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { useFetchUserLoggedIn } from "@/entities/api/auth/useFetchUserLoggedIn";
 import { useUserStore } from "@/stores/userStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import ProfileModal from "./ui/profile-modal";
 
 export default function Header() {
   const pathname = usePathname();
@@ -18,9 +19,8 @@ export default function Header() {
     HIDDEN_HEADER.includes(String(pathname)) ||
     (String(pathname).startsWith("/travel/") && pathname !== "/travel");
 
-  // || (String(pathname).startsWith("/travel/") && pathname !== "/travel");
-
   const { user, setUser } = useUserStore();
+  const [open, setOpen] = useState(false);
 
   // 1. 페이지 접속 시 자동으로 API 요청
   const { data, loading } = useFetchUserLoggedIn();
@@ -36,14 +36,7 @@ export default function Header() {
   // 로그인 정보를 통해 travel작성자 확인 및 마이 페이지 정보 표시 위함
   useEffect(() => {
     if (data?.fetchUserLoggedIn && user?._id !== data.fetchUserLoggedIn._id) {
-      setUser({
-        _id: data.fetchUserLoggedIn._id,
-        name: data.fetchUserLoggedIn.name,
-        email: data.fetchUserLoggedIn.email,
-        picture: data.fetchUserLoggedIn.picture ?? null,
-        createdAt: data.fetchUserLoggedIn.createdAt,
-        point: data.fetchUserLoggedIn.userPoint?.amount ?? 0,
-      });
+      setUser(data.fetchUserLoggedIn);
     }
   }, [data, setUser, user]);
 
@@ -88,7 +81,45 @@ export default function Header() {
               <TabNavigation />
               {!loading ? (
                 data?.fetchUserLoggedIn ? (
-                  <div>{data.fetchUserLoggedIn.name}</div>
+                  // <ProfileModal user={data.fetchUserLoggedIn} />
+                  <>
+                    <div
+                      onClick={() => setOpen(true)}
+                      className="relative flex gap-2 cursor-pointer"
+                    >
+                      <Image
+                        src={
+                          data.fetchUserLoggedIn.picture
+                            ? `https://storage.googleapis.com/${data.fetchUserLoggedIn.picture}`
+                            : `/not-images/not-profile.svg`
+                        }
+                        alt="profile"
+                        width={40}
+                        height={40}
+                      />
+                      <Image
+                        src={"/layout/header/down_arrow.svg"}
+                        alt="down-arrow"
+                        width={24}
+                        height={24}
+                      />
+                      {/* 프로파일 모달 */}
+                      {open && (
+                        <ProfileModal
+                          user={data.fetchUserLoggedIn}
+                          setOpen={setOpen}
+                        />
+                      )}
+                    </div>
+
+                    {/* 배경 클릭 모달 닫기 */}
+                    {open && (
+                      <div
+                        onClick={() => setOpen(false)}
+                        className="fixed bg-black/70 left-0 top-0 z-10 w-full h-screen"
+                      />
+                    )}
+                  </>
                 ) : (
                   <LoginButton />
                 )

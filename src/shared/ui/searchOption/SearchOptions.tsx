@@ -26,8 +26,6 @@ export default function SearchOptions() {
     to: validatedTo,
   });
 
-  console.log("datE: ", date);
-
   return (
     <article className="flex gap-4 justify-center items-center w-full max-md:flex-col mr-14 max-lg:mr-0">
       <DatePickerWithRange query={{ date, setDate }} />

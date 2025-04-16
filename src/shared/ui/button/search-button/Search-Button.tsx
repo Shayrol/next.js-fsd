@@ -37,9 +37,6 @@ function SearchButton({ query }: { query: IProps }) {
   const fromUtcDate = fromDate ? adjustToKst(fromDate, true) : undefined;
   const toUtcDate = toDate ? adjustToKst(toDate, false) : undefined;
 
-  console.log("Button date: ", fromUtcDate);
-  console.log("Button date: ", toUtcDate);
-
   const onClickSubmit = async () => {
     // 현재 페이지 경로 유지
     const currentPath = window.location.pathname; // 현재 경로를 가져옴

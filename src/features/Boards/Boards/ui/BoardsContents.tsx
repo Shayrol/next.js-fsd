@@ -9,8 +9,6 @@ import { useSearchParams } from "next/navigation";
 import SkeletonUI from "./SkeletonUI";
 
 export default function BoardsContents() {
-  console.log("BoardsContents");
-
   const searchParams = useSearchParams();
 
   const page: string | null | undefined = searchParams?.get("page");

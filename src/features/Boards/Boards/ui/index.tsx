@@ -5,8 +5,6 @@ import { WriterButton } from "@/shared/ui/button/write-button";
 import SearchOptions from "../../../../shared/ui/searchOption/SearchOptions";
 
 export default function Boards() {
-  console.log("Boards 실행");
-
   return (
     <section className="flex flex-col justify-center items-start gap-6 w-full h-fit">
       <h1 className="font-bold text-[28px]">트립토크 게시판</h1>
