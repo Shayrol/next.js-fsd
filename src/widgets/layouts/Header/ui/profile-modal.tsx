@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useLogoutUser } from "../api/useLogoutUser";
 import Cookie from "js-cookie";
+import PointModal from "./point-modal";
 
 export default function ProfileModal({
   user,
@@ -83,15 +84,7 @@ export default function ProfileModal({
       {/* charge, sign out */}
       <div className="flex flex-col gap-2 w-full">
         {/* charge */}
-        <button className="flex justify-start items-center gap-2 py-2 w-full">
-          <Image
-            src={"/mypage/charge.svg"}
-            alt="charge"
-            width={16}
-            height={16}
-          />
-          <p className="font-normal text-[16px] text-black">포인트 충전</p>
-        </button>
+        <PointModal />
         {/* sign out */}
         <Link
           href={"/"}

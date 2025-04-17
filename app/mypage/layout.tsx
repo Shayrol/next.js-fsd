@@ -16,6 +16,8 @@ function MyPageLayout({ children }: { children: React.ReactNode }) {
   const pathName = usePathname();
   const { user } = useUserStore();
 
+  console.log("My point user: ", user);
+
   return (
     <main className="flex flex-col justify-center items-start gap-10 w-full max-w-[1280px] h-full">
       <h1 className="font-bold text-[28px] text-black">마이 페이지</h1>
@@ -40,7 +42,7 @@ function MyPageLayout({ children }: { children: React.ReactNode }) {
           <Image src={"/mypage/point.svg"} alt="point" width={24} height={24} />
           <div className="flex gap-1">
             <p className="font-medium text-[20px] text-black">
-              {user?.point?.toLocaleString()}
+              {user?.userPoint?.amount?.toLocaleString()}
             </p>
             <span className="font-medium text-[20px] text-black ">P</span>
           </div>

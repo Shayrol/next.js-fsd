@@ -116,7 +116,7 @@ export default function Header() {
                     {open && (
                       <div
                         onClick={() => setOpen(false)}
-                        className="fixed bg-black/70 left-0 top-0 z-10 w-full h-screen"
+                        className="fixed left-0 top-0 z-10 w-full h-screen"
                       />
                     )}
                   </>

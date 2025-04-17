@@ -20,14 +20,14 @@ export default function AllContents({ data }: { data: PointTransaction[] }) {
             </p>
             {/* 거래 및 충전 내역 */}
             <p className="flex justify-center items-center gap-2 min-w-[100px] font-normal text-[16px] text-gray-900">
-              {el.balance?.toLocaleString() ?? "11,000"}원
+              {el.amount?.toLocaleString() ?? "11,000"}원
             </p>
             {/* <div className="flex justify-center items-center max-w-[100px] bg-gray-100">
                 <p className="w-[100px] truncate text-center">{el.status}</p>
               </div> */}
             {/* 잔액 */}
             <p className="flex justify-center items-center gap-2 min-w-[100px] font-normal text-[16px] text-gray-900">
-              {el.amount?.toLocaleString() ?? "22,000"}원
+              {el.balance?.toLocaleString() ?? "22,000"}원
             </p>
           </li>
         </Link>
