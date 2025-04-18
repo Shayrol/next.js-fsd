@@ -18,11 +18,9 @@ const FETCH_POINT_TRANSACTIONS_OF_LOADING = gql`
 
 export const useFetchPointTransactionsOfLoading = (
   { page }: { page: number },
-  options?: QueryHookOptions<
-    Pick<Query, "fetchPointTransactionsCountOfLoading">
-  >
+  options?: QueryHookOptions<Pick<Query, "fetchPointTransactionsOfLoading">>
 ) => {
-  const result = useQuery<Pick<Query, "fetchPointTransactionsCountOfLoading">>(
+  const result = useQuery<Pick<Query, "fetchPointTransactionsOfLoading">>(
     FETCH_POINT_TRANSACTIONS_OF_LOADING,
     {
       variables: {

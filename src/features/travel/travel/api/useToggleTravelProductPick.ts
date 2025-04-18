@@ -1,3 +1,4 @@
+import { Mutation } from "@/entities/api/graphql";
 import { gql, useMutation } from "@apollo/client";
 
 const TOGGLE_TRAVEL_PRODUCT_PICK = gql`
@@ -7,7 +8,9 @@ const TOGGLE_TRAVEL_PRODUCT_PICK = gql`
 `;
 
 export const useToggleTravelProductPick = () => {
-  const result = useMutation(TOGGLE_TRAVEL_PRODUCT_PICK);
+  const result = useMutation<Pick<Mutation, "toggleTravelproductPick">>(
+    TOGGLE_TRAVEL_PRODUCT_PICK
+  );
 
   return result;
 };

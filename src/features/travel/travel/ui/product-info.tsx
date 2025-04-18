@@ -8,18 +8,46 @@ import { useState } from "react";
 import ProductInfoMobile from "./product-info-mobile";
 import { useUserStore } from "@/stores/userStore";
 import Link from "next/link";
+import { useCreatePointTransactionOfBuyingAndSelling } from "../api/useCreatePointTransactionOfBuyingAndSelling";
+import { useRouter } from "next/navigation";
+import { FETCH_USER_LOGGED_IN } from "@/entities/api/auth/useFetchUserLoggedIn";
+import { useApolloClient } from "@apollo/client";
 
 export default function ProductInfo({
   data,
 }: {
   data: Pick<Query, "fetchTravelproduct"> | undefined;
 }) {
+  const router = useRouter();
   const dataInfo: Travelproduct | undefined = data?.fetchTravelproduct;
   const [pickImage, setPickImage] = useState<number>(0);
   const { user } = useUserStore();
+  const [createPointTransactionOfBuyingAndSelling] =
+    useCreatePointTransactionOfBuyingAndSelling();
 
   const onClickPickImage = (index: number) => {
     setPickImage(index);
+  };
+
+  const client = useApolloClient();
+
+  const onClickBuying = async () => {
+    try {
+      const result = await createPointTransactionOfBuyingAndSelling({
+        variables: {
+          useritemId: data?.fetchTravelproduct._id,
+        },
+        refetchQueries: [{ query: FETCH_USER_LOGGED_IN }],
+        awaitRefetchQueries: true,
+      });
+      await client.clearStore();
+      router.push("/travel");
+      console.log("구매 정보: ", result);
+    } catch (error) {
+      if (error instanceof Error) {
+        console.log("Buying and Selling API error: ", error.message);
+      }
+    }
   };
 
   return (
@@ -102,7 +130,10 @@ export default function ProductInfo({
               </ol>
             </div>
             {user?._id !== data?.fetchTravelproduct.seller?._id ? (
-              <button className="flex justify-center items-center gap-2 px-4 py-3 w-full rounded-[8px] font-semibold text-[20px] text-white bg-[#2974E5] hover:bg-[#2974E5]/90">
+              <button
+                onClick={onClickBuying}
+                className="flex justify-center items-center gap-2 px-4 py-3 w-full rounded-[8px] font-semibold text-[20px] text-white bg-[#2974E5] hover:bg-[#2974E5]/90"
+              >
                 구매하기
               </button>
             ) : (
