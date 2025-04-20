@@ -2,12 +2,17 @@
 
 import { PointTransaction } from "@/entities/api/graphql";
 import { formatDate } from "@/lib/dateUtils";
+import { useFetchPointTransactionsCountOfSelling } from "../../../api/useFetchPointTransactionCountOfSelling";
+import Pagination from "@/shared/ui/pagination/pagination";
 
 export default function SellingContents({
   data,
 }: {
   data: PointTransaction[];
 }) {
+  const { data: count } = useFetchPointTransactionsCountOfSelling();
+  const SellingCount = count?.fetchPointTransactionsCountOfSelling;
+
   return (
     <ul className="flex flex-col gap-3 w-full">
       {data?.map((el) => (
@@ -33,6 +38,7 @@ export default function SellingContents({
           </p>
         </li>
       ))}
+      <Pagination count={SellingCount} />
     </ul>
   );
 }

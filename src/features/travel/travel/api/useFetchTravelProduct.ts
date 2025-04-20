@@ -24,6 +24,7 @@ export const TRAVEL_PRODUCT = gql`
         name
         picture
       }
+      soldAt
       createdAt
     }
   }

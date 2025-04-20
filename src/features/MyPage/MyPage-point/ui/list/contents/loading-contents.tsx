@@ -2,12 +2,17 @@
 
 import { PointTransaction } from "@/entities/api/graphql";
 import { formatDate } from "@/lib/dateUtils";
+import { useFetchPointTransactionsCountOfLoading } from "../../../api/useFetchPointTransactionCountOfLoading";
+import Pagination from "@/shared/ui/pagination/pagination";
 
 export default function LoadingContents({
   data,
 }: {
   data: PointTransaction[];
 }) {
+  const { data: count } = useFetchPointTransactionsCountOfLoading();
+  const LoadingCount = count?.fetchPointTransactionsCountOfLoading;
+
   return (
     <ul className="flex flex-col gap-3 w-full">
       {data?.map((el) => (
@@ -35,6 +40,7 @@ export default function LoadingContents({
           </p>
         </li>
       ))}
+      <Pagination count={LoadingCount} />
     </ul>
   );
 }

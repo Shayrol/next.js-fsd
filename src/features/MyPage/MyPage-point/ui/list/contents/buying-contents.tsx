@@ -2,8 +2,14 @@
 
 import { PointTransaction } from "@/entities/api/graphql";
 import { formatDate } from "@/lib/dateUtils";
+import { useFetchPointTransactionsCountOfBuying } from "../../../api/useFetchPointTransactionCountOfBuying";
+import Pagination from "@/shared/ui/pagination/pagination";
 
 export default function BuyingContents({ data }: { data: PointTransaction[] }) {
+  const { data: count } = useFetchPointTransactionsCountOfBuying();
+  const BuyingCount = count?.fetchPointTransactionsCountOfBuying;
+  console.log("count: ", count);
+
   return (
     <ul className="flex flex-col gap-3 w-full">
       {data?.map((el) => (
@@ -16,7 +22,7 @@ export default function BuyingContents({ data }: { data: PointTransaction[] }) {
             {formatDate(el.createdAt)}
           </p>
           {/* 상품 명 */}
-          <p className="w-full font-normal text-[16px] text-gray-900 truncate">
+          <p className="w-full font-normal text-sm text-gray-900 truncate">
             {el.travelproduct?.name}
           </p>
           {/* 거래내역 */}
@@ -29,10 +35,11 @@ export default function BuyingContents({ data }: { data: PointTransaction[] }) {
           </p>
           {/* 판매자 */}
           <p className="flex justify-center items-center gap-2 min-w-[100px] font-semibold text-sm text-gray-900">
-            {el.travelproduct?.seller?.name ?? "null"}
+            {el.travelproduct?.seller?._id?.slice(0, 4)}
           </p>
         </li>
       ))}
+      <Pagination count={BuyingCount} />
     </ul>
   );
 }

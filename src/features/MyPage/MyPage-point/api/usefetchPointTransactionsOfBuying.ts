@@ -13,6 +13,10 @@ const FETCH_POINT_TRANSACTIONS_OF_BUYING = gql`
       status
       travelproduct {
         name
+        seller {
+          _id
+          # name 판매자 _id 밖에 불러오지 못함...
+        }
       }
       createdAt
     }

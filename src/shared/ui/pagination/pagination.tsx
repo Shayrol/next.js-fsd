@@ -1,12 +1,12 @@
 "use client";
 
-import { Query } from "@/entities/api/graphql";
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useRef, useState } from "react";
 
 interface IProps {
-  count?: Pick<Query, "fetchBoardsCount"> | undefined;
+  count?: number | undefined;
+  // count?: Pick<Query, "fetchBoardsCount"> | undefined;
 }
 
 export default function Pagination(props: IProps) {
@@ -22,12 +22,12 @@ export default function Pagination(props: IProps) {
   const pageNumber = page ? parseInt(page, 10) : 1;
   // 첫 번째 page 1, 11, 21...
   // const startPageNum = Math.floor((pageNumber - 1) / 10) * 10 + 1;
-  const startPageNum = Math.floor((pageNumber - 1) / 5) * 5 + 1;
+  const startPageNum = Math.floor((pageNumber - 1) / 10) * 10 + 1;
   // 첫 번째 page 저장(이전, 다음 페이지 이동 및 계산을 위함)
   const [startPage, setStartPage] = useState(startPageNum);
   // 마지막 page 번호 불러오기 (총860개 일때 86 반환)
   // const lastPage = Math.ceil((props.count?.fetchBoardsCount ?? 10) / 10);
-  const lastPage = Math.ceil((props.count?.fetchBoardsCount ?? 5) / 5);
+  const lastPage = Math.ceil((props.count ?? 10) / 10);
   const searchParams = useSearchParams();
 
   const PrevPageChange = () => {

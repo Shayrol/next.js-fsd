@@ -34,6 +34,8 @@ export default function BoardsContents() {
     to: end,
   });
 
+  const BoardsCount = count?.fetchBoardsCount;
+
   return (
     <>
       {!loading ? (
@@ -86,7 +88,7 @@ export default function BoardsContents() {
               )}
             </section>
           </ul>
-          <Pagination count={count} />
+          <Pagination count={BoardsCount} />
         </article>
       ) : (
         <SkeletonUI />

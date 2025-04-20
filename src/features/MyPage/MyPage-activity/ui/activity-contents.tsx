@@ -117,19 +117,19 @@ export default function ActivityContents() {
         <div className="flex flex-col gap-2 w-full">
           {/* list header */}
           <div className="flex gap-2 px-6 py-4 w-full">
-            <p className="flex justify-center items-center gap-2 min-w-[64px] font-medium text-[16px] text-gray-900">
+            <p className="flex justify-center items-center gap-2 min-w-[64px] font-medium text-sm text-gray-900">
               번호
             </p>
-            <p className="flex justify-start items-center gap-2 w-full font-medium text-[16px] text-gray-900">
+            <p className="flex justify-start items-center gap-2 w-full font-medium text-sm text-gray-900 text-nowrap">
               상품
             </p>
-            <p className="flex justify-center items-center gap-2 min-w-[100px] font-medium text-[16px] text-gray-900">
+            <p className="flex justify-center items-center gap-2 min-w-[100px] font-medium text-sm text-gray-900">
               판매가격
             </p>
-            <p className="flex justify-center items-center gap-2 min-w-[100px] font-medium text-[16px] text-gray-900">
+            <p className="flex justify-center items-center gap-2 min-w-[100px] font-medium text-sm text-gray-900">
               판매자
             </p>
-            <p className="flex justify-center items-center gap-2 min-w-[100px] font-medium text-[16px] text-gray-900">
+            <p className="flex justify-center items-center gap-2 min-w-[100px] font-medium text-sm text-gray-900">
               날짜
             </p>
           </div>
@@ -139,15 +139,30 @@ export default function ActivityContents() {
               <Link href={`/travel/${el._id}`} key={el._id}>
                 <li className="group relative cursor-pointer flex gap-2 px-6 py-3 w-full border border-gray-100 bg-white rounded-[8px]">
                   {/* _id */}
-                  <p className="flex justify-center items-center gap-2 min-w-[64px] font-normal text-[16px] text-gray-900">
+                  <p
+                    className={`flex justify-center items-center gap-2 min-w-[64px] font-normal text-sm
+                      ${el.soldAt ? "text-gray-400" : "text-gray-900"}
+                    `}
+                  >
                     {el._id.slice(0, 4)}
                   </p>
                   {/* name */}
-                  <p className="w-full font-normal text-[16px] text-gray-900 truncate">
-                    {el.name}
-                  </p>
+                  <div className="flex justify-start gap-2 w-full truncate">
+                    <p
+                      className={`font-normal text-sm truncate
+                        ${el.soldAt ? "text-gray-400" : "text-gray-900"}
+                      `}
+                    >
+                      {el.name}
+                    </p>
+                    {el.soldAt && (
+                      <span className="font-bold text-sm text-[#2974E5]">
+                        판매완료
+                      </span>
+                    )}
+                  </div>
                   {/* price */}
-                  <p className="flex justify-center items-center gap-2 min-w-[100px] font-normal text-[16px] text-gray-900">
+                  <p className="flex justify-center items-center gap-2 min-w-[100px] font-normal text-sm text-gray-900">
                     {el.price?.toLocaleString()}원
                   </p>
                   {/* seller - 가운데 정렬 + ... 처리 */}
@@ -157,7 +172,7 @@ export default function ActivityContents() {
                     </p>
                   </div>
                   {/* createdAt */}
-                  <p className="flex justify-center items-center gap-2 min-w-[100px] font-normal text-[16px] text-gray-900">
+                  <p className="flex justify-center items-center gap-2 min-w-[100px] font-normal text-sm text-gray-900">
                     {formatDate(el.createdAt)}
                   </p>
                   {/* delete */}

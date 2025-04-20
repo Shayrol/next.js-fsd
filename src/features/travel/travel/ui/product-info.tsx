@@ -129,20 +129,26 @@ export default function ProductInfo({
                 </li>
               </ol>
             </div>
-            {user?._id !== data?.fetchTravelproduct.seller?._id ? (
-              <button
-                onClick={onClickBuying}
-                className="flex justify-center items-center gap-2 px-4 py-3 w-full rounded-[8px] font-semibold text-[20px] text-white bg-[#2974E5] hover:bg-[#2974E5]/90"
-              >
-                구매하기
-              </button>
+            {data?.fetchTravelproduct.soldAt === null ? (
+              user?._id !== data?.fetchTravelproduct.seller?._id ? (
+                <button
+                  onClick={onClickBuying}
+                  className="flex justify-center items-center gap-2 px-4 py-3 w-full rounded-[8px] font-semibold text-[20px] text-white bg-[#2974E5] hover:bg-[#2974E5]/90"
+                >
+                  구매하기
+                </button>
+              ) : (
+                <Link
+                  href={`/travel/${dataInfo?._id}/edit`}
+                  className="flex justify-center items-center gap-2 px-4 py-3 w-full rounded-[8px] font-semibold text-[20px] text-white bg-[#2974E5] hover:bg-[#2974E5]/90"
+                >
+                  수정하기
+                </Link>
+              )
             ) : (
-              <Link
-                href={`/travel/${dataInfo?._id}/edit`}
-                className="flex justify-center items-center gap-2 px-4 py-3 w-full rounded-[8px] font-semibold text-[20px] text-white bg-[#2974E5] hover:bg-[#2974E5]/90"
-              >
-                수정하기
-              </Link>
+              <div className="flex justify-center items-center gap-2 px-4 py-3 w-full rounded-[8px] font-semibold text-[20px] text-white bg-gray-400">
+                판매완료
+              </div>
             )}
           </div>
 
