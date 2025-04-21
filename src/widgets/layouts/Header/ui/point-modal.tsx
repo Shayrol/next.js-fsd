@@ -17,20 +17,29 @@ import {
 } from "@/components/ui/select";
 import { useUserStore } from "@/stores/userStore";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { requestPayment } from "../utils/requestPayment";
 import { useCreatePointTransactionOfLoading } from "../api/useCreatePointTransactionOfLoading";
 import { PointTransaction, User } from "@/entities/api/graphql";
+import { useParams } from "next/navigation";
 
-export default function PointModal() {
+interface IProps {
+  setErrorOpen?: Dispatch<SetStateAction<boolean>>;
+}
+
+export default function PointModal({ setErrorOpen }: IProps) {
   const [open, setOpen] = useState(false); // 모달 열림 여부 제어
   const [selectedValue, setSelectedValue] = useState<string | null>(null);
   const { user, setUser } = useUserStore();
+  const params = useParams();
+  const travelId = params?.travelId;
 
   const [createPointTransactionOfLoading, { data }] =
     useCreatePointTransactionOfLoading();
 
   const onClickCharge = async () => {
+    setOpen(false);
+    setErrorOpen?.(false);
     try {
       if (selectedValue) {
         const paymentId = await requestPayment(Number(selectedValue), user);
@@ -112,15 +121,21 @@ export default function PointModal() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <button className="flex justify-start items-center gap-2 py-2 w-full">
-          <Image
-            src={"/mypage/charge.svg"}
-            alt="charge"
-            width={16}
-            height={16}
-          />
-          <p className="font-normal text-[16px] text-black">포인트 충전</p>
-        </button>
+        {travelId ? (
+          <button className="flex gap-2 justify-center items-center px-3 py-2 min-w-[96px] max-w-[120px] w-full font-semibold text-sm text-white bg-[#2974E5] border border-[#2974E5] rounded-[8px]">
+            충전
+          </button>
+        ) : (
+          <button className="flex justify-start items-center gap-2 py-2 w-full">
+            <Image
+              src={"/mypage/charge.svg"}
+              alt="charge"
+              width={16}
+              height={16}
+            />
+            <p className="font-normal text-[16px] text-black">포인트 충전</p>
+          </button>
+        )}
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -177,14 +192,3 @@ export default function PointModal() {
     </Dialog>
   );
 }
-
-// 한 것
-// 1. 충전 하기
-// 2. 충전 후 LoggedIn 업데이트
-// 3. useState point 업데이트
-// 4. 충전 내역 (전체) 업데이트
-
-// 할 것
-// 1. 충전내역 가져오기
-// 2. 구매내역 가져오기
-// 3. 판매내역 가져오기

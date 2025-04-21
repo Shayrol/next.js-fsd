@@ -4,6 +4,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { PasswordChangeSchema } from "../api/schema";
 import { useResetUserPassword } from "../api/useResetUserPassword";
+import PasswordModal from "./password-button-modal";
 
 type IForm = {
   password: string;
@@ -11,7 +12,7 @@ type IForm = {
 };
 
 export default function PasswordChange() {
-  const { register, handleSubmit, formState } = useForm({
+  const { register, handleSubmit, formState, reset } = useForm({
     resolver: yupResolver(PasswordChangeSchema),
     // mode: "onChange",
   });
@@ -24,12 +25,15 @@ export default function PasswordChange() {
         password: data.password,
       },
     });
+    if (result.data?.resetUserPassword) {
+      reset();
+    }
     console.log("비밀번호 변경: ", result.data?.resetUserPassword);
   };
 
   return (
     <form
-      onClick={handleSubmit(onClickChangePassword)}
+      onSubmit={handleSubmit(onClickChangePassword)}
       className="flex flex-col justify-center items-end gap-6 w-full"
     >
       {/* 비밀번호 */}
@@ -72,26 +76,13 @@ export default function PasswordChange() {
       </div>
 
       {/* 버튼 */}
-      <button
-        type="submit"
-        disabled={!formState.isValid}
-        className={`flex justify-center items-center gap-2 px-4 py-3  font-semibold text-lg  rounded-[8px]
-            ${
-              formState.isValid
-                ? "bg-[#2974E5] text-white"
-                : "bg-gray-300 text-gray-100"
-            }
-          `}
-      >
-        비밀번호 변경
-      </button>
+      <PasswordModal formState={formState} />
     </form>
   );
 }
 
-// 비밀번호 1111 => 2222로 변겅
-//
-// 비밀번호 변경 완료 모달 띄우기 + /mypage/change-password에서 /mypage로 이동하기
-// 구매하기 클릭 시 취소, 확인 모달 띄우기
-// 모바일 뷰 구현하기
-// 구매 후 로그아웃 클릭 시 ui 변경 해결하기 (우선 reload를 통해 새로고침으로 해결함)
+// 마이페이지 모바일 뷰 구현하기
+// travels 리스트 무한 스크롤 구현
+// 모바일 뷰 header 구현 navigation 등
+// 숙박권 판매하기 등록 후 상세 페이지에서 뒤로 가기 시 다시 등록 창 띄워지지 않게 하기
+// (board 등록 후 이동은 됨 확인해 볼 것)
