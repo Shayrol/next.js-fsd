@@ -18,6 +18,10 @@ function MyPageLayout({ children }: { children: React.ReactNode }) {
 
   console.log("My point user: ", user);
 
+  const isSmallScreen = useIsSmallScreen();
+
+  const filteredMenuList = isSmallScreen ? [MenuList[2]] : MenuList;
+
   return (
     <main className="flex flex-col justify-center items-start gap-10 w-full max-w-[1280px] h-full">
       <h1 className="font-bold text-[28px] text-black">마이 페이지</h1>
@@ -51,13 +55,13 @@ function MyPageLayout({ children }: { children: React.ReactNode }) {
 
         {/* menu */}
         <div className="flex flex-col gap-2 w-full">
-          {MenuList.map((el, index) => (
+          {filteredMenuList.map((el, index) => (
             <Link
               href={el.path}
               key={index}
               className={`flex justify-between items-center px-3 py-2 w-full rounded-[8px] hover:bg-gray-100
-                  ${pathName === el.path ? "bg-gray-100" : "bg-white"}
-                `}
+        ${pathName === el.path ? "bg-gray-100" : "bg-white"}
+      `}
             >
               <p className="font-semibold text-[16px] text-black">{el.name}</p>
               <Image
@@ -77,3 +81,22 @@ function MyPageLayout({ children }: { children: React.ReactNode }) {
 
 const MyPageLayoutWrap = memo(MyPageLayout);
 export default MyPageLayoutWrap;
+
+import { useEffect, useState } from "react";
+
+const useIsSmallScreen = () => {
+  const [isSmall, setIsSmall] = useState(false);
+
+  useEffect(() => {
+    const checkScreen = () => {
+      setIsSmall(window.innerWidth <= 640); // Tailwind 'sm' 기준: 640px
+    };
+
+    checkScreen(); // 초기 실행
+    window.addEventListener("resize", checkScreen);
+
+    return () => window.removeEventListener("resize", checkScreen);
+  }, []);
+
+  return isSmall;
+};

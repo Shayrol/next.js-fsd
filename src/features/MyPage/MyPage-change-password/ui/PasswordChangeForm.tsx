@@ -81,8 +81,10 @@ export default function PasswordChange() {
   );
 }
 
-// 마이페이지 모바일 뷰 구현하기
-// travels 리스트 무한 스크롤 구현
-// 모바일 뷰 header 구현 navigation 등
-// 숙박권 판매하기 등록 후 상세 페이지에서 뒤로 가기 시 다시 등록 창 띄워지지 않게 하기
-// (board 등록 후 이동은 됨 확인해 볼 것)
+// 모바일 뷰 navigation bar 생성함
+// 마이페이지 layout 및 contents 모바일 뷰 구현
+
+// 해야할 것
+// header 모바일 뷰 구현
+// 로그인 시 모바일 프로파일 구현
+// 회원가입 구현

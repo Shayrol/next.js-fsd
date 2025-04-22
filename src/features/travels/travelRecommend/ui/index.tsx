@@ -1,3 +1,5 @@
+// 스와이프 - 북마크 추천 목록 4개
+
 "use client";
 
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -56,7 +58,7 @@ export default function TravelRecommend() {
           {activeIndex > 0 && (
             <button
               onClick={() => swiperInstance?.slidePrev()}
-              className="absolute flex justify-center items-center left-[-25px] top-[55%] transform -translate-y-1/2 w-10 h-10 bg-white rounded-full z-10 max-sm:hidden"
+              className="absolute flex justify-center items-center left-[-15px] top-[55%] transform -translate-y-1/2 w-10 h-10 bg-white rounded-full z-10 max-sm:hidden"
               style={{ boxShadow: "0px 0px 25px 0px rgba(0, 0, 0, 0.25)" }}
             >
               <Image
@@ -72,7 +74,7 @@ export default function TravelRecommend() {
           {activeIndex < totalSlides - 2 && (
             <button
               onClick={() => swiperInstance?.slideNext()}
-              className="absolute flex justify-center items-center right-[-25px] top-[55%] transform -translate-y-1/2 w-10 h-10 bg-white rounded-full z-10 max-sm:hidden"
+              className="absolute flex justify-center items-center right-[-15px] top-[55%] transform -translate-y-1/2 w-10 h-10 bg-white rounded-full z-10 max-sm:hidden"
               style={{ boxShadow: "0px 0px 25px 0px rgba(0, 0, 0, 0.25)" }}
             >
               <Image

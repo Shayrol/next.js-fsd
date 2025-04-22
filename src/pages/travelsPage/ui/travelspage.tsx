@@ -4,7 +4,7 @@ import { Travels } from "@/features/travels/travels";
 
 export default function TravelsPage() {
   return (
-    <main className="flex flex-col gap-6 justify-center items-center w-full border border-red-500">
+    <main className="flex flex-col gap-6 justify-center items-center w-full">
       <TravelRecommend />
       <TravelAd />
       <Travels />

@@ -192,7 +192,7 @@ export default function TravelWriterForm({ edit, data }: IProps) {
         },
       });
 
-      router.push(`/travel/${result.data?.createTravelproduct._id}`);
+      router.replace(`/travel/${result.data?.createTravelproduct._id}`);
     } catch (error) {
       console.error("게시글 등록 오류:", error);
       alert("게시글 등록 중 오류가 발생했습니다.");
@@ -238,7 +238,7 @@ export default function TravelWriterForm({ edit, data }: IProps) {
         },
       });
 
-      router.push(`/travel/${result.data?.updateTravelproduct._id}`);
+      router.replace(`/travel/${result.data?.updateTravelproduct._id}`);
     } catch (error) {
       console.error("게시글 등록 오류:", error);
       alert("게시글 등록 중 오류가 발생했습니다.");
