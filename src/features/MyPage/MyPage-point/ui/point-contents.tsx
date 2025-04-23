@@ -64,23 +64,15 @@ export default function PointContents() {
 
   const data = pointDataMap[tab] as PointTransaction[];
 
-  console.log("data", data);
-  console.log("data", data?.length);
-  console.log("tab: ", tab);
-  console.log("tab: ", PointButtonList[1].id);
-  console.log("pointDataMap: ", pointDataMap);
-  console.log("loading: ", LoadingData);
-  console.log("buying: ", BuyingData);
-
   return (
     <section
       style={{ boxShadow: "0px 0px 20px 0px #00000014" }}
-      className="flex flex-col gap-6 px-12 py-6 w-full rounded-[16px]"
+      className="flex flex-col gap-6 px-12 py-6 w-full rounded-[16px] max-sm:p-4 max-sm:gap-4"
     >
       {data?.length !== 0 ? (
         <div className="flex flex-col gap-2 w-full">
           {/* list header */}
-          <div className="flex gap-2 px-6 py-4 w-full">
+          <div className="flex gap-2 px-6 py-4 w-full max-sm:px-2 max-sm:py-1 max-sm:gap-2">
             {tab === "all" && <AllHeader />}
             {tab === "loading" && <LoadingHeader />}
             {tab === "buying" && <BuyingHeader />}
@@ -102,14 +94,3 @@ export default function PointContents() {
     </section>
   );
 }
-
-// 구매후 잔액 계산이 안맞는 구간이 있음 (이유 모름..)
-// 로그아웃 후 다른 아이디 로그인 시 이전 데이터가 남아있음 - client.clear 뭐시기로 캐시 초기화 하기
-// 구매후 로그아웃 하면 로그인 버튼으로 변경이 되지 않음 - 저번과 똑같은 문제로 해결 했으나 이번은 뭐가 문제인지 모르겠음
-// pagination 추가하기 + count 추가하기 (buying, selling, charging)
-// 판매자 정보 불러오기 에러 (이유 모름...)
-
-// 구매 클릭 시 모달 띄우기
-// 비밀번호 변경 페이지 구현
-// 회원가입 페이지 구현
-// 모바일 뷰 구현

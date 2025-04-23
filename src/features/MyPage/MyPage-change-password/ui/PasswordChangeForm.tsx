@@ -81,10 +81,9 @@ export default function PasswordChange() {
   );
 }
 
-// 모바일 뷰 navigation bar 생성함
-// 마이페이지 layout 및 contents 모바일 뷰 구현
+// 한 것
+// 마이 페이지 리스트 모바일 뷰 구현 (text 사이즈 줄이니 쉽게 함)
 
 // 해야할 것
 // header 모바일 뷰 구현
-// 로그인 시 모바일 프로파일 구현
 // 회원가입 구현

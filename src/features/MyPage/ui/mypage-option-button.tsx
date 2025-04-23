@@ -29,7 +29,7 @@ export default function MyPageOptionButton({
             activeTab === el.id
               ? "text-white bg-black"
               : "text-black bg-gray-200 hover:bg-gray-300"
-          }`}
+          } max-sm:px-2 max-sm:py-1`}
         >
           {el.label}
         </button>

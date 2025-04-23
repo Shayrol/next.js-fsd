@@ -18,13 +18,11 @@ function MyPageLayout({ children }: { children: React.ReactNode }) {
 
   console.log("My point user: ", user);
 
-  const isSmallScreen = useIsSmallScreen();
-
-  const filteredMenuList = isSmallScreen ? [MenuList[2]] : MenuList;
-
   return (
-    <main className="flex flex-col justify-center items-start gap-10 w-full max-w-[1280px] h-full">
-      <h1 className="font-bold text-[28px] text-black">마이 페이지</h1>
+    <main className="flex flex-col justify-center items-start gap-10 w-full max-w-[1280px] max-sm:gap-2">
+      <h1 className="font-bold text-[28px] text-black max-sm:text-base">
+        마이 페이지
+      </h1>
       <section className="flex flex-col gap-3 p-6 w-full min-w-[280px] border border-gray-300 bg-white rounded-[8px]">
         <p className="font-semibold text-[18px] text-black">내 정보</p>
 
@@ -37,25 +35,33 @@ function MyPageLayout({ children }: { children: React.ReactNode }) {
             height={40}
             className="rounded-full"
           />
-          <p className="font-medium text-[16px] text-[#333333]">{user?.name}</p>
+          <p className="font-medium text-base text-[#333333]">{user?.name}</p>
         </div>
         <hr className="w-full border border-gray-100" />
 
         {/* point */}
-        <div className="flex items-center gap-2">
-          <Image src={"/mypage/point.svg"} alt="point" width={24} height={24} />
+        <div className="flex items-center gap-2 max-sm:gap-1">
+          <Image
+            src={"/mypage/point.svg"}
+            alt="point"
+            width={24}
+            height={24}
+            className="max-sm:w-4 max-sm:h-4"
+          />
           <div className="flex gap-1">
-            <p className="font-medium text-[20px] text-black">
+            <p className="font-medium text-xl text-black max-sm:text-sm">
               {user?.userPoint?.amount?.toLocaleString()}
             </p>
-            <span className="font-medium text-[20px] text-black ">P</span>
+            <span className="font-medium text-xl text-black max-sm:text-sm">
+              P
+            </span>
           </div>
         </div>
         <hr className="w-full border border-gray-100" />
 
         {/* menu */}
         <div className="flex flex-col gap-2 w-full">
-          {filteredMenuList.map((el, index) => (
+          {MenuList.map((el, index) => (
             <Link
               href={el.path}
               key={index}
@@ -63,12 +69,15 @@ function MyPageLayout({ children }: { children: React.ReactNode }) {
         ${pathName === el.path ? "bg-gray-100" : "bg-white"}
       `}
             >
-              <p className="font-semibold text-[16px] text-black">{el.name}</p>
+              <p className="font-semibold text-base text-black max-sm:text-sm">
+                {el.name}
+              </p>
               <Image
                 src={"/mypage/right_arrow.svg"}
                 alt="arrow"
                 width={24}
                 height={24}
+                className="max-sm:w-4 max-sm:h-4"
               />
             </Link>
           ))}
@@ -81,22 +90,3 @@ function MyPageLayout({ children }: { children: React.ReactNode }) {
 
 const MyPageLayoutWrap = memo(MyPageLayout);
 export default MyPageLayoutWrap;
-
-import { useEffect, useState } from "react";
-
-const useIsSmallScreen = () => {
-  const [isSmall, setIsSmall] = useState(false);
-
-  useEffect(() => {
-    const checkScreen = () => {
-      setIsSmall(window.innerWidth <= 640); // Tailwind 'sm' 기준: 640px
-    };
-
-    checkScreen(); // 초기 실행
-    window.addEventListener("resize", checkScreen);
-
-    return () => window.removeEventListener("resize", checkScreen);
-  }, []);
-
-  return isSmall;
-};
