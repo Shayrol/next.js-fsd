@@ -13,14 +13,14 @@ export default async function RootLayout({
     <ApolloClientProvider>
       <html lang="en" suppressHydrationWarning>
         <head />
-        <body className="flex flex-col items-center justify-start w-full h-screen gap-10">
+        <body className="flex flex-col items-center justify-start w-full gap-10 max-sm:gap-6">
           {/* <ThemeProvider
             attribute="class"
             defaultTheme="system"
             enableSystem
             disableTransitionOnChange
           > */}
-          <header className="w-full h-fit">
+          <header className="flex flex-col justify-center items-center w-full h-fit">
             <Header />
             <Banner />
           </header>

@@ -26,7 +26,7 @@ export default function PasswordModal({ formState }: IProps) {
         <button
           type="submit"
           disabled={!formState.isValid}
-          className={`flex justify-center items-center gap-2 px-4 py-3  font-semibold text-lg  rounded-[8px]
+          className={`flex justify-center items-center gap-2 px-4 py-3  font-semibold text-lg  rounded-[8px] max-sm:text-sm
             ${
               formState.isValid
                 ? "bg-[#2974E5] text-white"
@@ -37,7 +37,7 @@ export default function PasswordModal({ formState }: IProps) {
           비밀번호 변경
         </button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="w-[480px] max-sm:w-[320px] rounded-[8px]">
         <DialogHeader>
           {/* DialogTitle이 꼭 있어야 함 */}
           <DialogTitle></DialogTitle>

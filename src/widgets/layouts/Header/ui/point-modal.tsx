@@ -133,11 +133,11 @@ export default function PointModal({ setErrorOpen }: IProps) {
               width={16}
               height={16}
             />
-            <p className="font-normal text-[16px] text-black">포인트 충전</p>
+            <p className="font-normal text-base text-black">포인트 충전</p>
           </button>
         )}
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="w-[480px] max-sm:w-[320px] rounded-[8px]">
         <DialogHeader>
           {/* DialogTitle이 꼭 있어야 함 */}
           <DialogTitle></DialogTitle>
@@ -149,7 +149,7 @@ export default function PointModal({ setErrorOpen }: IProps) {
                 width={80}
                 height={56}
               />
-              <p className="font-semibold text-[18px] text-black">
+              <p className="font-semibold text-lg text-black">
                 충전하실 금액을 선택해 주세요
               </p>
 

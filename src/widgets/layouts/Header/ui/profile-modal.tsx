@@ -39,7 +39,7 @@ export default function ProfileModal({
   };
 
   return (
-    <div className="absolute flex flex-col gap-3 left-[-170px] top-0 z-20 min-w-[240px] p-5 border border-gray-100 bg-white rounded-[8px]">
+    <div className="absolute flex flex-col gap-3 left-[-160px] top-0 z-20 min-w-[240px] p-5 border border-gray-400 bg-white rounded-[8px]">
       {/* profile */}
       <button
         onClick={(e) => {

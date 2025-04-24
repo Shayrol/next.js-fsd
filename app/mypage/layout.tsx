@@ -19,11 +19,12 @@ function MyPageLayout({ children }: { children: React.ReactNode }) {
   console.log("My point user: ", user);
 
   return (
-    <main className="flex flex-col justify-center items-start gap-10 w-full max-w-[1280px] max-sm:gap-2">
-      <h1 className="font-bold text-[28px] text-black max-sm:text-base">
+    <main className="flex flex-col justify-center items-start gap-[10px] w-full max-w-[1280px] max-sm:gap-2">
+      <h1 className="font-bold text-[28px] text-black max-sm:hidden">
         마이 페이지
       </h1>
-      <section className="flex flex-col gap-3 p-6 w-full min-w-[280px] border border-gray-300 bg-white rounded-[8px]">
+
+      <section className="flex flex-col gap-3 p-6 mb-3 w-full min-w-[280px] border border-gray-300 bg-white rounded-[8px]">
         <p className="font-semibold text-[18px] text-black">내 정보</p>
 
         {/* 프로필 */}
