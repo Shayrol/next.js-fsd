@@ -39,19 +39,22 @@ export default function BoardsContents() {
   return (
     <>
       {!loading ? (
-        <article className="flex flex-col justify-center items-center gap-6 px-2 py-6 w-full shadow-lg shadow-[#1c1c1c1c] rounded-2xl">
+        <article
+          style={{ boxShadow: "0px 0px 20px 0px #00000014" }}
+          className="flex flex-col justify-center items-center gap-6 px-2 py-6 w-full rounded-2xl max-sm:p-4 max-sm:gap-4"
+        >
           <ul className="flex flex-col justify-center items-center gap-2 w-full">
-            <div className="flex w-full justify-center items-center max-w-[1280px] gap-3 px-6 py-4">
-              <span className="flex justify-center items-center w-[64px] gap-[10px] font-medium text-nowrap text-[#1c1c1c]">
+            <div className="flex w-full justify-center items-center gap-3 p-2">
+              <span className="flex justify-center items-center w-[64px] gap-[10px] font-medium text-sm text-nowrap text-[#1c1c1c] max-sm:text-xs">
                 번호
               </span>
-              <span className="flex w-full max-w-[800px] gap-[10px] font-medium text-nowrap text-[#1c1c1c]">
+              <span className="flex w-full max-w-[800px] gap-[10px] font-medium text-nowrap text-[#1c1c1c] max-sm:text-xs">
                 제목
               </span>
-              <span className="flex justify-center w-[140px] max-w-[120px] gap-[10px] font-medium text-nowrap text-[#1c1c1c]">
+              <span className="flex justify-center w-[140px] max-w-[120px] gap-[10px] font-medium text-nowrap text-[#1c1c1c] max-sm:text-xs">
                 작성자
               </span>
-              <span className="flex justify-center items-center  w-full max-w-[100px] gap-[10px] font-medium text-nowrap text-[#1c1c1c]">
+              <span className="flex justify-center items-center  w-full max-w-[100px] gap-[10px] font-medium text-nowrap text-[#1c1c1c] max-sm:text-xs">
                 날짜
               </span>
             </div>
@@ -60,23 +63,23 @@ export default function BoardsContents() {
                 data.fetchBoards.map((el) => (
                   <li
                     key={el._id}
-                    className="flex justify-center items-center gap-2 w-full  h-[44px] px-6 py-3 border border-gray-300 rounded-xl"
+                    className="flex justify-center items-center gap-2 w-full p-2 h-[44px]  border border-gray-300 rounded-xl"
                   >
-                    <p className="flex justify-center items-center w-[64px] gap-[10px] font-medium text-[#1c1c1c] opacity-60">
+                    <p className="flex justify-center items-center w-[64px] gap-[10px] font-medium text-[#1c1c1c] opacity-60 max-sm:text-xs">
                       {el._id.slice(-4)}
                     </p>
                     <Link
                       href={`/board/${el._id}`}
-                      className="flex w-full max-w-[800px] overflow-hidden"
+                      className="flex w-full max-w-[800px] overflow-hidden max-sm:text-xs"
                     >
                       <h1 className="w-full truncate">{el.title}</h1>
                     </Link>
 
-                    <span className="flex justify-center w-[160px] max-w-[120px] overflow-hidden">
+                    <span className="flex justify-center w-[160px] max-w-[120px] overflow-hidden max-sm:text-xs">
                       <h3 className="w-fit truncate">{el.writer}</h3>
                     </span>
 
-                    <time className="flex justify-center items-center w-full max-w-[100px] gap-[10px] font-medium text-[#1c1c1c]">
+                    <time className="flex justify-center items-center w-full max-w-[100px] gap-[10px] font-medium text-[#1c1c1c] max-sm:text-xs">
                       {formatDate(el.createdAt)}
                     </time>
                   </li>

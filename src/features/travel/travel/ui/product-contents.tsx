@@ -19,7 +19,7 @@ export default function ProductContents({
   return (
     <>
       <ProductHeaderMobile data={data} />
-      <section className="flex flex-col gap-4 w-full min-h-[500px]">
+      <section className="flex flex-col gap-4 w-full min-h-[500px] px-5">
         <p className="font-bold text-[20px] text-gray-800">상세 설명</p>
         <article
           dangerouslySetInnerHTML={{

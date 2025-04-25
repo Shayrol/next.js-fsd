@@ -17,7 +17,7 @@ export default function ProductLocation({
 
   return (
     <>
-      <section className="flex flex-col gap-4 w-full">
+      <section className="flex flex-col gap-4 w-full px-5">
         <p className="font-bold text-[20px] text-gray-800">상세 위치</p>
         {dataLocation !== null ? (
           <div className="flex justify-center items-center w-full h-[300px] rounded-[8px] bg-gray-100">

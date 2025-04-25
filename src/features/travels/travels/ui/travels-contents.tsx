@@ -58,11 +58,12 @@ export default function TravelsContents() {
       dataLength={data?.fetchTravelproducts.length ?? 0}
     >
       {data && data?.fetchTravelproducts.length > 0 ? (
-        <ul className="grid grid-cols-4 w-full max-w-[1280px] gap-8 max-lg:grid-cols-2 max-sm:grid-cols-1">
+        // max-sm:grid-cols-1
+        <ul className="grid grid-cols-4 w-full max-w-[1280px] gap-8 max-lg:grid-cols-2 max-sm:gap-3">
           {data.fetchTravelproducts.map((el) => (
             <Link href={`travel/${el._id}`} key={el._id}>
               <li key={el._id} className="flex flex-col gap-3 w-full">
-                <div className="relative flex justify-center items-center w-full h-[296px]">
+                <div className="relative flex justify-center items-center w-full sm:h-[296px] max-sm:aspect-square">
                   <Image
                     src={
                       el.images?.length !== 0

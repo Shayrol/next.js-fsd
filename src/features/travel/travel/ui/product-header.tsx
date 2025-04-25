@@ -5,7 +5,6 @@
 import { Query } from "@/entities/api/graphql";
 import { useUserStore } from "@/stores/userStore";
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useFetchDeleteTravelProduct } from "../../travelWriter/api/useFetchDeleteTravelProduct";
 import Bookmark from "./bookmark";
@@ -19,15 +18,6 @@ export default function ProductHeader({
   const router = useRouter();
 
   const [deleteTravelProduct] = useFetchDeleteTravelProduct();
-
-  const handleBackClick = () => {
-    const prevPath = sessionStorage.getItem("travelListPrevPath");
-    if (prevPath) {
-      router.push(prevPath);
-    } else {
-      router.push("/travel");
-    }
-  };
 
   const onClickDelete = async () => {
     try {
@@ -43,7 +33,7 @@ export default function ProductHeader({
 
   return (
     <>
-      <header className="flex flex-col gap-2 w-full max-[810px]:hidden">
+      <header className="flex flex-col gap-2 w-full max-[810px]:hidden px-5">
         {/* title, delete, link, location, bookmark */}
         <div className="flex justify-between items-center">
           {/* title */}
@@ -115,52 +105,6 @@ export default function ProductHeader({
         <p className="font-medium text-[16px] text-[#2974E5]">
           {data?.fetchTravelproduct.tags?.join(" ")}
         </p>
-      </header>
-
-      {/* mobile */}
-      <header className="min-[810px]:hidden">
-        <div className="flex flex-row justify-between items-center gap-[10px] px-5 w-full">
-          <button onClick={handleBackClick}>
-            <Image
-              src={"/pagination/prev.svg"}
-              alt="prev"
-              width={12}
-              height={12}
-            />
-          </button>
-          {/* profile */}
-          <div>
-            {user?._id ? (
-              <div className="flex justify-center items-center gap-1">
-                <Image
-                  src={
-                    user.picture
-                      ? `https://storage.googleapis.com/${user.picture}`
-                      : "/not-images/not-profile.svg"
-                  }
-                  alt="profile"
-                  width={24}
-                  height={24}
-                  className="rounded-full object-cover"
-                />
-                <p className="font-light text-[14px] text-black">{user.name}</p>
-              </div>
-            ) : (
-              <Link
-                href={"/login"}
-                className="flex justify-center items-center gap-2"
-              >
-                <p className="font-medium text-[13px] text-gray-800">로그인</p>
-                <Image
-                  src={"/login-signin-btn.svg"}
-                  alt="login-image"
-                  width={14}
-                  height={14}
-                />
-              </Link>
-            )}
-          </div>
-        </div>
       </header>
     </>
   );

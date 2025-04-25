@@ -6,7 +6,7 @@ export default function ProductHeaderMobile({
   data: Pick<Query, "fetchTravelproduct"> | undefined;
 }) {
   return (
-    <header className="flex flex-col gap-2 w-full min-[810px]:hidden">
+    <header className="flex flex-col gap-2 w-full min-[810px]:hidden px-5">
       <>
         {/* tags */}
         <p className="font-medium text-[16px] text-[#2974E5]">

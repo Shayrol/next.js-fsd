@@ -9,7 +9,7 @@ import { useFetchUserLoggedIn } from "@/entities/api/auth/useFetchUserLoggedIn";
 import { useUserStore } from "@/stores/userStore";
 import { useEffect, useState } from "react";
 import ProfileModal from "./ui/profile-modal";
-import MobileProfileModal from "./ui/mobile-profile-modal";
+import MobileProfileModal from "./ui/profile-modal-mobile";
 
 const pathList = [
   { name: "트립토크", path: "/" },
@@ -67,7 +67,7 @@ export default function Header() {
         <div className="flex justify-between px-2 w-full max-w-[1280px] ">
           {/* 모바일 */}
           {!headerMobile && (
-            <div className="sm:hidden flex justify-between items-center w-full py-3 h-[48px] gap-2">
+            <div className="sm:hidden flex justify-between items-center w-full py-3 h-[60px] gap-2">
               <p className="font-semibold text-base text-black">
                 {currentPage?.name ?? (
                   <button

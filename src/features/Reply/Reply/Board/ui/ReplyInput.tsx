@@ -135,7 +135,7 @@ export default function ReplyInput(props: IFormInputProps) {
             }}
           />
           <div className="flex justify-start items-start gap-4 w-full max-sm:flex-col">
-            <div className="relative flex flex-col w-full max-w-[312px] gap-2">
+            <div className="relative flex flex-col w-[312px] gap-2 max-sm:w-full">
               <p className="flex gap-1 font-medium text-black">
                 작성자<span className="text-red-500">*</span>
               </p>
@@ -153,7 +153,7 @@ export default function ReplyInput(props: IFormInputProps) {
                 </span>
               )}
             </div>
-            <div className="relative flex flex-col w-full max-w-[312px] gap-2">
+            <div className="relative flex flex-col w-[312px] gap-2 max-sm:w-full">
               <p className="flex gap-1 font-medium text-black">
                 비밀번호<span className="text-red-500">*</span>
               </p>

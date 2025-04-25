@@ -13,9 +13,9 @@ import { useCreatePointTransactionOfBuyingAndSelling } from "../api/useCreatePoi
 
 import { useParams, useRouter } from "next/navigation";
 import { FETCH_USER_LOGGED_IN } from "@/entities/api/auth/useFetchUserLoggedIn";
-import PointModal from "@/widgets/layouts/Header/ui/point-modal";
 import { useUserStore } from "@/stores/userStore";
 import { User } from "@/entities/api/graphql";
+import PointModalSelling from "@/widgets/layouts/Header/ui/point-modal-selling";
 
 export default function BuyingButtonModal() {
   const [open, setOpen] = useState(false);
@@ -139,7 +139,7 @@ function ErrorPointModal({
               >
                 취소
               </button>
-              <PointModal setErrorOpen={setErrorOpen} />
+              <PointModalSelling setErrorOpen={setErrorOpen} />
             </div>
           </div>
         </DialogHeader>

@@ -19,8 +19,8 @@ export default function Travels() {
   }, [pathname, searchParams]);
 
   return (
-    <section className="flex flex-col gap-6 w-full rounded-2xl">
-      <p className="font-bold text-[28px] max-sm:text-[18px] text-black">
+    <section className="flex flex-col justify-center items-center gap-6 w-full rounded-2xl px-5">
+      <p className="flex justify-start items-start w-full font-bold text-[28px] max-sm:text-xl text-black">
         여기에서만 예약할 수 있는 숙소
       </p>
       <TravelsAvailability />

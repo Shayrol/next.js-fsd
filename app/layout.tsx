@@ -13,7 +13,7 @@ export default async function RootLayout({
     <ApolloClientProvider>
       <html lang="en" suppressHydrationWarning>
         <head />
-        <body className="flex flex-col items-center justify-start w-full gap-10 max-sm:gap-6">
+        <body className="flex flex-col items-center justify-start w-full gap-10 max-sm:gap-0">
           {/* <ThemeProvider
             attribute="class"
             defaultTheme="system"
@@ -24,7 +24,7 @@ export default async function RootLayout({
             <Header />
             <Banner />
           </header>
-          <main className="flex items-start justify-center w-full max-w-[1280px] h-fit  px-5">
+          <main className="flex items-start justify-center w-full max-w-[1280px] h-fit mb-5">
             {children}
           </main>
           <Footer />

@@ -19,7 +19,7 @@ function MyPageLayout({ children }: { children: React.ReactNode }) {
   console.log("My point user: ", user);
 
   return (
-    <main className="flex flex-col justify-center items-start gap-[10px] w-full max-w-[1280px] max-sm:gap-2">
+    <main className="flex flex-col justify-center items-start gap-[10px] w-full max-w-[1280px] max-sm:gap-2 px-5">
       <h1 className="font-bold text-[28px] text-black max-sm:hidden">
         마이 페이지
       </h1>

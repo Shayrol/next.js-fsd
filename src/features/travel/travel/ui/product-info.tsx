@@ -25,7 +25,7 @@ export default function ProductInfo({
 
   return (
     <>
-      <section className="flex gap-6 w-full max-[810px]:hidden">
+      <section className="flex gap-6 w-full max-[810px]:hidden px-5">
         {/* main image */}
         {/* {dataInfo?.images ? ( */}
         <div className="relative flex justify-center items-start text-white w-full min-w-[400px] h-full aspect-[4/3] rounded-[8px]">
@@ -104,12 +104,6 @@ export default function ProductInfo({
             </div>
             {data?.fetchTravelproduct.soldAt === null ? (
               user?._id !== data?.fetchTravelproduct.seller?._id ? (
-                // <button
-                //   onClick={onClickBuying}
-                //   className="flex justify-center items-center gap-2 px-4 py-3 w-full rounded-[8px] font-semibold text-[20px] text-white bg-[#2974E5] hover:bg-[#2974E5]/90"
-                // >
-                //   구매하기
-                // </button>
                 <BuyingButtonModal />
               ) : (
                 <Link

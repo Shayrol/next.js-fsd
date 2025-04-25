@@ -17,14 +17,14 @@ export default function TravelsAvailability() {
   };
 
   return (
-    <div className="flex gap-4">
+    <div className="flex justify-start items-start gap-4 w-full">
       <button
         onClick={() => setQueryParam("availability", "available")}
-        className={`px-4 py-3 gap[10px] rounded-[8px]
+        className={`h-fit px-4 py-3 gap[10px] rounded-[8px] text-base max-sm:px-3 max-sm:py-2 max-sm:text-sm
           ${
             closed === "closed"
-              ? "bg-gray-200/90 text-black"
-              : "bg-black text-white"
+              ? "bg-gray-200/90 text-black font-medium"
+              : "bg-black text-white font-semibold"
           }
           `}
       >
@@ -32,11 +32,11 @@ export default function TravelsAvailability() {
       </button>
       <button
         onClick={() => setQueryParam("availability", "closed")}
-        className={`px-4 py-3 gap[10px] rounded-[8px]
+        className={`h-fit px-4 py-3 gap[10px] rounded-[8px] text-base max-sm:px-3 max-sm:py-2 max-sm:text-sm
           ${
             closed === "closed"
-              ? "bg-black text-white"
-              : "bg-gray-200/90 text-black"
+              ? "bg-black text-white font-semibold"
+              : "bg-gray-200/90 text-black font-medium"
           }
           `}
       >

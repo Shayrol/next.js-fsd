@@ -6,8 +6,8 @@ import SearchOptions from "../../../../shared/ui/searchOption/SearchOptions";
 
 export default function Boards() {
   return (
-    <section className="flex flex-col justify-center items-start gap-6 w-full h-fit">
-      <h1 className="font-bold text-[28px]">트립토크 게시판</h1>
+    <section className="flex flex-col justify-center items-start gap-6 w-full h-fit px-5">
+      <h1 className="font-bold text-[28px] max-sm:text-xl">트립토크 게시판</h1>
       <article className="flex w-full h-full justify-center items-end gap-2 max-lg:flex-col-reverse">
         <SearchOptions />
         <WriterButton name={"트립토크 등록"} link={"/board/new"} />

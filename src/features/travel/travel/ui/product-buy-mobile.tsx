@@ -39,7 +39,7 @@ export default function ProductBuyMobile({
   };
 
   return (
-    <section className="flex justify-center items-center gap-[10px] pb-5 w-full min-[810px]:hidden">
+    <section className="flex justify-center items-center gap-[10px] pb-5 w-full min-[810px]:hidden px-5">
       <div className="flex justify-center items-center py-4 w-full">
         {data?.fetchTravelproduct.soldAt === null ? (
           user?._id !== data?.fetchTravelproduct.seller?._id ? (

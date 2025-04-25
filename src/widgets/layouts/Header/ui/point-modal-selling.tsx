@@ -1,3 +1,5 @@
+// 프로파일 모달의 포인트 충전 버튼이 달라 만듦.. (비효율적...)
+
 "use client";
 
 import {
@@ -26,7 +28,7 @@ interface IProps {
   setErrorOpen?: Dispatch<SetStateAction<boolean>>;
 }
 
-export default function PointModal({ setErrorOpen }: IProps) {
+export default function PointModalSelling({ setErrorOpen }: IProps) {
   const [open, setOpen] = useState(false); // 모달 열림 여부 제어
   const [selectedValue, setSelectedValue] = useState<string | null>(null);
   const { user, setUser } = useUserStore();
@@ -118,17 +120,8 @@ export default function PointModal({ setErrorOpen }: IProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        {/* <button className="flex gap-2 justify-center items-center px-3 py-2 min-w-[96px] max-w-[120px] w-full font-semibold text-sm text-white bg-[#2974E5] border border-[#2974E5] rounded-[8px]">
-            충전
-          </button> */}
-        <button className="flex justify-start items-center gap-2 py-2 w-full">
-          <Image
-            src={"/mypage/charge.svg"}
-            alt="charge"
-            width={16}
-            height={16}
-          />
-          <p className="font-normal text-base text-black">포인트 충전</p>
+        <button className="flex gap-2 justify-center items-center px-3 py-2 min-w-[96px] max-w-[120px] w-full font-semibold text-sm text-white bg-[#2974E5] border border-[#2974E5] rounded-[8px]">
+          충전
         </button>
       </DialogTrigger>
       <DialogContent className="w-[480px] max-sm:w-[320px] rounded-[8px]">

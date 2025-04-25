@@ -14,5 +14,3 @@ export default function MyPageActivity() {
     </section>
   );
 }
-
-// 마이페이지 구현하기
