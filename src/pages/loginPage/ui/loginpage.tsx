@@ -68,24 +68,22 @@ export default function LoginPage() {
     }
   };
 
-  // console.log("header - cookie AccessToken: ", Cookies.get("accessToken"));
-
   return (
-    <main className="flex flex-row justify-center items-center w-full h-[1080px] max-sm:h-full">
+    <main className="flex justify-center items-start w-full">
       {/* 로그인 영역 */}
-      <section className="flex flex-col justify-start items-center max-w-[400px] gap-[64px] h-full pb-10 bg-white">
-        <div className="sm:hidden sm:pt-[50px] max-sm:flex relative justify-center items-center w-full h-[48px]">
-          <p>로그인</p>
-          <Link href={"/"} className="absolute right-[20px] top-[17px]">
+      <section className="flex flex-col justify-start items-center w-full max-w-[400px] h-[1080px] px-5 pt-[244px] pb-10 bg-white max-sm:p-0 max-sm:px-5 max-sm:max-w-full max-sm:gap-16 max-sm:h-fit">
+        {/* 모바일 헤더 */}
+        <div className="sm:hidden flex justify-end items-center w-full h-[48px]">
+          <Link href={"/"}>
             <Image
               src={"/login-close-btn.svg"}
               alt="로그인 창 닫기"
-              width={13}
-              height={13}
+              width={24}
+              height={24}
             />
           </Link>
         </div>
-        <div>
+        <>
           {/* 헤더 영역: 로고 및 환영 메시지 */}
           <header className="flex flex-col justify-center items-center gap-6">
             <Logo width={120} height={80} />
@@ -97,7 +95,7 @@ export default function LoginPage() {
           {/* 로그인 폼 */}
           <form
             onSubmit={handleSubmit(onLogin)}
-            className="flex flex-col justify-center items-center gap-8 px-5 max-w-full w-[320px]"
+            className="flex flex-col justify-center items-center gap-8 w-full max-w-[320px]"
           >
             <fieldset className="flex flex-col justify-center items-center w-full gap-6 border-none">
               <legend className="sr-only">로그인 정보 입력</legend>
@@ -154,19 +152,19 @@ export default function LoginPage() {
             <footer className="flex flex-col justify-center items-center gap-6 w-full">
               <button
                 type="submit"
-                className="flex justify-center items-center gap-2 w-full px-4 py-3 bg-[#2974e5] text-white rounded-[8px] font-semibold hover:bg-[#2974e5]/90"
+                className="flex justify-center items-center gap-2 w-full px-4 py-3 bg-[#2974e5] rounded-[8px] font-semibold text-lg text-white hover:bg-[#2974e5]/90"
               >
                 로그인
               </button>
               <Link
                 href={"/signup"}
-                className="font-normal text-black text-[12px] hover:underline"
+                className="font-normal text-black text-sm hover:underline"
               >
                 회원가입
               </Link>
             </footer>
           </form>
-        </div>
+        </>
       </section>
 
       {/* 로그인 이미지 (모바일에서는 숨김) */}

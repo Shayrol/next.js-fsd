@@ -34,7 +34,7 @@ function DatePickerWithRange({ query }: { query: IProps }) {
             id="date"
             variant={"outline"}
             className={cn(
-              "w-full min-w-[289px] h-full max-h-[48px] p-3 gap-2 justify-start text-left font-normal border-none outline-none bg-gray-50",
+              "w-full min-w-[280px] h-full max-h-[48px] p-3 gap-2 justify-start text-left font-normal border-none outline-none bg-gray-50",
               !query.date?.from && !query.date?.to && "text-muted-foreground"
             )}
           >

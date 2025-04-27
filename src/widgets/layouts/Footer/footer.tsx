@@ -1,3 +1,5 @@
+// 모바일 네비게이션
+
 "use client";
 
 import Image from "next/image";

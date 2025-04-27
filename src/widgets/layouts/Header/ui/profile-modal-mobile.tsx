@@ -1,3 +1,5 @@
+"use client";
+
 import { User } from "@/entities/api/graphql";
 import Image from "next/image";
 import Link from "next/link";
@@ -53,7 +55,7 @@ export default function MobileProfileModal({
                         ${open ? "translate-x-0" : "translate-x-full"}
                       `}
       >
-        <header className="flex justify-between items-center px-5 w-full min-h-12 border border-red-500">
+        <header className="flex justify-between items-center px-5 w-full min-h-12">
           <Image
             src={"/layout/header/logo-header.svg"}
             alt="logo"
