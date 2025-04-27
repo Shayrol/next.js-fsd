@@ -82,7 +82,7 @@
       <img src="https://github.com/user-attachments/assets/385fefa7-5bfe-4144-af66-f1c580ec7500" width="300" />
     </td>
         <td align="center" valign="top" colspan="2">
-      <p>프로파일 모달</p>
+      <p>프로필 모달</p>
       <img src="https://github.com/user-attachments/assets/220b9bb2-169a-47b2-83bb-e5c038200699" width="300" />
     </td>
   </tr>
