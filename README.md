@@ -37,11 +37,11 @@
   <tr>
     <td align="center" valign="top">
       <p>숙박권 구매 메인 페이지</p>
-      <img src="https://github.com/user-attachments/assets/146db859-871d-49a8-80da-c9fd6120279d" width="300" />
+      <img src="https://github.com/user-attachments/assets/7d2393c4-bc3f-4a93-8cca-3b422dc7c2a5" width="300" />
     </td>
     <td align="center" valign="top">
       <p>숙박권 구매 상세 페이지</p>
-      <img src="https://github.com/user-attachments/assets/7d2393c4-bc3f-4a93-8cca-3b422dc7c2a5" width="300" />
+      <img src="https://github.com/user-attachments/assets/146db859-871d-49a8-80da-c9fd6120279d" width="300" />
     </td>
   </tr>
   <tr>
