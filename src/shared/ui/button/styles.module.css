@@ -1,0 +1,15 @@
+/* 
+  공통 컴포넌트 버튼 스타일
+*/
+
+.button__soft__m__full {
+  background-color: yellow;
+  height: 30px;
+  width: 100%;
+}
+
+.button__soft__fit__m {
+  background-color: pink;
+  height: fit-content;
+  width: 30px;
+}
