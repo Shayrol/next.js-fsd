@@ -37,11 +37,11 @@
   <tr>
     <td align="center" valign="top">
       <p>숙박권 구매 메인 페이지</p>
-      <img src="https://github.com/user-attachments/assets/146db859-871d-49a8-80da-c9fd6120279d" width="300" />
+      <img src="https://github.com/user-attachments/assets/7d2393c4-bc3f-4a93-8cca-3b422dc7c2a5" width="300" />
     </td>
     <td align="center" valign="top">
       <p>숙박권 구매 상세 페이지</p>
-      <img src="https://github.com/user-attachments/assets/7d2393c4-bc3f-4a93-8cca-3b422dc7c2a5" width="300" />
+      <img src="https://github.com/user-attachments/assets/146db859-871d-49a8-80da-c9fd6120279d" width="300" />
     </td>
   </tr>
   <tr>
@@ -82,7 +82,7 @@
       <img src="https://github.com/user-attachments/assets/385fefa7-5bfe-4144-af66-f1c580ec7500" width="300" />
     </td>
         <td align="center" valign="top" colspan="2">
-      <p>프로파일 모달</p>
+      <p>프로필 모달</p>
       <img src="https://github.com/user-attachments/assets/220b9bb2-169a-47b2-83bb-e5c038200699" width="300" />
     </td>
   </tr>
