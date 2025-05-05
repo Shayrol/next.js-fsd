@@ -13,3 +13,11 @@
   height: fit-content;
   width: 30px;
 }
+
+/* input */
+
+.input__soft__s__full {
+  border: 1px solid black;
+  height: 20px;
+  width: 100%;
+}
