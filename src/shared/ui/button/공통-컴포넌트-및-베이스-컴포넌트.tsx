@@ -71,24 +71,18 @@ type InputBaseProps<T extends FieldValues> = {
   keyname: Path<T>;
 } & React.InputHTMLAttributes<HTMLInputElement>; // type, className 등 기본 input 속성 포함
 
-// 스키마 타입
-interface ISchema {
-  title: string;
-  price: string;
-}
-
 // 1. 입력 뼈대
 function InputBase<T extends FieldValues>({
   keyname,
   ...props
 }: InputBaseProps<T>) {
-  const { register } = useFormContext<T>();
+  const { register } = useFormContext<T>(); // schema가 각각 적용된 form을 사용할 수 있다.
 
   return (
     <input
       className={props.className}
       type={props.type}
-      {...register(keyname)} // keyof T -> string으로 변환 필요
+      {...register(keyname)}
     />
   );
 }
@@ -102,6 +96,12 @@ export function InputSoftSFull<T extends FieldValues>(
 
 // 다른 컴포넌트에서 해당 버튼 사용 예제
 // import { InputSoftSFull } from "";
+
+// 스키마 타입
+interface ISchema {
+  title: string;
+  price: string;
+}
 
 {
   InputSoftSFull<ISchema>({ type: "text", keyname: "title" });
